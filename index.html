@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ur-Latn">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+    <meta name="theme-color" content="#fff8e7">
+    <meta name="robots" content="noindex">
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" href="qari-192.png">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    <title>آغازِ اساس</title>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@700&family=Nunito:wght@700;800&display=swap" rel="stylesheet">
+    <style>
+        html, body { margin: 0; height: 100%; background: #fff8e7; font-family: 'Nunito', sans-serif; color: #2b2a33; }
+        #lock { max-width: 380px; margin: 0 auto; padding: 15vh 20px; text-align: center; animation: fadeIn 0.8s ease; }
+        #lock img { width: 100px; border-radius: 24px; box-shadow: 0 10px 20px rgba(0,0,0,0.1); margin-bottom: 15px; }
+        #lock h1 { font-family: 'Amiri', serif; font-size: 32px; margin: 0 0 5px 0; color: #1f8a52; }
+        #lock p { font-size: 14px; color: #666; margin-bottom: 25px; }
+        input { width: 100%; box-sizing: border-box; font: inherit; font-size: 22px; text-align: center; padding: 14px; border: 2px solid #eadfbe; border-radius: 16px; margin: 0 0 16px 0; letter-spacing: 4px; outline: none; background: #fff; transition: border-color 0.3s; }
+        input:focus { border-color: #2fbf71; }
+        button { font: inherit; font-weight: 800; border: 0; border-radius: 16px; padding: 16px 18px; background: #2fbf71; color: #fff; width: 100%; box-shadow: 0 6px 0 #1f8a52; cursor: pointer; transition: transform 0.1s, box-shadow 0.1s; font-size: 18px; }
+        button:active { transform: translateY(4px); box-shadow: 0 2px 0 #1f8a52; }
+        #msg { color: #b3541a; min-height: 1.5em; font-size: 14px; margin-top: 15px; font-weight: bold; }
+        
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+    <div id="lock">
+        <img src="qari-192.png" alt="Logo">
+        <h1>آغازِ اساس</h1>
+        <p>Access code likhein / कोड लिखें</p>
+        <input id="c" type="password" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="••••••">
+        <button id="go">Kholein (Unlock)</button>
+        <p id="msg"></p>
+    </div>
+    
+    <script>
+        const b64 = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
+        const $ = i => document.getElementById(i);
+        const WEEK = 7 * 864e5;
+        const ls = {
+            g: k => { try { return localStorage.getItem(k) } catch(e) { return null } },
+            s: (k,v) => { try { localStorage.setItem(k,v) } catch(e) {} },
+            d: k => { try { localStorage.removeItem(k) } catch(e) {} }
+        };
+
+        if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
+
+        async function dk(code, salt) {
+            const k = await crypto.subtle.importKey('raw', new TextEncoder().encode(code), 'PBKDF2', false, ['deriveKey']);
+            return crypto.subtle.deriveKey({ name: 'PBKDF2', salt, iterations: 200000, hash: 'SHA-256' }, k, { name: 'AES-GCM', length: 256 }, false, ['decrypt']);
+        }
+
+        async function fetchBoth() {
+            let online = true;
+            const f = u => fetch(u, { cache: 'no-store' }).then(r => { if (!r.ok) throw 0; return r }).catch(() => { online = false; return caches.match(u) });
+            const [u, a] = await Promise.all([f('users.json'), f('app.enc')]);
+            if (!u || !a) throw 0;
+            return { users: (await u.json()).users, enc: await a.text(), online };
+        }
+
+        async function tryOpen(code) {
+            let d;
+            try { d = await fetchBoth() } catch(e) { return { err: 'Internet chahiye (pehli baar)' } }
+            if (!d.online && Date.now() - (+ls.g('qr_ok') || 0) > WEEK) return { err: 'Internet se jud kar dobara kholein' };
+            
+            for (const e of d.users) {
+                try {
+                    const kk = await dk(code, b64(e.s));
+                    const raw = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: b64(e.i) }, kk, b64(e.w));
+                    const rw = new Uint8Array(raw);
+                    const mk = await crypto.subtle.importKey('raw', rw.slice(0, 32), 'AES-GCM', false, ['decrypt']);
+                    const x = b64(d.enc);
+                    const html = new TextDecoder().decode(await crypto.subtle.decrypt({ name: 'AES-GCM', iv: x.slice(0, 12) }, mk, x.slice(12)));
+                    if (d.online) ls.s('qr_ok', Date.now());
+                    return { html, admin: rw[32] === 1, mk };
+                } catch(_) {}
+            }
+            return { bad: 1, online: d.online };
+        }
+
+        function run(h) {
+            document.open();
+            document.write(h);
+            document.close();
+        }
+
+        async function enter(code, auto) {
+            $('msg').textContent = 'Checking...';
+            const r = await tryOpen(code);
+            if (r.html) {
+                ls.s('qr_code', code);
+                window.__admin = r.admin;
+                window.__dec = async b => {
+                    const u = new Uint8Array(b);
+                    return crypto.subtle.decrypt({ name: 'AES-GCM', iv: u.slice(0, 12) }, r.mk, u.slice(12));
+                };
+                run(r.html);
+                return;
+            }
+            if (r.bad && r.online) {
+                ls.d('qr_code');
+                $('msg').textContent = auto ? 'Access band kar diya gaya hai.' : 'Galat code';
+            } else {
+                $('msg').textContent = r.err || 'Galat code';
+            }
+            $('lock').hidden = false;
+        }
+
+        $('go').onclick = () => { const v = $('c').value.trim(); if (v) enter(v, false) };
+        $('c').onkeydown = e => { if (e.key === 'Enter') $('go').click() };
+        
+        const saved = ls.g('qr_code');
+        if (saved) { $('lock').hidden = true; enter(saved, true) }
+    </script>
+</body>
+</html>
