@@ -1,0 +1,31 @@
+{
+  "name": "آغازِ اساس - Noorani Qaida",
+  "short_name": "آغازِ اساس",
+  "description": "Bachchon ke liye Qaida, duaein, namaz aur surahein (Ahle Hadith Manhaj)",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#fff8e7",
+  "theme_color": "#2fbf71",
+  "icons": [
+    {
+      "src": "qari-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "qari-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "qari-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
