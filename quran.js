@@ -12,7 +12,10 @@ const Q = {
     rep: 0,
     rate: 1,
     qari: lsGet('qari', QARIS[0].id),
-    audio: new Audio()
+    audio: new Audio(),
+    showTr: lsGet('show_tr', '1') !== '0',
+    tok: 0,
+    blobUrl: null
 };
 Q.audio.preload = 'auto';
 if (!QARIS.some((q) => q.id === Q.qari)) Q.qari = QARIS[0].id;
@@ -78,13 +81,17 @@ function openSurah(n) {
                 <button class="ctl" data-sr="repeat" id="sr-repeat" title="Har ayat kitni baar">${ico('repeat')} <span>${Q.repeat}×</span></button>
                 <button class="ctl" data-sr="rate" id="sr-rate" title="Raftaar"><span>${Q.rate}×</span></button>
             </div>
+            <div class="sr-tools">
+                <button class="tool-chip ${Q.showTr ? 'on' : ''}" data-sr="tr" id="sr-tr">${ico('bulb')} Matlab</button>
+                <button class="tool-chip" data-sr="offline" id="sr-off">${offLabel(s.n)}</button>
+            </div>
             <div class="qari-row" id="sr-qaris">${qariChips()}</div>
             <div class="ayah-list">
                 <div class="bism ar" id="ayah--1">${BISMILLAH}</div>
                 ${s.ayat.map((a, i) => `
                     <button class="ayah" data-ayah="${i}" id="ayah-${i}">
                         <span class="no">${i + 1}</span>
-                        <span class="txt ar">${a}</span>
+                        <span class="body"><span class="txt ar">${a}</span>${s.tr && s.tr[i] ? `<span class="trn">${esc(s.tr[i])}</span>` : ''}</span>
                     </button>`).join('')}
             </div>
             <div class="reader-actions">
@@ -97,6 +104,7 @@ function openSurah(n) {
             <p class="sr-note">Qari ki awaaz ke liye internet chahiye.</p>
         </div>`;
     r.classList.add('open');
+    r.classList.toggle('hide-tr', !Q.showTr);
     r.scrollTop = 0;
 }
 
@@ -145,12 +153,70 @@ function srUI() {
 function srPlayCurrent() {
     if (!Q.s) return;
     const url = Q.idx === -1 ? bismillahUrl() : ayahUrl(Q.s.n, Q.idx + 1);
-    Q.audio.src = url;
-    Q.audio.playbackRate = Q.rate;
+    const tok = ++Q.tok;
     Q.playing = true;
     srUI();
-    const p = Q.audio.play();
-    if (p && p.catch) p.catch((e) => { if (e && e.name !== 'AbortError') srError(); });
+    cachedSrc(url).then((src) => {
+        if (tok !== Q.tok || !Q.s || !Q.playing) return;
+        Q.audio.src = src;
+        Q.audio.playbackRate = Q.rate;
+        const p = Q.audio.play();
+        if (p && p.catch) p.catch((e) => { if (e && e.name !== 'AbortError') srError(); });
+    });
+}
+
+// ---------- Offline (phone mein save) ----------
+const AUDIO_CACHE = 'qa-audio-v1';
+const offKey = () => 'off_' + Q.qari;
+const offList = () => lsGet(offKey(), []) || [];
+function isOffline(n) { return offList().includes(n); }
+function offLabel(n) { return isOffline(n) ? `${ico('check')} Offline save hai` : `${ico('download')} Offline save karein`; }
+
+function cachedSrc(url) {
+    if (!('caches' in window)) return Promise.resolve(url);
+    return caches.open(AUDIO_CACHE).then((c) => c.match(url)).then((hit) => {
+        if (!hit) return url;
+        return hit.blob().then((b) => {
+            if (Q.blobUrl) URL.revokeObjectURL(Q.blobUrl);
+            Q.blobUrl = URL.createObjectURL(b);
+            return Q.blobUrl;
+        });
+    }).catch(() => url);
+}
+
+async function srDownload() {
+    const s = Q.s;
+    if (!s) return;
+    const btn = $('sr-off');
+    if (!('caches' in window)) { toast('Is browser mein offline save nahi ho sakta.'); return; }
+    if (isOffline(s.n)) {
+        const c = await caches.open(AUDIO_CACHE);
+        const urls = [bismillahUrl()].concat(s.ayat.map((a, i) => ayahUrl(s.n, i + 1)));
+        await Promise.all(urls.slice(1).map((u) => c.delete(u)));
+        lsSet(offKey(), offList().filter((x) => x !== s.n));
+        btn.innerHTML = offLabel(s.n);
+        toast('Offline save hata diya.');
+        return;
+    }
+    if (!navigator.onLine) { toast('Download ke liye internet chahiye.'); return; }
+    const urls = [bismillahUrl()].concat(s.ayat.map((a, i) => ayahUrl(s.n, i + 1)));
+    const c = await caches.open(AUDIO_CACHE);
+    btn.disabled = true;
+    try {
+        for (let i = 0; i < urls.length; i++) {
+            btn.textContent = `Download ${i + 1}/${urls.length}…`;
+            if (await c.match(urls[i])) continue;
+            const r = await fetch(urls[i], { mode: 'cors' });
+            if (!r.ok) throw new Error('http ' + r.status);
+            await c.put(urls[i], r);
+        }
+        const l = offList(); l.push(s.n); lsSet(offKey(), l);
+        toast('Ho gaya! Ab ye surah bina internet ke chalegi.');
+    } catch (e) {
+        toast('Download nahi ho saka. Internet check karein ya doosra qari chunein.');
+    }
+    btn.disabled = false;
+    btn.innerHTML = offLabel(s.n);
 }
 
 function srPlayFrom(i) { Q.rep = 0; Q.idx = i; srPlayCurrent(); }
@@ -230,6 +296,7 @@ window.addEventListener('DOMContentLoaded', () => {
             Q.qari = qc.dataset.qari;
             lsSet('qari', Q.qari);
             $('sr-qaris').innerHTML = qariChips();
+            $('sr-off').innerHTML = offLabel(Q.s.n);
             if (Q.playing && Q.idx >= -1) srPlayCurrent(); else srUI();
             return;
         }
@@ -244,6 +311,8 @@ window.addEventListener('DOMContentLoaded', () => {
         else if (act === 'repeat') { Q.repeat = REPEATS[(REPEATS.indexOf(Q.repeat) + 1) % REPEATS.length]; Q.rep = 0; srUI(); }
         else if (act === 'rate') { Q.rate = RATES[(RATES.indexOf(Q.rate) + 1) % RATES.length]; Q.audio.playbackRate = Q.rate; srUI(); }
         else if (act === 'hifz') srToggleHifz();
+        else if (act === 'tr') { Q.showTr = !Q.showTr; lsSet('show_tr', Q.showTr ? '1' : '0'); $('surah-reader').classList.toggle('hide-tr', !Q.showTr); b.classList.toggle('on', Q.showTr); }
+        else if (act === 'offline') srDownload();
         else if (act === 'prev' && pos > 0) openSurah(order[pos - 1].n);
         else if (act === 'next' && pos < order.length - 1) openSurah(order[pos + 1].n);
     });

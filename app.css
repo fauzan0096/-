@@ -497,3 +497,25 @@ h1, h2, h3, p { margin: 0; }
 .bottom-nav { grid-template-columns: repeat(5, 1fr); padding: 6px; }
 .nav-item { font-size: 10.5px; letter-spacing: -.01em; }
 .nav-item .i { width: 21px; height: 21px; }
+
+/* waqia narration */
+.player-card.narr{margin-bottom:14px}
+.reader-card p.speaking,.seekh-card.speaking{background:var(--gold-soft,#FBF3E0);border-radius:12px;box-shadow:0 0 0 6px var(--gold-soft,#FBF3E0);transition:background .2s}
+
+/* Quran: matlab + offline */
+.ayah .body{flex:1;display:flex;flex-direction:column;gap:2px;min-width:0}
+.ayah .trn{font-size:14px;line-height:1.55;color:var(--muted);text-align:left;direction:ltr;padding-bottom:6px}
+#surah-reader.hide-tr .ayah .trn{display:none}
+.sr-tools{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.tool-chip{display:inline-flex;align-items:center;gap:6px;border:1.5px solid var(--line);background:var(--card);color:var(--g700);font-weight:700;font-size:13px;padding:8px 12px;border-radius:999px}
+.tool-chip.on{background:var(--g50);border-color:var(--g700)}
+.tool-chip:disabled{opacity:.6}
+.tool-chip .i{width:16px;height:16px}
+
+/* install popup */
+.install-bar{position:fixed;left:12px;right:12px;bottom:92px;z-index:90;display:flex;align-items:center;gap:10px;background:#0B2A5B;color:#fff;border-radius:18px;padding:10px 10px 10px 12px;box-shadow:0 14px 30px -10px rgba(0,0,0,.5);max-width:520px;margin:0 auto}
+.install-bar[hidden]{display:none}
+.install-bar img{width:42px;height:42px;border-radius:10px;flex-shrink:0}
+.install-bar .it{flex:1;min-width:0}.install-bar .it b{display:block;font-size:14px}.install-bar .it small{font-size:12px;opacity:.85;line-height:1.35;display:block}
+.install-bar .btn{padding:8px 14px;white-space:nowrap}
+.install-bar .icon-btn{background:transparent;color:#fff;width:32px;height:32px}

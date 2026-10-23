@@ -1,6 +1,6 @@
 // Service Worker — app ko offline chalane ke liye.
 // Jab bhi koi file badlein, CACHE_VERSION ka number barha dein.
-const CACHE_VERSION = 'v8';
+const CACHE_VERSION = 'v11';
 const CACHE_NAME = `aghaaz-e-asaas-${CACHE_VERSION}`;
 
 const ASSETS_TO_CACHE = [
@@ -14,6 +14,7 @@ const ASSETS_TO_CACHE = [
     'games.js',
     'surahs.js',
     'quran.js',
+    'record.html',
     'app.js',
     'qari-192.png',
     'qari-512.png',

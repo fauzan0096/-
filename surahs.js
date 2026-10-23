@@ -22,6 +22,13 @@ const surahData = [
             "وَأَرۡسَلَ عَلَيۡهِمۡ طَيۡرًا أَبَابِيلَ",
             "تَرۡمِيهِم بِحِجَارَةٖ مِّن سِجِّيلٖ",
             "فَجَعَلَهُمۡ كَعَصۡفٖ مَّأۡكُولِۭ"
+        ],
+        tr: [
+            "Kya aap ne nahi dekha ke aap ke Rab ne hathi walon ke saath kya kiya?",
+            "Kya us ne un ki chaal ko bekar nahi kar diya?",
+            "Aur un par parindon ke jhund ke jhund bhej diye,",
+            "Jo un par pakki hui mitti ke patthar phenkte the,",
+            "Phir un ko khaye hue bhoose ki tarah bana diya."
         ]
     },
     {
@@ -32,6 +39,12 @@ const surahData = [
             "إِۦلَٰفِهِمۡ رِحۡلَةَ ٱلشِّتَآءِ وَٱلصَّيۡفِ",
             "فَلۡيَعۡبُدُواْ رَبَّ هَٰذَا ٱلۡبَيۡتِ",
             "ٱلَّذِيٓ أَطۡعَمَهُم مِّن جُوعٖ وَءَامَنَهُم مِّنۡ خَوۡفِۭ"
+        ],
+        tr: [
+            "Quraish ko ulfat dene ki wajah se,",
+            "(yaani) unhein sardi aur garmi ke safar se ulfat dene ki wajah se,",
+            "Pas unhein chahiye ke is ghar (Kaaba) ke Rab ki ibadat karein,",
+            "Jis ne unhein bhook mein khana khilaya aur khauf se aman diya."
         ]
     },
     {
@@ -45,6 +58,15 @@ const surahData = [
             "ٱلَّذِينَ هُمۡ عَن صَلَاتِهِمۡ سَاهُونَ",
             "ٱلَّذِينَ هُمۡ يُرَآءُونَ",
             "وَيَمۡنَعُونَ ٱلۡمَاعُونَ"
+        ],
+        tr: [
+            "Kya aap ne us shakhs ko dekha jo roz-e-jaza ko jhutlata hai?",
+            "Wohi hai jo yateem ko dhakke deta hai,",
+            "Aur miskeen ko khana khilane par nahi ubharta,",
+            "To tabahi hai un namaziyon ke liye,",
+            "Jo apni namaz se ghafil hain,",
+            "Jo dikhawa karte hain,",
+            "Aur zaroori bartne ki cheezein (maangne par) nahi dete."
         ]
     },
     {
@@ -54,6 +76,11 @@ const surahData = [
             "إِنَّآ أَعۡطَيۡنَٰكَ ٱلۡكَوۡثَرَ",
             "فَصَلِّ لِرَبِّكَ وَٱنۡحَرۡ",
             "إِنَّ شَانِئَكَ هُوَ ٱلۡأَبۡتَرُ"
+        ],
+        tr: [
+            "Beshak hum ne aap ko Kawthar ata ki.",
+            "To apne Rab ke liye namaz padhiye aur qurbani kijiye.",
+            "Beshak aap ka dushman hi be-nishan (jad kata) hai."
         ]
     },
     {
@@ -66,6 +93,14 @@ const surahData = [
             "وَلَآ أَنَا۠ عَابِدٞ مَّا عَبَدتُّمۡ",
             "وَلَآ أَنتُمۡ عَٰبِدُونَ مَآ أَعۡبُدُ",
             "لَكُمۡ دِينُكُمۡ وَلِيَ دِينِ"
+        ],
+        tr: [
+            "Keh dijiye: Aye kafiro!",
+            "Main us ki ibadat nahi karta jis ki tum ibadat karte ho,",
+            "Aur na tum us ki ibadat karne wale ho jis ki main ibadat karta hoon,",
+            "Aur na main us ki ibadat karne wala hoon jis ki tum ne ibadat ki,",
+            "Aur na tum us ki ibadat karne wale ho jis ki main ibadat karta hoon,",
+            "Tumhare liye tumhara deen, aur mere liye mera deen."
         ]
     },
     {
@@ -75,6 +110,11 @@ const surahData = [
             "إِذَا جَآءَ نَصۡرُ ٱللَّهِ وَٱلۡفَتۡحُ",
             "وَرَأَيۡتَ ٱلنَّاسَ يَدۡخُلُونَ فِي دِينِ ٱللَّهِ أَفۡوَاجٗا",
             "فَسَبِّحۡ بِحَمۡدِ رَبِّكَ وَٱسۡتَغۡفِرۡهُۚ إِنَّهُۥ كَانَ تَوَّابَۢا"
+        ],
+        tr: [
+            "Jab Allah ki madad aur fatah aa jaye,",
+            "Aur aap logon ko dekh len ke woh Allah ke deen mein fauj dar fauj daakhil ho rahe hain,",
+            "To apne Rab ki hamd ke saath tasbeeh kijiye aur us se maghfirat maangiye, beshak woh bahut tawba qubool karne wala hai."
         ]
     },
     {
@@ -86,6 +126,13 @@ const surahData = [
             "سَيَصۡلَىٰ نَارٗا ذَاتَ لَهَبٖ",
             "وَٱمۡرَأَتُهُۥ حَمَّالَةَ ٱلۡحَطَبِ",
             "فِي جِيدِهَا حَبۡلٞ مِّن مَّسَدِۭ"
+        ],
+        tr: [
+            "Abu Lahab ke dono haath toot gaye aur woh khud barbad ho gaya.",
+            "Na us ka maal us ke kaam aaya aur na jo us ne kamaya.",
+            "Woh jald bhadakti hui aag mein daakhil hoga,",
+            "Aur us ki biwi bhi, jo lakdiyon ka bojh uthane wali hai,",
+            "Us ki gardan mein khajoor ki (bati hui) rassi hai."
         ]
     },
     {
@@ -96,6 +143,12 @@ const surahData = [
             "ٱللَّهُ ٱلصَّمَدُ",
             "لَمۡ يَلِدۡ وَلَمۡ يُولَدۡ",
             "وَلَمۡ يَكُن لَّهُۥ كُفُوًا أَحَدُۢ"
+        ],
+        tr: [
+            "Keh dijiye: Woh Allah ek hai.",
+            "Allah be-niyaz hai.",
+            "Na us ki koi aulad hai aur na woh kisi ki aulad hai,",
+            "Aur na koi us ke barabar hai."
         ]
     },
     {
@@ -107,6 +160,13 @@ const surahData = [
             "وَمِن شَرِّ غَاسِقٍ إِذَا وَقَبَ",
             "وَمِن شَرِّ ٱلنَّفَّٰثَٰتِ فِي ٱلۡعُقَدِ",
             "وَمِن شَرِّ حَاسِدٍ إِذَا حَسَدَ"
+        ],
+        tr: [
+            "Keh dijiye: Main subah ke Rab ki panah mangta hoon,",
+            "Un cheezon ke shar se jo us ne paida ki,",
+            "Aur andheri raat ke shar se jab woh chha jaye,",
+            "Aur girhon mein phoonkne wali (jaadugar) auraton ke shar se,",
+            "Aur hasad karne wale ke shar se jab woh hasad kare."
         ]
     },
     {
@@ -119,6 +179,14 @@ const surahData = [
             "مِن شَرِّ ٱلۡوَسۡوَاسِ ٱلۡخَنَّاسِ",
             "ٱلَّذِي يُوَسۡوِسُ فِي صُدُورِ ٱلنَّاسِ",
             "مِنَ ٱلۡجِنَّةِ وَٱلنَّاسِ"
+        ],
+        tr: [
+            "Keh dijiye: Main logon ke Rab ki panah mangta hoon,",
+            "Logon ke Badshah ki,",
+            "Logon ke Mabood ki,",
+            "Waswasa daalne wale, peechhe hat jane wale (shaitan) ke shar se,",
+            "Jo logon ke seenon mein waswase daalta hai,",
+            "Jinnat mein se aur insaanon mein se."
         ]
     }
 ];

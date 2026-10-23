@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="ur"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ustad ki awaaz record karein</title>
+<style>
+:root{--navy:#0B2A5B;--gold:#D99A2B;--bg:#F7F6F2;--line:#E2E0D8}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);font-family:system-ui,sans-serif;color:#1b2540}
+header{background:var(--navy);color:#fff;padding:16px;position:sticky;top:0;z-index:5}
+header h1{margin:0 0 4px;font-size:18px}header p{margin:0;font-size:13px;opacity:.85}
+.bar{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+button{font:inherit;border:0;border-radius:12px;padding:9px 14px;font-weight:700;cursor:pointer}
+.b{background:var(--gold);color:#3A2705}.g{background:#fff;color:var(--navy)}
+main{padding:12px;max-width:640px;margin:auto}
+h2{font-size:15px;margin:18px 4px 8px;color:var(--navy)}
+.row{display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid var(--line);border-radius:14px;padding:10px 12px;margin-bottom:8px}
+.row.done{border-color:#2e9e5b}.row.rec{border-color:#d33;background:#fff3f3}
+.ar{font-size:28px;min-width:64px;text-align:center;font-family:'Amiri','Noto Naskh Arabic',serif}
+.info{flex:1;min-width:0;font-size:13px;color:#5b6784}.info b{display:block;color:#1b2540;font-size:14px}
+.row button{padding:8px 11px}.rb{background:#d33;color:#fff}
+#msg{font-size:13px;margin-top:8px}
+</style></head><body>
+<header><h1>Ustad ki awaaz record karein</h1>
+<p>Har harf/lafz ke saamne ● dabayein, bolein, phir ■ dabayein. Phir "Export" karke file GitHub ke <b>audio</b> folder mein daal dein.</p>
+<div class="bar"><button class="b" id="exp">⬇ Export (ustad-awaaz.json)</button><label class="g" style="border-radius:12px;padding:9px 14px;font-weight:700;cursor:pointer">⬆ Import<input id="imp" type="file" accept=".json" hidden></label><span id="cnt" style="align-self:center;font-size:13px"></span></div>
+<div id="msg"></div></header>
+<main id="list"></main>
+<script src="courseData.js"></script><script src="duas.js"></script>
+<script>
+const $=id=>document.getElementById(id);
+let db,clips={},rec=null,cur=null;
+function openDb(){return new Promise((res,rej)=>{const r=indexedDB.open('qa-voice',1);r.onupgradeneeded=()=>r.result.createObjectStore('clips');r.onsuccess=()=>res(r.result);r.onerror=rej;});}
+const tx=(m)=>db.transaction('clips',m).objectStore('clips');
+const put=(k,v)=>new Promise(r=>{tx('readwrite').put(v,k).onsuccess=r;});
+const del=(k)=>new Promise(r=>{tx('readwrite').delete(k).onsuccess=r;});
+function loadAll(){return new Promise(res=>{const s=tx('readonly'),k=s.getAllKeys(),v=s.getAll();v.onsuccess=()=>{k.result.forEach((x,i)=>clips[x]=v.result[i].data);res();};});}
+const toData=(blob)=>new Promise(r=>{const f=new FileReader();f.onload=()=>r(f.result);f.readAsDataURL(blob);});
+
+const groups=[];const seen=new Set();
+qaidaData.forEach(l=>{const it=[];l.items.forEach(i=>{if(!seen.has(i.voice)){seen.add(i.voice);it.push(i);}});if(it.length)groups.push([l.title,it]);});
+groups.push(['Duaein',duasData.filter(d=>!seen.has(d.voice)).map(d=>({ar:d.ar,ro:d.ro,voice:d.voice}))]);
+const total=groups.reduce((a,g)=>a+g[1].length,0);
+
+function render(){
+  $('list').innerHTML=groups.map((g,gi)=>`<h2>${g[0]}</h2>`+g[1].map((it,ii)=>{
+    const k=it.voice,has=!!clips[k];
+    return `<div class="row ${has?'done':''} ${cur===k?'rec':''}" data-k="${k}">
+      <div class="ar">${it.ar}</div>
+      <div class="info"><b>${it.ro||''}</b>${has?'✔ record hai':'abhi nahi'}</div>
+      ${has?`<button class="g" data-a="play">▶</button><button class="g" data-a="del">✕</button>`:''}
+      <button class="${cur===k?'g':'rb'}" data-a="rec">${cur===k?'■':'●'}</button></div>`;}).join('')).join('');
+  $('cnt').textContent=Object.keys(clips).length+' / '+total;
+}
+$('list').addEventListener('click',async e=>{
+  const b=e.target.closest('button');if(!b)return;const k=b.closest('.row').dataset.k,a=b.dataset.a;
+  if(a==='play'){new Audio(clips[k]).play();}
+  else if(a==='del'){delete clips[k];await del(k);render();}
+  else if(a==='rec'){
+    if(cur===k){rec.stop();return;}
+    if(cur)return;
+    try{
+      const st=await navigator.mediaDevices.getUserMedia({audio:true});
+      const ch=[];rec=new MediaRecorder(st);cur=k;
+      rec.ondataavailable=x=>ch.push(x.data);
+      rec.onstop=async()=>{st.getTracks().forEach(t=>t.stop());const blob=new Blob(ch,{type:rec.mimeType});const d=await toData(blob);clips[k]=d;await put(k,{data:d});cur=null;render();new Audio(d).play();};
+      rec.start();render();
+    }catch(err){$('msg').textContent='Mic ki ijazat nahi mili: '+err.message;cur=null;}
+  }
+});
+$('exp').onclick=()=>{
+  const blob=new Blob([JSON.stringify(clips)],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='ustad-awaaz.json';a.click();
+  $('msg').textContent='Ho gaya. Is file ko GitHub mein audio/ustad-awaaz.json naam se upload karein.';
+};
+$('imp').onchange=async e=>{const f=e.target.files[0];if(!f)return;const j=JSON.parse(await f.text());for(const k in j){clips[k]=j[k];await put(k,{data:j[k]});}render();};
+openDb().then(async d=>{db=d;await loadAll();render();});
+</script></body></html>

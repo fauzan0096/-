@@ -231,6 +231,7 @@ function renderStories() {
 
 function openStory(i) {
     if (i < 0 || i >= waqiaatData.length) return;
+    if (i !== currentStoryIndex) narrStop();
     currentStoryIndex = i;
     const s = waqiaatData[i];
     const read = progress.storiesRead.includes(s.id);
@@ -253,8 +254,14 @@ function openStory(i) {
             </div>
         </div>
         <div class="reader-sheet">
+            <div class="player-card narr">
+                <button class="big-play" data-reader="narr" id="narr-play" aria-label="Waqia suniye">${ico('play')}</button>
+                <div class="player-info"><b id="narr-now">Waqia suniye</b><small>AI awaaz se sunein</small></div>
+                <button class="ctl" data-reader="narr-stop" aria-label="Roken" title="Roken">${ico('x')}</button>
+                <button class="ctl" data-reader="narr-rate" id="narr-rate" title="Raftaar"><span>${NARR.rate}×</span></button>
+            </div>
             <div class="reader-card">
-                ${s.body.map((p) => `<p>${esc(p)}</p>`).join('')}
+                ${s.body.map((p, k) => `<p data-p="${k}">${esc(p)}</p>`).join('')}
                 ${s.dua ? `
                 <div class="quote-card">
                     <div class="label">Is waqie ki dua / aayat</div>
@@ -283,6 +290,7 @@ function openStory(i) {
 }
 
 function closeStory() {
+    narrStop();
     $('story-reader').classList.remove('open');
     renderStories();
 }
@@ -311,6 +319,79 @@ function openStoryKeepScroll() {
     r.scrollTop = top;
 }
 
+
+// ---------- Waqia ko AI awaaz se sunna ----------
+const NARR_RATES = [0.9, 1, 1.15];
+const NARR = { chunks: [], i: 0, playing: false, rate: 1, voice: null, token: 0 };
+function narrPickVoice() {
+    if (!('speechSynthesis' in window)) return;
+    const v = window.speechSynthesis.getVoices();
+    NARR.voice = v.find((x) => /^ur/i.test(x.lang)) || v.find((x) => /^hi/i.test(x.lang)) || v.find((x) => /^en-IN/i.test(x.lang)) || v.find((x) => /^en/i.test(x.lang)) || null;
+}
+if ('speechSynthesis' in window) {
+    narrPickVoice();
+    window.speechSynthesis.addEventListener('voiceschanged', narrPickVoice);
+}
+function narrBuild() {
+    const s = waqiaatData[currentStoryIndex];
+    const out = [];
+    const add = (txt, p) => {
+        (txt.match(/[^.!?۔]+[.!?۔]?/g) || [txt]).forEach((t) => {
+            t = t.trim();
+            if (!t) return;
+            // lambi jumlon ko chhota karo (Chrome lambi awaaz beech mein kaat deta hai)
+            while (t.length > 180) {
+                let k = t.lastIndexOf(',', 180); if (k < 40) k = t.lastIndexOf(' ', 180);
+                out.push({ t: t.slice(0, k + 1), p }); t = t.slice(k + 1).trim();
+            }
+            if (t) out.push({ t, p });
+        });
+    };
+    add(s.name + ' ka waqia.', -1);
+    s.body.forEach((b, k) => add(b, k));
+    add('Seekh. ' + s.seekh, 'seekh');
+    return out;
+}
+function narrUI() {
+    const b = $('narr-play');
+    if (!b) return;
+    b.innerHTML = ico(NARR.playing ? 'pause' : 'play');
+    b.classList.toggle('on', NARR.playing);
+    $('narr-now').textContent = NARR.playing ? 'Waqia chal raha hai…' : (NARR.chunks.length && NARR.i > 0 && NARR.i < NARR.chunks.length ? 'Ruka hua — dobara dabayein' : 'Waqia suniye');
+    $('narr-rate').querySelector('span').textContent = NARR.rate + '×';
+}
+function narrMark(p) {
+    document.querySelectorAll('#story-reader .reader-card p.speaking, #story-reader .seekh-card.speaking').forEach((e) => e.classList.remove('speaking'));
+    const el = p === 'seekh' ? document.querySelector('#story-reader .seekh-card') : (p >= 0 ? document.querySelector('#story-reader [data-p="' + p + '"]') : null);
+    if (el) { el.classList.add('speaking'); el.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+}
+function narrSpeak(i) {
+    if (!('speechSynthesis' in window)) { toast('Is browser mein awaaz ki sahulat nahi hai.'); return; }
+    const ss = window.speechSynthesis;
+    const tok = ++NARR.token;
+    ss.cancel();
+    if (!NARR.chunks.length) NARR.chunks = narrBuild();
+    if (i >= NARR.chunks.length) { NARR.playing = false; NARR.i = 0; narrMark(-1); narrUI(); return; }
+    NARR.i = i; NARR.playing = true;
+    const c = NARR.chunks[i];
+    const u = new SpeechSynthesisUtterance(c.t);
+    if (NARR.voice) { u.voice = NARR.voice; u.lang = NARR.voice.lang; } else u.lang = 'hi-IN';
+    u.rate = NARR.rate;
+    u.onend = () => { if (tok === NARR.token && NARR.playing) narrSpeak(i + 1); };
+    u.onerror = (e) => { if (tok === NARR.token && e.error !== 'canceled' && e.error !== 'interrupted') { NARR.playing = false; narrUI(); toast('Awaaz nahi chal saki.'); } };
+    narrMark(c.p); narrUI();
+    setTimeout(() => { if (tok === NARR.token) ss.speak(u); }, 60);
+}
+function narrToggle() {
+    if (NARR.playing) { NARR.token++; NARR.playing = false; try { window.speechSynthesis.cancel(); } catch (e) {} narrUI(); }
+    else narrSpeak(NARR.i < (NARR.chunks.length || 1) ? NARR.i : 0);
+}
+function narrStop() {
+    NARR.token++; NARR.playing = false; NARR.i = 0; NARR.chunks = [];
+    try { if ('speechSynthesis' in window) window.speechSynthesis.cancel(); } catch (e) {}
+    narrMark(-1); narrUI();
+}
+
 // ---------- Audio ----------
 let arVoice = null;
 function pickVoice() {
@@ -323,10 +404,40 @@ if ('speechSynthesis' in window) {
     window.speechSynthesis.addEventListener('voiceschanged', pickVoice);
 }
 
+// ---------- Ustad ki apni awaaz (record.html se bani) ----------
+let USTAD = {};          // { "الف": "data:audio/webm;base64,..." }
+let ustadAudio = null;
+function loadUstadVoice() {
+    fetch('audio/ustad-awaaz.json').then((r) => (r.ok ? r.json() : {})).then((j) => { USTAD = Object.assign(USTAD, j || {}); }).catch(() => {});
+    try {                                   // ustad ke apne phone par recorder ki awaazein foran
+        const rq = indexedDB.open('qa-voice', 1);
+        rq.onupgradeneeded = () => rq.result.createObjectStore('clips');
+        rq.onsuccess = () => {
+            const db = rq.result;
+            const tx = db.transaction('clips').objectStore('clips');
+            const ks = tx.getAllKeys(), vs = tx.getAll();
+            vs.onsuccess = () => { ks.result.forEach((k, i) => { if (vs.result[i] && vs.result[i].data) USTAD[k] = vs.result[i].data; }); };
+        };
+    } catch (e) { /* ignore */ }
+}
+loadUstadVoice();
+
 function speakAr(text, rate) {
-    if (!soundOn || !('speechSynthesis' in window)) return;
+    if (!soundOn) return;
     try {
-        window.speechSynthesis.cancel();
+        if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+        if (ustadAudio) { ustadAudio.pause(); ustadAudio = null; }
+        if (USTAD[text]) {
+            ustadAudio = new Audio(USTAD[text]);
+            ustadAudio.play().catch(() => speakTTS(text, rate));
+            return;
+        }
+    } catch (e) { /* neeche TTS chalega */ }
+    speakTTS(text, rate);
+}
+function speakTTS(text, rate) {
+    if (!('speechSynthesis' in window)) return;
+    try {
         const u = new SpeechSynthesisUtterance(text);
         u.lang = 'ar-SA';
         if (arVoice) u.voice = arVoice;
@@ -701,6 +812,9 @@ function wireEvents() {
         else if (act === 'read') markStoryRead();
         else if (act === 'prev') openStory(currentStoryIndex - 1);
         else if (act === 'next') openStory(currentStoryIndex + 1);
+        else if (act === 'narr') narrToggle();
+        else if (act === 'narr-stop') narrStop();
+        else if (act === 'narr-rate') { NARR.rate = NARR_RATES[(NARR_RATES.indexOf(NARR.rate) + 1) % NARR_RATES.length]; narrUI(); if (NARR.playing) narrSpeak(NARR.i); }
     });
 
     $('lesson-close').addEventListener('click', closeLesson);
@@ -739,3 +853,34 @@ if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('sw.js').catch(() => { /* file:// ya purana browser */ });
     });
 }
+
+
+// ---------- Install popup (PWA) ----------
+let deferredInstall = null;
+const isStandalone = () => window.matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+function showInstallBar(iosHelp) {
+    if (isStandalone() || lsGet('install_dismissed', '') === String(new Date().toDateString())) return;
+    const bar = $('install-bar'); if (!bar) return;
+    if (iosHelp) {
+        $('install-sub').textContent = 'Safari mein Share ⬆ dabayein, phir "Add to Home Screen" chunein.';
+        $('install-go').hidden = true;
+    }
+    bar.hidden = false;
+}
+window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredInstall = e;
+    setTimeout(() => showInstallBar(false), 2500);
+});
+window.addEventListener('appinstalled', () => { const b = $('install-bar'); if (b) b.hidden = true; deferredInstall = null; toast('App install ho gayi!'); });
+window.addEventListener('DOMContentLoaded', () => {
+    $('install-go').addEventListener('click', async () => {
+        if (!deferredInstall) return;
+        deferredInstall.prompt();
+        await deferredInstall.userChoice.catch(() => {});
+        deferredInstall = null; $('install-bar').hidden = true;
+    });
+    $('install-x').addEventListener('click', () => { $('install-bar').hidden = true; lsSet('install_dismissed', String(new Date().toDateString())); });
+    const ios = /iphone|ipad|ipod/i.test(navigator.userAgent) && !isStandalone();
+    if (ios) setTimeout(() => showInstallBar(true), 3500);
+});
