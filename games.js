@@ -119,6 +119,7 @@ function endGame(reason) {
     const stars = score >= s3 ? 3 : score >= s2 ? 2 : score >= s1 ? 1 : 0;
     const xp = Math.round(score / 5);
     if (xp > 0 && typeof addXP === 'function') addXP(xp);
+    if (score > 0 && typeof bumpDaily === 'function') bumpDaily('played');
 
     const praise = stars === 3 ? 'MashaAllah! Kamaal kar diya' : stars === 2 ? 'Bahut khoob!' : stars === 1 ? 'Achha raha, aur mashq karein' : 'Koi baat nahi, dobara try karein';
     const res = gel('game-result');

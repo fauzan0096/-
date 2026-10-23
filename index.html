@@ -46,6 +46,10 @@
         <symbol id="i-out" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></symbol>
         <symbol id="i-trophy" viewBox="0 0 24 24"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0zM17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3"/></symbol>
         <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-3-6.7L21 8M21 3v5h-5"/></symbol>
+        <symbol id="i-pause" viewBox="0 0 24 24"><path d="M8 5v14M16 5v14" stroke-width="3.2"/></symbol>
+        <symbol id="i-repeat" viewBox="0 0 24 24"><path d="M17 2l4 4-4 4M3 11V9a3 3 0 0 1 3-3h15M7 22l-4-4 4-4M21 13v2a3 3 0 0 1-3 3H3"/></symbol>
+        <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></symbol>
+        <symbol id="i-head" viewBox="0 0 24 24"><path d="M3 14v-2a9 9 0 0 1 18 0v2"/><path d="M21 15v3a2 2 0 0 1-2 2h-1v-6h1a2 2 0 0 1 2 2zM3 15v3a2 2 0 0 0 2 2h1v-6H5a2 2 0 0 0-2 2z"/></symbol>
         <symbol id="i-bulb" viewBox="0 0 24 24"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-4 10.5c.8.8 1 1.5 1 2.5h6c0-1 .2-1.7 1-2.5A6 6 0 0 0 12 3z"/></symbol>
     </defs>
 </svg>
@@ -113,8 +117,19 @@
                     <div class="bar"><i id="xp-bar"></i></div>
                 </div>
             </div>
+            <div class="daily-card" id="daily-card"></div>
             <div class="section-head"><h2>Aapke Sabaq</h2><span id="sabaq-count"></span></div>
             <div class="sabaq-list" id="sabaq-list"></div>
+        </section>
+
+        <!-- QURAN -->
+        <section id="page-quran" class="page">
+            <div class="page-intro"><h2>Quran — Aakhri 10 Surah</h2><p>Qari ke saath sunein, ayat-ba-ayat dohrayein aur yaad karein.</p></div>
+            <div class="hifz-card">
+                <div class="xp-meta"><span id="quran-progress-text">Yaad: 0 / 10</span><span>Surah 114 se 105</span></div>
+                <div class="bar"><i id="quran-progress-bar"></i></div>
+            </div>
+            <div class="surah-list" id="surah-list"></div>
         </section>
 
         <!-- DUAEIN -->
@@ -152,6 +167,7 @@
 
     <nav class="bottom-nav" aria-label="Main">
         <button class="nav-item active" data-tab="qaida"><svg class="i"><use href="#i-book"/></svg>Sabaq</button>
+        <button class="nav-item" data-tab="quran"><svg class="i"><use href="#i-head"/></svg>Quran</button>
         <button class="nav-item" data-tab="duas"><svg class="i"><use href="#i-moon"/></svg>Duaein</button>
         <button class="nav-item" data-tab="stories"><svg class="i"><use href="#i-scroll"/></svg>Waqiaat</button>
         <button class="nav-item" data-tab="games"><svg class="i"><use href="#i-game"/></svg>Games</button>
@@ -186,6 +202,19 @@
     </div>
 </div>
 
+<!-- ================= SURAH READER ================= -->
+<div class="reader" id="surah-reader"></div>
+
+<!-- ================= QUIZ ================= -->
+<div class="lesson" id="quiz-view">
+    <div class="lesson-top">
+        <button class="icon-btn" id="quiz-close" aria-label="Band karein"><svg class="i"><use href="#i-x"/></svg></button>
+        <div class="t"><b id="quiz-title">Quiz</b><small id="quiz-count">Sawal 1 / 5</small></div>
+    </div>
+    <div class="lesson-prog"><i id="quiz-bar"></i></div>
+    <div class="lesson-body" id="quiz-body"></div>
+</div>
+
 <!-- ================= STORY READER ================= -->
 <div class="reader" id="story-reader"></div>
 
@@ -209,7 +238,7 @@
     <div class="modal-box">
         <div class="ico"><svg class="i"><use href="#i-check"/></svg></div>
         <h2>MashaAllah!</h2>
-        <p>Aapne yeh sabaq mukammal kar liya. Agla sabaq khul gaya hai.</p>
+        <p id="success-text">Aapne yeh sabaq mukammal kar liya. Agla sabaq khul gaya hai.</p>
         <button class="btn btn-lg btn-block" id="success-close">Aage Barhein</button>
     </div>
 </div>
@@ -219,7 +248,9 @@
 <script src="courseData.js"></script>
 <script src="duas.js"></script>
 <script src="waqiaat.js"></script>
+<script src="surahs.js"></script>
 <script src="games.js"></script>
 <script src="app.js"></script>
+<script src="quran.js"></script>
 </body>
 </html>

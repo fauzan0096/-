@@ -34,10 +34,14 @@ function loadProgress() {
     let p = null;
     try { p = JSON.parse(lsGet(key, 'null')); } catch (e) { p = null; }
     if (!p) {
-        p = { unlocked: parseInt(lsGet('unlocked_level', '0'), 10) || 0, xp: 0, streak: 0, lastDay: '', storiesRead: [], best: {} };
+        p = { unlocked: parseInt(lsGet('unlocked_level', '0'), 10) || 0, xp: 0, streak: 0, lastDay: '', storiesRead: [], best: {}, memorized: [], heard: [], hifzXp: [], goalItems: 10, daily: null };
     }
     p.storiesRead = p.storiesRead || [];
     p.best = p.best || {};
+    p.memorized = p.memorized || [];
+    p.heard = p.heard || [];
+    p.hifzXp = p.hifzXp || [];
+    p.goalItems = p.goalItems || 10;
     progress = p;
     progress._key = key;
 }
@@ -118,6 +122,8 @@ function initApp() {
     renderQaida();
     renderDuas();
     renderStories();
+    renderDaily();
+    if (typeof renderSurahList === 'function') renderSurahList();
     if (typeof renderGameBests === 'function') renderGameBests();
     initCanvas();
 }
@@ -128,6 +134,8 @@ function switchTab(tabId) {
     $('page-' + tabId).classList.add('active');
     document.querySelectorAll('.nav-item').forEach((n) => n.classList.toggle('active', n.dataset.tab === tabId));
     document.querySelector('.app-header').classList.toggle('compact', tabId !== 'qaida');
+    if (tabId === 'qaida') renderDaily();
+    if (tabId === 'quran' && typeof renderSurahList === 'function') renderSurahList();
     window.scrollTo(0, 0);
 }
 
@@ -388,19 +396,14 @@ function prevItem() {
 function completeLesson() {
     const lesson = qaidaData[currentLessonIndex];
     const firstTime = currentLessonIndex >= progress.unlocked;
+    bumpDaily('items');
     if (currentItemIndex < lesson.items.length - 1) {
         if (firstTime) { progress.xp += 2; saveProgress(); renderStats(); }
         currentItemIndex++;
         loadLetter();
         return;
     }
-    if (currentLessonIndex === progress.unlocked) {
-        progress.unlocked++;
-        saveProgress();
-        addXP(30);
-    }
-    renderStats();
-    $('success-modal').classList.add('open');
+    startQuiz();   // sabaq ke aakhir mein quiz; pass hone par hi agla sabaq khulta hai
 }
 
 function closeSuccess() {
@@ -471,9 +474,200 @@ function clearCanvas() {
     if (ctx && canvas) ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
 
+
+// ==========================================================
+// Roz ka target
+// ==========================================================
+const GOAL_CHOICES = [10, 20, 30];
+
+function ensureDaily() {
+    const today = dayStr(new Date());
+    if (!progress.daily || progress.daily.date !== today) {
+        progress.daily = { date: today, items: 0, surahs: [], played: false, rewarded: false };
+    }
+    return progress.daily;
+}
+
+function dailyRows() {
+    const d = ensureDaily();
+    const goal = progress.goalItems || 10;
+    return [
+        { id: 'items', title: `${goal} huroof / alfaz seekhein`, now: Math.min(d.items, goal), max: goal, done: d.items >= goal, go: 'list', btn: 'Sabaq' },
+        { id: 'surah', title: '1 surah qari ke saath suniye', now: Math.min(d.surahs.length, 1), max: 1, done: d.surahs.length >= 1, go: 'quran', btn: 'Sunein' },
+        { id: 'played', title: '1 game ya quiz poora karein', now: d.played ? 1 : 0, max: 1, done: d.played, go: 'games', btn: 'Khelein' }
+    ];
+}
+
+function bumpDaily(kind, val) {
+    if (!progress) return;
+    const d = ensureDaily();
+    if (kind === 'items') d.items++;
+    if (kind === 'surah' && !d.surahs.includes(val)) d.surahs.push(val);
+    if (kind === 'played') d.played = true;
+    const rows = dailyRows();
+    if (!d.rewarded && rows.every((r) => r.done)) {
+        d.rewarded = true;
+        progress.xp += 30;
+        saveProgress();
+        renderStats();
+        toast('Aaj ka target poora! +30 XP');
+    }
+    saveProgress();
+    renderDaily();
+}
+
+function renderDaily() {
+    const el = $('daily-card');
+    if (!el || !progress) return;
+    const rows = dailyRows();
+    const done = rows.filter((r) => r.done).length;
+    const pct = Math.round(rows.reduce((a, r) => a + r.now / r.max, 0) / rows.length * 100);
+    const all = done === rows.length;
+    el.classList.toggle('complete', all);
+    el.innerHTML = `
+        <div class="daily-head">
+            <span class="ico">${ico(all ? 'check' : 'target')}</span>
+            <div class="t"><b>${all ? 'Aaj ka target poora!' : 'Aaj ka Target'}</b><small>${done} / ${rows.length} kaam mukammal</small></div>
+            <button class="goal-chip" data-goal title="Huroof ka target badlein">${progress.goalItems} huroof ${ico('down')}</button>
+        </div>
+        <div class="bar"><i style="width:${pct}%"></i></div>
+        <div class="tasks">
+            ${rows.map((r) => `
+                <div class="task ${r.done ? 'done' : ''}">
+                    <span class="tick">${r.done ? ico('check') : ''}</span>
+                    <div class="tt"><b>${esc(r.title)}</b>${r.max > 1 ? `<small>${r.now} / ${r.max}</small>` : ''}</div>
+                    ${r.done ? '' : `<button class="mini" data-go="${r.go}">${r.btn}</button>`}
+                </div>`).join('')}
+        </div>`;
+}
+
+// ==========================================================
+// Sabaq ke baad Quiz
+// ==========================================================
+let quiz = null;
+const quizShuffle = (arr) => { const a = arr.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+
+function buildQuiz(lesson) {
+    const seen = { ar: new Set(), voice: new Set(), ro: new Set() };
+    let pool = lesson.items.filter((it) => {
+        if (seen.ar.has(it.ar) || seen.voice.has(it.voice) || seen.ro.has(it.ro)) return false;
+        seen.ar.add(it.ar); seen.voice.add(it.voice); seen.ro.add(it.ro);
+        return true;
+    });
+    if (pool.length < 4) pool = lesson.items;
+    return quizShuffle(pool).slice(0, Math.min(5, pool.length)).map((item, k) => ({
+        type: k % 2 === 0 ? 'hear' : 'read',
+        item,
+        opts: quizShuffle([item].concat(quizShuffle(pool.filter((x) => x !== item)).slice(0, 3)))
+    }));
+}
+
+function startQuiz() {
+    quiz = { qs: buildQuiz(qaidaData[currentLessonIndex]), i: 0, score: 0, locked: false, lessonIndex: currentLessonIndex };
+    $('quiz-view').classList.add('open');
+    renderQuizQ();
+}
+
+function renderQuizQ() {
+    const q = quiz.qs[quiz.i];
+    const total = quiz.qs.length;
+    quiz.locked = false;
+    $('quiz-title').textContent = 'Sabaq ' + (quiz.lessonIndex + 1) + ' ka Quiz';
+    $('quiz-count').textContent = 'Sawal ' + (quiz.i + 1) + ' / ' + total;
+    $('quiz-bar').style.width = (quiz.i / total * 100) + '%';
+
+    const prompt = q.type === 'hear'
+        ? `<div class="q-label">Awaaz suniye aur sahi jawab chunein</div>
+           <button class="speak-big" id="quiz-speak" aria-label="Dobara suniye">${ico('vol')}</button>`
+        : `<div class="q-label">Yeh kaise padha jata hai?</div>
+           <div class="quiz-arabic ar ${sizeClass(q.item.ar)}">${esc(q.item.ar)}</div>`;
+    const opts = q.opts.map((o, k) => q.type === 'hear'
+        ? `<button class="opt qopt ${sizeClass(o.ar) ? 'sm' : ''}" data-k="${k}">${esc(o.ar)}</button>`
+        : `<button class="opt qopt latin" data-k="${k}">${esc(o.ro)}</button>`).join('');
+    $('quiz-body').innerHTML = `<div class="q-card">${prompt}<div class="opt-grid">${opts}</div></div>`;
+    if (q.type === 'hear') speakAr(q.item.voice, 0.7);
+}
+
+function answerQuiz(k) {
+    if (!quiz || quiz.locked) return;
+    quiz.locked = true;
+    const q = quiz.qs[quiz.i];
+    const right = q.opts.indexOf(q.item);
+    const btns = $('quiz-body').querySelectorAll('.qopt');
+    btns.forEach((b) => { b.disabled = true; });
+    btns[right].classList.add('right');
+    const ok = k === right;
+    if (ok) quiz.score++; else btns[k].classList.add('wrong');
+    speakAr(q.item.voice, 0.7);
+    setTimeout(() => {
+        if (!quiz) return;
+        quiz.i++;
+        if (quiz.i < quiz.qs.length) renderQuizQ(); else finishQuiz();
+    }, ok ? 1100 : 1800);
+}
+
+function finishQuiz() {
+    const total = quiz.qs.length;
+    const need = Math.ceil(total * 0.8);
+    const pass = quiz.score >= need;
+    $('quiz-bar').style.width = '100%';
+    bumpDaily('played');
+    let xpNote = '';
+    if (pass) {
+        const first = quiz.lessonIndex === progress.unlocked;
+        if (first) { progress.unlocked++; saveProgress(); }
+        const xp = quiz.score === total ? 50 : 30;
+        if (first || quiz.score === total) { addXP(xp); xpNote = ` • +${xp} XP`; }
+        renderStats(); renderQaida();
+    }
+    $('quiz-body').innerHTML = `
+        <div class="q-card result">
+            <div class="modal-icon ${pass ? '' : 'bad'}">${ico(pass ? 'trophy' : 'refresh')}</div>
+            <h2>${pass ? 'MashaAllah! Quiz pass' : 'Thoda aur mashq karein'}</h2>
+            <div class="big">${quiz.score} / ${total}</div>
+            <p class="sub">${pass ? 'Agla sabaq khul gaya hai' + xpNote : `Pass hone ke liye ${need} sahi jawab chahiye`}</p>
+            <div class="result-actions">
+                ${pass
+                    ? '<button class="btn btn-lg btn-block" id="quiz-done">Aage Barhein</button>'
+                    : '<button class="btn btn-lg btn-block" id="quiz-retry">Quiz dobara</button><button class="btn btn-ghost btn-block" id="quiz-review">Sabaq dobara dekhein</button>'}
+            </div>
+        </div>`;
+}
+
+function closeQuiz() {
+    quiz = null;
+    $('quiz-view').classList.remove('open');
+    if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+}
+
+function wireQuizAndDaily() {
+    $('quiz-close').addEventListener('click', closeQuiz);
+    $('quiz-body').addEventListener('click', (e) => {
+        const opt = e.target.closest('.qopt');
+        if (opt) { answerQuiz(parseInt(opt.dataset.k, 10)); return; }
+        if (e.target.closest('#quiz-speak')) { speakAr(quiz.qs[quiz.i].item.voice, 0.7); return; }
+        if (e.target.closest('#quiz-done')) { closeQuiz(); closeLesson(); renderQaida(); renderStats(); return; }
+        if (e.target.closest('#quiz-retry')) { startQuiz(); return; }
+        if (e.target.closest('#quiz-review')) { closeQuiz(); currentItemIndex = 0; loadLetter(); }
+    });
+    $('daily-card').addEventListener('click', (e) => {
+        if (e.target.closest('[data-goal]')) {
+            const i = GOAL_CHOICES.indexOf(progress.goalItems);
+            progress.goalItems = GOAL_CHOICES[(i + 1) % GOAL_CHOICES.length];
+            saveProgress(); renderDaily();
+            return;
+        }
+        const go = e.target.closest('[data-go]');
+        if (!go) return;
+        if (go.dataset.go === 'list') $('sabaq-list').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        else switchTab(go.dataset.go);
+    });
+}
+
 // ---------- Event wiring ----------
 function wireEvents() {
     $('login-form').addEventListener('submit', login);
+    wireQuizAndDaily();
     $('user-chip').addEventListener('click', (e) => { e.stopPropagation(); toggleUserMenu(); });
     document.addEventListener('click', (e) => { if (!e.target.closest('.menu-wrap')) toggleUserMenu(false); });
     $('menu-logout').addEventListener('click', logout);
@@ -520,7 +714,9 @@ function wireEvents() {
     // Android back button / Escape se overlays band hon
     document.addEventListener('keydown', (e) => {
         if (e.key !== 'Escape') return;
-        if ($('game-screen').classList.contains('open') && typeof exitGame === 'function') exitGame();
+        if ($('quiz-view').classList.contains('open')) closeQuiz();
+        else if ($('surah-reader').classList.contains('open') && typeof closeSurah === 'function') closeSurah();
+        else if ($('game-screen').classList.contains('open') && typeof exitGame === 'function') exitGame();
         else if ($('story-reader').classList.contains('open')) closeStory();
         else if ($('lesson-view').classList.contains('open')) closeLesson();
     });
