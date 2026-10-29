@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ur-Latn">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Aghaaz-e-Asaas — Kids</title>
+    <meta name="theme-color" content="#FFD54F">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Baloo+2:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="app.css">
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+        <symbol id="i-close" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12" stroke-width="3" stroke-linecap="round"/></symbol>
+        <symbol id="i-back" viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    </defs>
+</svg>
+
+<!-- Login Screen -->
+<div id="login-screen">
+    <form class="login-card" id="login-form">
+        <img src="qari-192.png" alt="Logo" style="width:80px; margin:0 auto 10px; border-radius:20px;">
+        <h1 style="font-family:'Amiri'; color:#1E88E5; font-size:2.5rem; margin-bottom:10px;">آغازِ اساس</h1>
+        <p style="color:#666; margin-bottom:20px;">Bachon ke liye asaan app</p>
+        <div class="field">
+            <input type="text" id="name" placeholder="Apna Naam likhein" required>
+        </div>
+        <div class="field">
+            <input type="password" id="pass" placeholder="Password" required>
+        </div>
+        <button type="submit" class="btn-kid btn-yellow" style="width:100%">Shuru Karein 🚀</button>
+        <p id="login-msg" style="color:red; margin-top:10px;"></p>
+    </form>
+</div>
+
+<!-- Main App -->
+<div id="app-screen" hidden>
+    
+    <header class="app-header">
+        <div class="header-inner">
+            <div class="header-row">
+                <div class="brand">
+                    <b>Assalamu Alaikum, <span id="user-display">Bacha</span>! 👋</b>
+                </div>
+                <button class="btn-kid btn-small btn-red" id="menu-logout">Wapas</button>
+            </div>
+            <div class="stats-card">
+                <div class="stat-item">⭐ Lvl <span id="st-level">1</span></div>
+                <div class="stat-item">🔥 <span id="st-streak">1</span> din</div>
+                <div class="stat-item">🏆 <span id="st-done">0/12</span></div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- HOME TAB -->
+        <section id="page-home" class="page active">
+            <div class="kids-grid">
+                <button class="kids-tile bg-blue" data-go="qaida">
+                    <span class="tile-emoji">📖</span>
+                    <span class="tile-text">Sabaq</span>
+                </button>
+                <button class="kids-tile bg-green" data-go="namaz">
+                    <span class="tile-emoji">🕌</span>
+                    <span class="tile-text">Namaz</span>
+                </button>
+                <button class="kids-tile bg-pink" data-go="stories">
+                    <span class="tile-emoji">📚</span>
+                    <span class="tile-text">Kahaniyan</span>
+                </button>
+                <button class="kids-tile bg-yellow" data-go="games">
+                    <span class="tile-emoji">🎮</span>
+                    <span class="tile-text">Khelo</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- QAIDA TAB (Course) -->
+        <section id="page-qaida" class="page">
+            <div class="section-head"><h2>Sabaq Chunein</h2></div>
+            <div class="sabaq-list" id="sabaq-list" dir="rtl"></div>
+        </section>
+
+        <!-- NAMAZ TAB (Hidden, only opens popup) -->
+        <section id="page-namaz" class="page"></section>
+
+        <!-- STORIES TAB -->
+        <section id="page-stories" class="page">
+            <div class="section-head"><h2>Nabiyon ki Kahaniyan</h2></div>
+            <div class="story-list" id="stories-list" dir="ltr"></div>
+            
+            <div class="section-head" style="margin-top:20px"><h2>Akhlaq ki Baatein</h2></div>
+            <button class="btn-kid btn-green btn-block" id="akhlaq-hero">Akhlaq Padhein 💚</button>
+        </section>
+
+        <!-- GAMES TAB -->
+        <section id="page-games" class="page">
+            <div class="section-head"><h2>Maze se Khelein</h2></div>
+            <div class="game-grid" id="games-menu">
+                <button class="game-card" data-game="match">
+                    <span class="emoji">🔤</span><h3>Harf Pehchano</h3>
+                </button>
+                <button class="game-card" data-game="color">
+                    <span class="emoji">🎨</span><h3>Rang Bharo</h3>
+                </button>
+            </div>
+        </section>
+    </main>
+
+    <!-- Bottom Nav -->
+    <nav class="bottom-nav">
+        <button class="nav-item active" data-tab="home">🏠 <span>Ghar</span></button>
+        <button class="nav-item" data-tab="qaida">📖 <span>Sabaq</span></button>
+        <button class="nav-item" data-tab="stories">📚 <span>Kahani</span></button>
+        <button class="nav-item" data-tab="games">🎮 <span>Khel</span></button>
+    </nav>
+</div>
+
+<!-- Views (Lesson, Games, Stories, Namaz, Akhlaq) -->
+<div class="lesson" id="lesson-view">
+    <div class="lesson-top">
+        <button class="icon-btn" id="lesson-close"><svg class="i"><use href="#i-close"/></svg></button>
+        <div class="t"><b id="lesson-title">Sabaq</b><small id="lesson-count">1 / 28</small></div>
+    </div>
+    <div class="lesson-prog"><i id="lesson-bar"></i></div>
+    <div class="lesson-body">
+        <div class="letter-card"><div class="big-letter" id="current-letter" dir="rtl">ا</div><div class="roman" id="current-roman">Alif</div></div>
+        <div class="lesson-actions">
+            <button class="btn-kid btn-yellow" id="btn-listen">🔊 Suniye</button>
+        </div>
+    </div>
+    <div class="lesson-foot">
+        <button class="btn-kid btn-blue" id="btn-prev" style="width:80px">←</button>
+        <button class="btn-kid btn-green" id="next-btn" style="flex:1">Aage →</button>
+    </div>
+</div>
+
+<div class="game-screen" id="game-screen">
+    <div class="game-top">
+        <button class="icon-btn" id="game-exit"><svg class="i"><use href="#i-back"/></svg></button>
+        <div class="title" id="game-title">Game</div>
+        <span class="chip gold" id="game-score">0 ⭐</span>
+    </div>
+    <div class="game-area" id="game-area"></div>
+</div>
+
+<div class="reader" id="story-reader"></div>
+<div class="namaz-view" id="namaz-view"></div>
+<div class="full-view" id="akhlaq-view"></div>
+
+<!-- Scripts (Only required ones) -->
+<script src="courseData.js"></script>
+<script src="waqiaat.js"></script>
+<script src="namazData.js"></script>
+<script src="akhlaqData.js"></script>
+<script src="app.js"></script>
+<script src="namaz.js"></script>
+<script src="akhlaq.js"></script>
+<script src="kidsGames.js"></script>
+</body>
+</html>
