@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'v20';
+const CACHE_VERSION = 'v21'; 
 const CACHE_NAME = `aghaaz-e-asaas-${CACHE_VERSION}`;
 
 const ASSETS_TO_CACHE = [
