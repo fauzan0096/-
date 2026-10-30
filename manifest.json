@@ -1,17 +1,17 @@
 {
-  "name": "Aghaaz-e-Asaas — Qaida",
+  "name": "Aghaaz-e-Asaas — Bachon ka Qaida",
   "short_name": "Aghaaz Asaas",
-  "description": "Bachon ke liye Qaida, Duaein, Nabiyon ke Waqiaat aur Games.",
+  "description": "3 se 7 saal ke bachon ke liye: harf, rang, duaein, surahein aur khel.",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#F7F6F2",
-  "theme_color": "#0B2A5B",
+  "background_color": "#FFF4DC",
+  "theme_color": "#FFF4DC",
   "lang": "ur",
   "icons": [
-    { "src": "qari-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
-    { "src": "qari-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
-    { "src": "qari-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
   ]
 }
