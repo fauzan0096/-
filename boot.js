@@ -11,6 +11,7 @@
   }
 
   function start() {
+    document.documentElement.setAttribute('dir', 'rtl'); document.documentElement.setAttribute('lang', 'ur');
     try { const n = document.getElementById('splash-noori'); if (n) n.innerHTML = UI.mascot('happy', 'splash-m'); } catch (e) {}
     try { V.init(); } catch (e) { console.error(e); }
     try { Store.init(); } catch (e) { console.error(e); }
