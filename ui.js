@@ -253,10 +253,17 @@
 
   /* ------------------------- awaaz record (amma/abbu ki awaaz) ------------------------- */
   // har jagah: UI.recBtn(key, label) — click par parent gate, phir 6 second ki recording
+  // har jagah: UI.recBtn(key, label) — chip par mic + "Record" likha hota hai,
+  // aur saath us cheez ka naam jis ki awaaz record hogi
   UI.recBtn = function (key, label) {
     if (!key) return '';
     const has = AA.voice && AA.voice.hasClip ? AA.voice.hasClip(key) : false;
-    return '<span class="rec-btn' + (has ? ' has' : '') + '" data-rec="' + AA.esc(key) + '" data-lbl="' + AA.esc(label || '') + '" role="button" aria-label="' + AA.esc((label || '') + ' — record') + '">🎙️<span>' + AA.esc(label || 'Awaaz') + '</span></span>';
+    const word = AA.t ? AA.t('Record') : 'Record';
+    const nm = String(label || '').trim();
+    return '<span class="rec-btn' + (has ? ' has' : '') + '" data-rec="' + AA.esc(key) + '" data-lbl="' + AA.esc(nm) + '" role="button" aria-label="' + AA.esc(word + (nm ? ' — ' + nm : '')) + '">' +
+      '<span class="rc-ic">🎙️</span>' +
+      '<span class="rc-tx"><b>' + AA.esc(nm || word) + '</b>' + (nm ? '<small>' + AA.esc(word) + (has ? ' ✓' : '') + '</small>' : (has ? '<small>✓ ' + AA.esc(word) + '</small>' : '')) + '</span>' +
+      '</span>';
   };
 
   UI.recordFor = async function (key, label) {

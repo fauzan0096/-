@@ -88,6 +88,7 @@
 
         '<div class="pa"><h3>🎙️ Ammi/Abbu ki awaaz</h3><p>Bachche apni ammi ya abbu ki awaaz mein seekhein to yaad zyada rehta hai. Neeche kisi bhi cheez par record dabayein — jahan recording ho, wahan phone ki awaaz ki jagah aap ki awaaz bajegi.</p>' +
         '<p class="note">App ke har screen par 🎙️ nishan hai — harf, tasveer, dua ya surah ke saath. Us par dabayein, chhota sa hisaab hal karein, aur apni awaaz record kar lein. Bachcha phir hamesha wahi awaaz sunega.</p>' +
+        '<p class="note">Ab har 🎙️ button par "Record" likha hai — us par dabayein, chhota hisaab hal karein aur apni awaaz record kar lein.</p>' +
         '<div class="pills" style="justify-content:flex-start;margin:8px 0">' + REC_TABS.map(([k, l], i) => '<button class="pill ' + (i === 0 ? 'on' : '') + '" data-act="rtab" data-k="' + k + '">' + l + '</button>').join('') + '</div>' +
         '<div id="rec-list"></div>' +
         '<div class="row wrap" style="margin-top:10px"><button class="mini gray" data-act="rexp">⬇️ Backup</button><button class="mini gray" data-act="rimp">⬆️ Wapas laayein</button><input type="file" id="rfile" accept="application/json" hidden></div></div>' +

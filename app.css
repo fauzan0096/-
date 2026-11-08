@@ -601,10 +601,14 @@ html[dir='ltr'] .bubble-say { border-radius: 26px 26px 8px 26px; }
 
 
 /* ---------- Awaaz record (amma/abbu) ---------- */
-.rec-btn { display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; border-radius: 99px; background: var(--card); border: 2px solid var(--line); box-shadow: var(--shadow-s); font-size: 1rem; font-weight: 700; color: var(--ink2); cursor: pointer; }
-.rec-btn span { font-size: .8rem; max-width: 90px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.rec-btn { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px 6px 10px; border-radius: 16px; background: var(--card); border: 2px solid var(--c1); box-shadow: var(--shadow-s); color: var(--ink); cursor: pointer; max-width: 100%; }
+.rec-btn .rc-ic { font-size: 1.15rem; line-height: 1; }
+.rec-btn .rc-tx { display: flex; flex-direction: column; line-height: 1.15; text-align: start; min-width: 0; }
+.rec-btn .rc-tx b { font-size: .85rem; max-width: 120px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.rec-btn .rc-tx small { font-size: .64rem; color: var(--c1d); font-weight: 700; letter-spacing: .04em; text-transform: uppercase; }
 .rec-btn:active { transform: translateY(2px); }
-.rec-btn.has { border-color: var(--ok); color: var(--c3d); background: var(--ok-bg); }
+.rec-btn.has { border-color: var(--c3); background: var(--ok-bg); }
+.rec-btn.has .rc-tx small { color: var(--c3d); }
 .rec-wrap { display: flex; justify-content: center; margin-top: 10px; }
 .rec { text-align: center; display: flex; flex-direction: column; align-items: center; gap: 10px; }
 .rec-ic { width: 96px; height: 96px; border-radius: 50%; display: grid; place-items: center; font-size: 2.6rem; background: var(--soft); border: 4px solid var(--line); }

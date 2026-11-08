@@ -484,6 +484,8 @@
     'Poori kahani': ['پوری کہانی', 'पूरी कहानी', 'Whole story', 'संपूर्ण गोष्ट'],
     'Har kahani paanch chhoti lines ki hai. 🔊 dabao to app khud padh kar sunayegi.': ['ہر کہانی پانچ چھوٹی لائنوں کی ہے۔ 🔊 دباؤ تو ایپ خود پڑھ کر سنائے گی۔', 'हर कहानी पाँच छोटी लाइनों की है। 🔊 दबाओ तो ऐप खुद पढ़ कर सुनाएगा।', 'Each story has five short lines. Tap 🔊 and the app reads it out.', 'प्रत्येक गोष्ट पाच छोट्या ओळींची आहे. 🔊 दाबा म्हणजे अ‍ॅप स्वतः वाचून दाखवेल.'],
     'Kahani poori! 🌟': ['کہانی پوری! 🌟', 'कहानी पूरी! 🌟', 'Story finished! 🌟', 'गोष्ट पूर्ण! 🌟'],
+    'Record': ['ریکارڈ', 'रिकॉर्ड', 'Record', 'रेकॉर्ड'],
+    'Ab har 🎙️ button par "Record" likha hai — us par dabayein, chhota hisaab hal karein aur apni awaaz record kar lein.': ['اب ہر 🎙️ بٹن پر "ریکارڈ" لکھا ہے — اس پر دبائیں، چھوٹا حساب حل کریں اور اپنی آواز ریکارڈ کر لیں۔', 'अब हर 🎙️ बटन पर "रिकॉर्ड" लिखा है — उस पर दबाएँ, छोटा हिसाब हल करें और अपनी आवाज़ रिकॉर्ड कर लें।', 'Every 🎙️ button now says "Record" — tap it, solve a small sum and record your voice.', 'आता प्रत्येक 🎙️ बटणावर "रेकॉर्ड" लिहिले आहे — त्यावर दाबा, छोटी बेरीज सोडवा आणि तुमचा आवाज रेकॉर्ड करा.'],
     'Matlab suno': ['مطلب سنو', 'मतलब सुनो', 'Hear the meaning', 'अर्थ ऐका'],
     'Shakal': ['شکل', 'शक्ल', 'Shape', 'आकार'],
     'Surah': ['سورت', 'सूरत', 'Surah', 'सुरा'],
