@@ -10,7 +10,7 @@ Folder kisi static server par rakhein (`python3 -m http.server`, GitHub Pages, k
 
 - `index.html` — app ka shell (meta, splash, script tags).
 - `app.css` — saari styling, `@font-face` bhi (fonts local hain).
-- `util.js`, `i18n.js`, `data.js`, `audio.js`, `store.js`, `ui.js`, `home.js`, `learn.js`, `trace.js`, `lesson.js`, `games.js`, `games2.js`, `early.js`, `art.js`, `deen.js`, `album.js`, `duo.js`, `parent.js`, `boot.js` — 19 files, isi tarteeb se load hoti hain (i18n sab se pehle, taake lafz turant tarjuma hon).
+- `util.js`, `i18n.js`, `data.js`, `audio.js`, `store.js`, `ui.js`, `home.js`, `learn.js`, `trace.js`, `lesson.js`, `games.js`, `games2.js`, `early.js`, `art.js`, `deen.js`, `album.js`, `duo.js`, `stories.js`, `parent.js`, `boot.js` — 20 files, isi tarteeb se load hoti hain (i18n sab se pehle, taake lafz turant tarjuma hon).
 - `fonts/` — 8 font files (Fredoka, Noto Naskh Arabic, Amiri, Amiri Quran).
 - `audio/quran/` — 28 ayat ki mp3 (Husary Muallim), `surah+ayat` ke 6-digit naam se.
 - `audio/ustad-awaaz.json` — walidain ki pehle se record ki hui clips (khali `{}` bhi chalega).
@@ -41,6 +41,7 @@ Huroof, rang, jaanwar, ginti (1–20), shakal, lafz, **do harfi lafz (JOIN)**, d
 - **Halki music aur naye sound effects:** `audio.js` mein WebAudio se bani music (koi file nahi) aur `tap, pop, good, great, oops, star, whoosh, win, drop, coin, magic, boing, clap, tada` — sab Phone mein hi bante hain, offline.
 - **Zubaan ka button har page par:** screen ke kinare par chhota 🌐/RO button — dabate hi paanch zubanon ki list.
 - **Kahaniyan:** home par 📖 "کہانیاں" — **10** chhoti kahaniyan (Noori aur chirya, Ammi ki baat, Do dost aur ek seb, Billi ka doodh, Pyasa kauwa, Sher aur chuha, Sach bolne wala Zain, Dada jaan ki madad, Safai ka inaam, Chaand ko salam), har ek 5 lines. Tap par app khud padh kar sunati hai, "Poori kahani" sab lines ek ke baad ek, har line 🎙️ se record bhi ho sakti hai.
+- **Har jagah apni awaaz:** 🎙️ harf, lafz, rang, jaanwar, ginti, shakal, dua, surah ki ayat, wudu/namaz ke qadam, achhi baatein, harkat, darakht ka har phal, do-harfi lafz aur kahani ki har line ke saath. Parent area mein ek hi list se sab record ho sakta hai (Harf / Alfaaz / Rang / Jaanwar / Ginti / Shakal / Duaein / Surah / Namaz / Aadat / Jodo / Kahani).
 - **Sahi awaaz:** Arbi lafz Arbi awaaz mein, uske baad us ka matlab chuni hui zubaan mein; Urdu/English/Hindi/Marathi text apni zubaan ki awaaz mein (`Voice.speakText` script dekh kar voice chunta hai).
 
 

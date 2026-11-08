@@ -485,6 +485,10 @@
     'Har kahani paanch chhoti lines ki hai. 🔊 dabao to app khud padh kar sunayegi.': ['ہر کہانی پانچ چھوٹی لائنوں کی ہے۔ 🔊 دباؤ تو ایپ خود پڑھ کر سنائے گی۔', 'हर कहानी पाँच छोटी लाइनों की है। 🔊 दबाओ तो ऐप खुद पढ़ कर सुनाएगा।', 'Each story has five short lines. Tap 🔊 and the app reads it out.', 'प्रत्येक गोष्ट पाच छोट्या ओळींची आहे. 🔊 दाबा म्हणजे अ‍ॅप स्वतः वाचून दाखवेल.'],
     'Kahani poori! 🌟': ['کہانی پوری! 🌟', 'कहानी पूरी! 🌟', 'Story finished! 🌟', 'गोष्ट पूर्ण! 🌟'],
     'Matlab suno': ['مطلب سنو', 'मतलब सुनो', 'Hear the meaning', 'अर्थ ऐका'],
+    'Shakal': ['شکل', 'शक्ल', 'Shape', 'आकार'],
+    'Surah': ['سورت', 'सूरत', 'Surah', 'सुरा'],
+    'Aadat': ['عادت', 'आदत', 'Habit', 'सवय'],
+    'Jodo': ['جوڑو', 'जोड़ो', 'Join', 'जोडा'],
     'App ke har screen par 🎙️ nishan hai — harf, tasveer, dua ya surah ke saath. Us par dabayein, chhota sa hisaab hal karein, aur apni awaaz record kar lein. Bachcha phir hamesha wahi awaaz sunega.': ['ایپ کے ہر اسکرین پر 🎙️ نشان ہے — حرف، تصویر، دعا یا سورت کے ساتھ۔ اس پر دبائیں، چھوٹا سا حساب حل کریں، اور اپنی آواز ریکارڈ کر لیں۔ بچہ پھر ہمیشہ وہی آواز سنے گا۔', 'ऐप के हर स्क्रीन पर 🎙️ निशान है — हरफ़, तस्वीर, दुआ या सूरत के साथ। उस पर दबाएँ, छोटा सा हिसाब हल करें, और अपनी आवाज़ रिकॉर्ड कर लें। बच्चा फिर हमेशा वही आवाज़ सुनेगा।', 'Every screen has a 🎙️ mark — with letters, pictures, duas and surahs. Tap it, solve a small sum, and record your own voice. The child will then always hear that voice.', 'प्रत्येक स्क्रीनवर 🎙️ खूण आहे — अक्षर, चित्र, दुआ किंवा सुरासोबत. ती दाबा, छोटी बेरीज सोडवा आणि तुमचा आवाज रेकॉर्ड करा. मूल नंतर नेहमी तोच आवाज ऐकेल.']
   };
 

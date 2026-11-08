@@ -31,11 +31,36 @@
   const tg = (id, on) => '<button class="toggle ' + (on ? 'on' : '') + '" data-act="tg" data-k="' + id + '" role="switch" aria-checked="' + !!on + '"></button>';
   const pills = (k, opts, cur) => '<div class="pills">' + opts.map(([v, l]) => '<button class="pill ' + (String(cur) === String(v) ? 'on' : '') + '" data-act="pl" data-k="' + k + '" data-v="' + v + '">' + l + '</button>').join('') + '</div>';
 
-  // record karne ki list: harf, alfaaz, duaein  (key = arabic text; Voice.arab pehle yahi clip bajata hai)
+  // record karne ki list: har cheez jo bachche ko sunai jati hai (key = jo text bola jata hai)
+  const REC_TABS = [['letters', 'Harf'], ['words', 'Alfaaz'], ['colors', 'Rang'], ['animals', 'Jaanwar'], ['numbers', 'Ginti'], ['shapes', 'Shakal'], ['duas', 'Duaein'], ['surahs', 'Surah'], ['namaz', 'Namaz'], ['habits', 'Aadat'], ['join', 'Jodo'], ['stories', 'Kahani']];
   function recItems(tab) {
-    if (tab === 'letters') return D.LETTERS.map((L) => ({ key: L.say, ar: L.ch, nm: L.n }));
-    if (tab === 'words') { const seen = {}; return D.LETTERS.filter((L) => L.w && L.w.ar).map((L) => ({ key: L.w.ar, ar: L.w.e, nm: L.w.ro + ' (' + L.w.ar + ')' })).filter((x) => !seen[x.key] && (seen[x.key] = 1)); }
-    return D.DUAS.map((d) => ({ key: d.ar, ar: d.e, nm: d.ro }));
+    if (tab === 'letters') return D.LETTERS.map((L) => ({ key: L.say, show: L.ch, nm: L.n }));
+    if (tab === 'words') {
+      const seen = {};
+      return D.LETTERS.filter((L) => L.w && L.w.ar).map((L) => ({ key: L.w.ar, show: L.w.e, nm: L.n + ' — ' + L.w.ro })).filter((x) => !seen[x.key] && (seen[x.key] = 1));
+    }
+    if (tab === 'colors') return D.COLORS.map((c) => ({ key: c.ur, show: c.things[0], nm: c.ro + ' — ' + c.en }));
+    if (tab === 'animals') return D.ANIMALS.map((a) => ({ key: a.ur, show: a.e, nm: a.ro + ' — ' + a.en }));
+    if (tab === 'numbers') return D.NUMBERS.map((n) => ({ key: n.ur, show: String(n.n), nm: n.ro }));
+    if (tab === 'shapes') return D.SHAPES.map((s) => ({ key: s.ur, show: '⬛', nm: s.ro }));
+    if (tab === 'duas') return D.DUAS.map((d) => ({ key: d.ar, show: d.e, nm: d.ro }));
+    if (tab === 'surahs') {
+      const out = [];
+      D.SURAHS.forEach((s) => s.ayat.forEach((a, i) => out.push({ key: a, show: '📖', nm: s.ro + ' — ayah ' + (i + 1) })));
+      return out;
+    }
+    if (tab === 'namaz') {
+      return D.WUDU.map((w) => ({ key: V.keyOf(w), show: w.e, nm: 'Wudu — ' + w.ro }))
+        .concat(D.POSTURES.map((p) => ({ key: V.keyOf(p), show: '🕌', nm: 'Namaz — ' + p.ro })));
+    }
+    if (tab === 'habits') return D.HABITS.map((h) => ({ key: V.keyOf(h), show: h.e, nm: h.ro }));
+    if (tab === 'join') return D.JOIN.map((j) => ({ key: j.w, show: j.w, nm: j.ro + ' — ' + j.ur }));
+    if (tab === 'stories') {
+      const out = [];
+      D.STORIES.forEach((st) => st.lines.forEach((ln, i) => out.push({ key: AA.mn(ln), show: st.e, nm: AA.mn(st.title) + ' — ' + (i + 1) })));
+      return out;
+    }
+    return [];
   }
 
   S.parent = {
@@ -63,7 +88,7 @@
 
         '<div class="pa"><h3>🎙️ Ammi/Abbu ki awaaz</h3><p>Bachche apni ammi ya abbu ki awaaz mein seekhein to yaad zyada rehta hai. Neeche kisi bhi cheez par record dabayein — jahan recording ho, wahan phone ki awaaz ki jagah aap ki awaaz bajegi.</p>' +
         '<p class="note">App ke har screen par 🎙️ nishan hai — harf, tasveer, dua ya surah ke saath. Us par dabayein, chhota sa hisaab hal karein, aur apni awaaz record kar lein. Bachcha phir hamesha wahi awaaz sunega.</p>' +
-        '<div class="pills" style="justify-content:flex-start;margin:8px 0">' + [['letters', 'Harf'], ['words', 'Alfaaz'], ['duas', 'Duaein']].map(([k, l]) => '<button class="pill ' + (k === 'letters' ? 'on' : '') + '" data-act="rtab" data-k="' + k + '">' + l + '</button>').join('') + '</div>' +
+        '<div class="pills" style="justify-content:flex-start;margin:8px 0">' + REC_TABS.map(([k, l], i) => '<button class="pill ' + (i === 0 ? 'on' : '') + '" data-act="rtab" data-k="' + k + '">' + l + '</button>').join('') + '</div>' +
         '<div id="rec-list"></div>' +
         '<div class="row wrap" style="margin-top:10px"><button class="mini gray" data-act="rexp">⬇️ Backup</button><button class="mini gray" data-act="rimp">⬆️ Wapas laayein</button><input type="file" id="rfile" accept="application/json" hidden></div></div>' +
 
@@ -85,7 +110,7 @@
       let tab = 'letters', rec = null, recKey = null;
       const list = AA.$('#rec-list', root);
       function drawList() {
-        list.innerHTML = recItems(tab).map((it) => '<div class="rec-row ' + (recKey === it.key ? 'live' : '') + '" data-key="' + AA.esc(it.key) + '"><span class="ar-big ar">' + it.ar + '</span><span class="nm">' + AA.esc(it.nm) + '<small>' + (V.hasClip(it.key) ? '✅ Recording hai' : 'Phone ki awaaz') + '</small></span>' +
+        list.innerHTML = recItems(tab).map((it) => '<div class="rec-row ' + (recKey === it.key ? 'live' : '') + '" data-key="' + AA.esc(it.key) + '"><span class="ar-big ar">' + it.show + '</span><span class="nm">' + AA.esc(it.nm) + '<small>' + (V.hasClip(it.key) ? '✅ Recording hai' : 'Phone ki awaaz') + '</small></span>' +
           '<button class="mini gray" data-act="rplay" data-key="' + AA.esc(it.key) + '" aria-label="Sunein">▶</button><button class="mini ' + (recKey === it.key ? 'red' : '') + '" data-act="rrec" data-key="' + AA.esc(it.key) + '">' + (recKey === it.key ? '⏹ Ruko' : '⏺ Record') + '</button>' +
           (V.hasClip(it.key) ? '<button class="mini gray" data-act="rdel" data-key="' + AA.esc(it.key) + '" aria-label="Hatayein">✕</button>' : '') + '</div>').join('');
       }

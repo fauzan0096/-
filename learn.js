@@ -89,7 +89,7 @@
       const seen = Store.p.harkat.seen;
       return UI.topbar({ ur: 'زبر زیر پیش', ro: 'Harkat' }) +
         '<div class="pad col"><p class="center sub">Harf ke upar ya neeche chhota nishan lagta hai — wohi harf ki awaaz badalta hai.</p>' +
-        D.HARKAT.map((h) => '<button class="lrow ' + (seen.includes(h.id) ? 'done' : '') + '" data-act="open" data-id="' + h.id + '" style="--lc:' + h.color + '22"><span class="le" style="background:' + h.color + ';color:#fff"><span class="ar-big" style="font-size:2.6rem;line-height:1.5">بَ</span></span><span class="lt"><b class="ur">' + h.ur + '</b><small>' + h.ro + ' — ' + h.cue + '</small></span>' + (seen.includes(h.id) ? '<span class="lr">✅</span>' : '<span class="lr">▶</span>') + '</button>').join('') +
+        D.HARKAT.map((h) => '<button class="lrow ' + (seen.includes(h.id) ? 'done' : '') + '" data-act="open" data-id="' + h.id + '" style="--lc:' + h.color + '22"><span class="le" style="background:' + h.color + ';color:#fff"><span class="ar-big" style="font-size:2.6rem;line-height:1.5">بَ</span></span><span class="lt"><b class="ur">' + h.ur + '</b><small>' + h.ro + ' — ' + h.cue + '</small></span>' + UI.recBtn(V.keyOf(h), h.ro) + (seen.includes(h.id) ? '<span class="lr">✅</span>' : '<span class="lr">▶</span>') + '</button>').join('') +
         '</div>';
     },
     mount(root) { UI.bind(root, { open(t) { UI.go('harkatLesson', { id: t.dataset.id }); } }); }
@@ -102,6 +102,7 @@
         '<div class="pad col" style="align-items:center"><div class="step-say"><span class="ur">' + h.ur + '</span> — ' + h.cue + '</div>' +
         '<button class="letter-card" data-act="say" id="hk-card"><span class="ar-big big-letter" id="hk-ar"></span><span class="letter-name" id="hk-syl"></span><span class="speak-fab">' + UI.icon('sound') + '</span></button>' +
         '<div class="counter-dots" id="hk-dots">' + D.LETTERS.slice(0, 10).map(() => '<i></i>').join('') + '</div>' +
+        '<div class="row" style="justify-content:center" id="hk-rec"></div>' +
         '<div class="row"><button class="btn ghost" data-act="prev" aria-label="Pichla">' + UI.icon('back') + '</button><button class="btn big green" data-act="next">Agla ' + UI.icon('next') + '</button></div></div>';
     },
     mount(root, p) {
@@ -113,6 +114,8 @@
         const syl = i === 0 ? h.vow : D.SYL[i] + h.vow;
         root.querySelector('#hk-syl').textContent = syl;
         AA.$$('#hk-dots i', root).forEach((d, k) => d.classList.toggle('on', k <= Math.min(maxSeen, 9)));
+        const recEl = root.querySelector('#hk-rec');
+        if (recEl) recEl.innerHTML = UI.recBtn(txt, h.ro + ' ' + (i + 1));
         if (say) V.sayAr(txt, 0.8);
       };
       UI.bind(root, {

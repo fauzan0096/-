@@ -274,6 +274,8 @@
 
   Voice.praise = function () { return Voice.say(AA.pick(AA.data.PRAISE)); };
   Voice.hasClip = (k) => !!Voice.clips[k];
+  // recording ki key: jo text sab se pehle sunaya jata hai
+  Voice.keyOf = (item) => (typeof item === 'string' ? item : ((item && (item.ar || item.ur || item.ro)) || ''));
 
   /* ============================ SFX ============================ */
   const SFX = (AA.sfx = { on: true, ctx: null });

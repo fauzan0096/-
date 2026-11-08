@@ -69,6 +69,7 @@
         fruits + '</svg></div>' +
         '<p class="tree-msg"><b>' + msg + '</b></p>' +
         '<div class="row wrap" style="justify-content:center;margin-top:10px"><span class="chip">🍎 ' + ripe + ' paka</span><span class="chip">🌱 ' + growing + ' ug raha</span><span class="chip">🥀 ' + thirsty + ' pyasa</span></div>' +
+        '<div class="row" style="justify-content:center" id="tree-rec"></div>' +
         '<div class="pad col" style="align-items:center"><button class="btn big blue" data-act="water">💧 Paani do</button></div>';
     },
     mount(root) {
@@ -78,6 +79,8 @@
           AA.sfx.play('pop');
           if (Store.letterState(i) === 0) { UI.toast('Yeh harf abhi seekhna hai 🌱'); return; }
           V.seq([{ ar: L.say }]);
+          const recBox = AA.$('#tree-rec', root);
+          if (recBox) recBox.innerHTML = UI.recBtn(L.say, L.n);
           UI.floatText(root, L.n, window.innerWidth / 2 - 30, window.innerHeight * 0.55, 'soft');
         },
         water() { AA.sfx.play('whoosh'); UI.go('play', { id: 'review' }); }

@@ -184,7 +184,7 @@
     S[name] = {
       render() {
         return '<div class="lesson">' + UI.topbar({ ur: titleUr, ro: titleRo }) +
-          '<div class="cards-wrap"><div class="dots-row" id="sd"></div><div class="step-card" id="sc" data-act="say"></div>' +
+          '<div class="cards-wrap"><div class="dots-row" id="sd"></div><div class="step-card" id="sc" data-act="say"></div><div class="row" style="justify-content:center" id="sc-rec"></div>' +
           '<div class="cards-nav"><button class="btn ghost" data-act="prev" aria-label="Pichla">' + UI.icon('back') + '</button><span class="count" id="sn"></span><button class="btn big green" data-act="next" aria-label="Agla">' + UI.icon('next') + '</button></div></div></div>';
       },
       mount(root) {
@@ -193,6 +193,8 @@
           const el = AA.$('#sc', root); el.innerHTML = cardFn(items[i], i); el.style.animation = 'none'; void el.offsetWidth; el.style.animation = '';
           AA.$('#sn', root).textContent = (i + 1) + ' / ' + items.length;
           AA.$('#sd', root).innerHTML = items.map((_, k) => '<i class="' + (k < i ? 'ok' : k === i ? 'cur' : '') + '"></i>').join('');
+          const recEl = AA.$('#sc-rec', root);
+          if (recEl) recEl.innerHTML = UI.recBtn(V.keyOf(items[i]), titleRo + ' ' + (i + 1));
           if (speak) speakFn(items[i]);
         }
         UI.bind(root, {
@@ -240,7 +242,7 @@
       const today = Store.habitsToday();
       return UI.topbar({ ur: 'اچھی باتیں', ro: 'Aaj main ne kya kiya?' }) +
         '<p class="center sub" style="padding:0 20px">Jo kaam aaj kiya uspar dabao — sitara milega ⭐</p>' +
-        '<div class="list">' + D.HABITS.map((h) => '<button class="habit ' + (today.includes(h.id) ? 'on' : '') + '" data-act="h" data-id="' + h.id + '"><span class="he">' + h.e + '</span><span class="ht"><span class="ur">' + h.ur + '</span><small>' + h.ro + '</small></span><span class="hs">⭐</span></button>').join('') + '</div>';
+        '<div class="list">' + D.HABITS.map((h) => '<button class="habit ' + (today.includes(h.id) ? 'on' : '') + '" data-act="h" data-id="' + h.id + '"><span class="he">' + h.e + '</span><span class="ht"><span class="ur">' + h.ur + '</span><small>' + h.ro + '</small></span>' + UI.recBtn(V.keyOf(h), '') + '<span class="lr">' + (today.includes(h.id) ? '✅' : '⭐') + '</span></button>').join('') + '</div>';
     },
     mount(root) {
       UI.bind(root, {
