@@ -242,7 +242,7 @@
       const today = Store.habitsToday();
       return UI.topbar({ ur: 'اچھی باتیں', ro: 'Aaj main ne kya kiya?' }) +
         '<p class="center sub" style="padding:0 20px">Jo kaam aaj kiya uspar dabao — sitara milega ⭐</p>' +
-        '<div class="list">' + D.HABITS.map((h) => '<button class="habit ' + (today.includes(h.id) ? 'on' : '') + '" data-act="h" data-id="' + h.id + '"><span class="he">' + h.e + '</span><span class="ht"><span class="ur">' + h.ur + '</span><small>' + h.ro + '</small></span>' + UI.recBtn(V.keyOf(h), '') + '<span class="lr">' + (today.includes(h.id) ? '✅' : '⭐') + '</span></button>').join('') + '</div>';
+        '<div class="list">' + D.HABITS.map((h) => '<button class="habit ' + (today.includes(h.id) ? 'on' : '') + '" data-act="h" data-id="' + h.id + '"><span class="he">' + h.e + '</span><span class="ht"><span class="ur">' + h.ur + '</span><small>' + h.ro + '</small></span>' + UI.recBtn(V.keyOf(h), '') + '<span class="hs">' + (today.includes(h.id) ? '✅' : '⭐') + '</span></button>').join('') + '</div>';
     },
     mount(root) {
       UI.bind(root, {
