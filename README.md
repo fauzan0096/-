@@ -40,7 +40,7 @@ Huroof, rang, jaanwar, ginti (1–20), shakal, lafz, **do harfi lafz (JOIN)**, d
 - **Rang bharne ki 16 tasveerein:** masjid, machhli, phool, gubbaray, ghar, titli, chaand, darakht, sooraj, sitara, patang, rocket, bus, kitaab, seb aur dil — har tasveer alag alag hisson mein, ungli se rang bharne ke liye; saath hi 28 huroof ki mashq.
 - **Halki music aur naye sound effects:** `audio.js` mein WebAudio se bani music (koi file nahi) aur `tap, pop, good, great, oops, star, whoosh, win, drop, coin, magic, boing, clap, tada` — sab Phone mein hi bante hain, offline.
 - **Zubaan ka button har page par:** screen ke kinare par chhota 🌐/RO button — dabate hi paanch zubanon ki list.
-- **Kahaniyan:** home par 📖 "کہانیاں" — 4 chhoti kahaniyan (Noori aur chirya, Ammi ki baat, Do dost aur ek seb, Billi ka doodh), har ek 5 lines. Tap par app khud padh kar sunati hai, "Poori kahani" sab lines ek ke baad ek, har line 🎙️ se record bhi ho sakti hai.
+- **Kahaniyan:** home par 📖 "کہانیاں" — **10** chhoti kahaniyan (Noori aur chirya, Ammi ki baat, Do dost aur ek seb, Billi ka doodh, Pyasa kauwa, Sher aur chuha, Sach bolne wala Zain, Dada jaan ki madad, Safai ka inaam, Chaand ko salam), har ek 5 lines. Tap par app khud padh kar sunati hai, "Poori kahani" sab lines ek ke baad ek, har line 🎙️ se record bhi ho sakti hai.
 - **Sahi awaaz:** Arbi lafz Arbi awaaz mein, uske baad us ka matlab chuni hui zubaan mein; Urdu/English/Hindi/Marathi text apni zubaan ki awaaz mein (`Voice.speakText` script dekh kar voice chunta hai).
 
 

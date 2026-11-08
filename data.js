@@ -426,6 +426,72 @@
         { e: '😺', ro: 'Billi ne doodh piya aur khush ho kar chali gayi.', ur: 'بلی نے دودھ پیا اور خوش ہو کر چلی گئی۔', hi: 'बिल्ली ने दूध पिया और खुश हो कर चली गई।', en: 'The cat drank it and went away happy.', mr: 'मांजरने दूध प्यायले आणि आनंदाने गेली.' },
         { e: '💚', ro: 'Hamza khush hua — jaanwaron se pyar karo.', ur: 'حمزہ خوش ہوا — جانوروں سے پیار کرو۔', hi: 'हमज़ा खुश हुआ — जानवरों से प्यार करो।', en: 'Hamza was happy — be kind to animals.', mr: 'हमझा आनंदी झाला — प्राण्यांवर प्रेम करा.' }
       ]
+    },
+    {
+      id: 'kauwa', e: '🐦‍⬛', color: '#6B6490',
+      title: { ro: 'Pyasa kauwa', ur: 'پیاسا کوا', hi: 'प्यासा कौआ', en: 'The thirsty crow', mr: 'तहानलेला कावळा' },
+      lines: [
+        { e: '🐦‍⬛', ro: 'Ek kauwa ud raha tha.', ur: 'ایک کوا اڑ رہا تھا۔', hi: 'एक कौआ उड़ रहा था।', en: 'A crow was flying.', mr: 'एक कावळा उडत होता.' },
+        { e: '🥵', ro: 'Us ko bohat pyaas lagi thi.', ur: 'اس کو بہت پیاس لگی تھی۔', hi: 'उसे बहुत प्यास लगी थी।', en: 'He was very thirsty.', mr: 'त्याला खूप तहान लागली होती.' },
+        { e: '🏺', ro: 'Us ne ek ghara dekha — us mein thoda paani tha.', ur: 'اس نے ایک گھڑا دیکھا — اس میں تھوڑا پانی تھا۔', hi: 'उसने एक घड़ा देखा — उसमें थोड़ा पानी था।', en: 'He saw a pot — with a little water in it.', mr: 'त्याला एक घागर दिसले — त्यात थोडे पाणी होते.' },
+        { e: '🪨', ro: 'Us ne chhote patthar uthaye aur ghare mein daale.', ur: 'اس نے چھوٹے پتھر اٹھائے اور گھڑے میں ڈالے۔', hi: 'उसने छोटे पत्थर उठाए और घड़े में डाले।', en: 'He picked up small stones and dropped them in.', mr: 'त्याने छोटे दगड उचलले आणि घागरात टाकले.' },
+        { e: '💧', ro: 'Paani upar aa gaya — kauwa khush ho kar piya.', ur: 'پانی اوپر آ گیا — کوا خوش ہو کر پیا۔', hi: 'पानी ऊपर आ गया — कौआ खुश हो कर पिया।', en: 'The water rose — the crow drank happily.', mr: 'पाणी वर आले — कावळा आनंदाने प्यायला.' }
+      ]
+    },
+    {
+      id: 'sher', e: '🦁', color: '#FFB020',
+      title: { ro: 'Sher aur chuha', ur: 'شیر اور چوہا', hi: 'शेर और चूहा', en: 'The lion and the mouse', mr: 'सिंह आणि उंदीर' },
+      lines: [
+        { e: '🦁', ro: 'Ek sher so raha tha.', ur: 'ایک شیر سو رہا تھا۔', hi: 'एक शेर सो रहा था।', en: 'A lion was sleeping.', mr: 'एक सिंह झोपला होता.' },
+        { e: '🐭', ro: 'Ek chhota chuha us ke upar daur gaya.', ur: 'ایک چھوٹا چوہا اس کے اوپر دوڑ گیا۔', hi: 'एक छोटा चूहा उसके ऊपर दौड़ गया।', en: 'A little mouse ran over him.', mr: 'एक छोटा उंदीर त्याच्यावरून धावला.' },
+        { e: '😮', ro: 'Sher utha, magar chuhe ko chhod diya.', ur: 'شیر اٹھا، مگر چوہے کو چھوڑ دیا۔', hi: 'शेर उठा, मगर चूहे को छोड़ दिया।', en: 'The lion woke up, but let the mouse go.', mr: 'सिंह उठला, पण उंदराला सोडून दिले.' },
+        { e: '🤝', ro: 'Kuch din baad chuhe ne sher ki madad ki.', ur: 'کچھ دن بعد چوہے نے شیر کی مدد کی۔', hi: 'कुछ दिन बाद चूहे ने शेर की मदद की।', en: 'Some days later the mouse helped the lion.', mr: 'काही दिवसांनी उंदराने सिंहाला मदत केली.' },
+        { e: '💚', ro: 'Chhoti madad bhi bari hoti hai.', ur: 'چھوٹی مدد بھی بڑی ہوتی ہے۔', hi: 'छोटी मदद भी बड़ी होती है।', en: 'Even a small help is a big help.', mr: 'छोटी मदतही मोठी असते.' }
+      ]
+    },
+    {
+      id: 'zain', e: '✏️', color: '#8B6CFF',
+      title: { ro: 'Sach bolne wala Zain', ur: 'سچ بولنے والا زین', hi: 'सच बोलने वाला ज़ैन', en: 'Zain tells the truth', mr: 'खरे बोलणारा झैन' },
+      lines: [
+        { e: '🙁', ro: 'Zain ka pencil kho gaya.', ur: 'زین کا پنسل کھو گیا۔', hi: 'ज़ैन का पेंसिल खो गया।', en: 'Zain lost his pencil.', mr: 'झैनची पेन्सिल हरवली.' },
+        { e: '👀', ro: 'Us ne dekha: pencil Dawood ke paas hai.', ur: 'اس نے دیکھا: پنسل داؤد کے پاس ہے۔', hi: 'उसने देखा: पेंसिल दाऊद के पास है।', en: 'He saw the pencil with Dawood.', mr: 'त्याने पाहिले: पेन्सिल दाऊदकडे आहे.' },
+        { e: '🗣️', ro: 'Zain ne sach bola: "Yeh meri pencil hai."', ur: 'زین نے سچ بولا: "یہ میری پنسل ہے۔"', hi: 'ज़ैन ने सच बोला: "यह मेरी पेंसिल है।"', en: 'Zain told the truth: "That is my pencil."', mr: 'झैनने खरे बोलले: "ही माझी पेन्सिल आहे."' },
+        { e: '🤲', ro: 'Dawood ne maafi mangi.', ur: 'داؤد نے معافی مانگی۔', hi: 'दाऊद ने माफ़ी माँगी।', en: 'Dawood said sorry.', mr: 'दाऊदने माफी मागितली.' },
+        { e: '💚', ro: 'Sach bolne se dil halka hota hai.', ur: 'سچ بولنے سے دل ہلکا ہوتا ہے۔', hi: 'सच बोलने से दिल हल्का होता है।', en: 'Telling the truth makes the heart light.', mr: 'खरे बोलल्याने मन हलके होते.' }
+      ]
+    },
+    {
+      id: 'dada', e: '🧓', color: '#12B5A6',
+      title: { ro: 'Dada jaan ki madad', ur: 'دادا جان کی مدد', hi: 'दादा जान की मदद', en: 'Helping grandfather', mr: 'आजोबांना मदत' },
+      lines: [
+        { e: '🧓', ro: 'Dada jaan ko chalne mein takleef thi.', ur: 'دادا جان کو چلنے میں تکلیف تھی۔', hi: 'दादा जान को चलने में तकलीफ़ थी।', en: 'Grandfather had trouble walking.', mr: 'आजोबांना चालण्यात त्रास होता.' },
+        { e: '👧', ro: 'Ayesha ne un ka haath pakda.', ur: 'عائشہ نے ان کا ہاتھ پکڑا۔', hi: 'आयशा ने उनका हाथ पकड़ा।', en: 'Ayesha held his hand.', mr: 'आयशाने त्यांचा हात धरला.' },
+        { e: '🚶', ro: 'Unhon ne mil kar ghar tak saath chal diya.', ur: 'انہوں نے مل کر گھر تک ساتھ چل دیا۔', hi: 'उन्होंने मिल कर घर तक साथ चल दिया।', en: 'Together they walked home.', mr: 'ते दोघे एकत्र घरापर्यंत चालले.' },
+        { e: '😊', ro: 'Dada jaan ne kaha: "Shabash, meri bachchi."', ur: 'دادا جان نے کہا: "شاباش، میری بچی۔"', hi: 'दादा जान ने कहा: "शाबाश, मेरी बच्ची।"', en: 'Grandfather said: "Well done, my child."', mr: 'आजोबा म्हणाले: "शाब्बास, माझ्या बाळा."' },
+        { e: '💚', ro: 'Buzurgon ka khayal rakho.', ur: 'بزرگوں کا خیال رکھو۔', hi: 'बुज़ुर्गों का ख़याल रखो।', en: 'Take care of the elders.', mr: 'मोठ्यांची काळजी घ्या.' }
+      ]
+    },
+    {
+      id: 'safai', e: '🧺', color: '#7BD65A',
+      title: { ro: 'Safai ka inaam', ur: 'صفائی کا انعام', hi: 'सफ़ाई का इनाम', en: 'The reward of tidying', mr: 'स्वच्छतेचे बक्षीस' },
+      lines: [
+        { e: '🧸', ro: 'Kamre mein khiloney bikhre thay.', ur: 'کمرے میں کھلونے بکھرے تھے۔', hi: 'कमरे में खिलौने बिखरे थे।', en: 'Toys were scattered in the room.', mr: 'खोलीत खेळणी पसरलेली होती.' },
+        { e: '👦', ro: 'Amaan ne sab khiloney uthaye.', ur: 'امان نے سب کھلونے اٹھائے۔', hi: 'अमान ने सब खिलौने उठाए।', en: 'Amaan picked up all the toys.', mr: 'अमानने सर्व खेळणी उचलली.' },
+        { e: '🧺', ro: 'Us ne unhen tokri mein rakha.', ur: 'اس نے انہیں ٹوکری میں رکھا۔', hi: 'उसने उन्हें टोकरी में रखा।', en: 'He put them in the basket.', mr: 'त्याने ती टोपलीत ठेवली.' },
+        { e: '✨', ro: 'Kamra saaf ho gaya.', ur: 'کمرہ صاف ہو گیا۔', hi: 'कमरा साफ़ हो गया।', en: 'The room became clean.', mr: 'खोली स्वच्छ झाली.' },
+        { e: '💚', ro: 'Ammi ne kaha: "MashaAllah! Safai aadha imaan hai."', ur: 'امی نے کہا: "ماشاءاللہ! صفائی آدھا ایمان ہے۔"', hi: 'अम्मी ने कहा: "माशाअल्लाह! सफ़ाई आधा ईमान है।"', en: 'Ammi said: "MashaAllah! Cleanliness is half of faith."', mr: 'आई म्हणाली: "माशाअल्लाह! स्वच्छता अर्धा ईमान आहे."' }
+      ]
+    },
+    {
+      id: 'chaand', e: '🌙', color: '#3DA9FC',
+      title: { ro: 'Chaand ko salam', ur: 'چاند کو سلام', hi: 'चाँद को सलाम', en: 'Hello, moon', mr: 'चंद्राला सलाम' },
+      lines: [
+        { e: '🌙', ro: 'Raat hui aur chaand nikla.', ur: 'رات ہوئی اور چاند نکلا۔', hi: 'रात हुई और चाँद निकला।', en: 'Night came and the moon rose.', mr: 'रात्र झाली आणि चंद्र उगवला.' },
+        { e: '🧒', ro: 'Noori ne chaand dekha aur muskura diya.', ur: 'نوری نے چاند دیکھا اور مسکرا دیا۔', hi: 'नूरी ने चाँद देखा और मुस्कुरा दिया।', en: 'Noori saw the moon and smiled.', mr: 'नूरीने चंद्र पाहिला आणि हसला.' },
+        { e: '🤲', ro: 'Us ne dua ki: "Ae Allah, sab ko sukoon de."', ur: 'اس نے دعا کی: "اے اللہ، سب کو سکون دے۔"', hi: 'उसने दुआ की: "ऐ अल्लाह, सब को सुकून दे।"', en: 'He prayed: "O Allah, give everyone peace."', mr: 'त्याने दुआ केली: "हे अल्लाह, सर्वांना शांती दे."' },
+        { e: '🛏️', ro: 'Ammi ne chaadar odhai aur pyar kiya.', ur: 'امی نے چادر اوڑھائی اور پیار کیا۔', hi: 'अम्मी ने चादर ओढ़ाई और प्यार किया।', en: 'Ammi covered him and hugged him.', mr: 'आईने चादर घातली आणि प्रेम केले.' },
+        { e: '😴', ro: 'Noori sukoon se so gaya.', ur: 'نوری سکون سے سو گیا۔', hi: 'नूरी सुकून से सो गया।', en: 'Noori fell asleep peacefully.', mr: 'नूरी शांतीने झोपला.' }
+      ]
     }
   ];
 })();
