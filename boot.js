@@ -52,8 +52,12 @@
     try { UI.go(Store.profile ? 'home' : 'welcome', {}, { root: true }); AA.booted = true; } catch (e) { console.error(e); const d = document.getElementById('boot-err'); if (d) d.textContent += 'go: ' + e.message; return; }
     setTimeout(hideSplash, 700);
 
-    // pehli touch par audio chalu (browser ki shart)
-    const unlock = () => { try { AA.sfx.play('tap'); } catch (e) {} window.removeEventListener('pointerdown', unlock); };
+    // pehli touch par audio chalu (browser ki shart) + halki music
+    const unlock = () => {
+      try { AA.sfx.play('tap'); } catch (e) {}
+      try { if (Store.settings.music !== false && AA.music) AA.music.start(); } catch (e) {}
+      window.removeEventListener('pointerdown', unlock);
+    };
     window.addEventListener('pointerdown', unlock, { once: true });
 
     // install

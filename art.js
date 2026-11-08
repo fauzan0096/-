@@ -76,6 +76,64 @@
       ['r', '<path d="M88 162 L94 104 L106 104 L112 162 Z"/>'],
       ['r', '<circle cx="66" cy="102" r="28"/>'], ['r', '<circle cx="134" cy="102" r="28"/>'], ['r', '<circle cx="100" cy="76" r="38"/>'],
       ['r', '<circle cx="84" cy="74" r="6"/>'], ['r', '<circle cx="118" cy="90" r="6"/>'], ['r', '<circle cx="64" cy="106" r="6"/>']
+    ]),
+    build('sooraj', 'سورج', 'Sooraj', '☀️', [
+      ['r', '<rect x="0" y="0" width="200" height="200"/>'],
+      ['r', '<circle cx="100" cy="92" r="42"/>'],
+      ['r', '<path d="M100 18 L114 46 L86 46 Z"/>'],
+      ['r', '<path d="M100 166 L86 138 L114 138 Z"/>'],
+      ['r', '<path d="M14 92 L42 78 L42 106 Z"/>'],
+      ['r', '<path d="M186 92 L158 106 L158 78 Z"/>'],
+      ['r', '<rect x="0" y="168" width="200" height="32"/>']
+    ]),
+    build('sitara', 'ستارہ', 'Sitara', '⭐', [
+      ['r', '<rect x="0" y="0" width="200" height="200"/>'],
+      ['r', star(100, 100, 74, 32)]
+    ]),
+    build('patang', 'پتنگ', 'Patang', '🪁', [
+      ['r', '<rect x="0" y="0" width="200" height="200"/>'],
+      ['r', '<path d="M100 16 L166 84 L100 152 L34 84 Z"/>'],
+      ['r', '<path d="M100 34 L148 84 L100 134 L52 84 Z"/>'],
+      ['r', '<path d="M104 158 L120 166 L104 174 Z"/>'],
+      ['r', '<path d="M96 182 L80 190 L96 198 Z"/>'],
+      ['l', '<path class="ol" d="M100 152 Q120 166 104 174 M104 174 Q86 182 96 190"/>']
+    ]),
+    build('rocket', 'راکٹ', 'Rocket', '🚀', [
+      ['r', '<rect x="0" y="0" width="200" height="200"/>'],
+      ['r', '<path d="M100 12 C128 48 136 96 136 132 L64 132 C64 96 72 48 100 12 Z"/>'],
+      ['r', '<circle cx="100" cy="76" r="15"/>'],
+      ['r', '<path d="M64 112 L38 154 L64 144 Z"/>'],
+      ['r', '<path d="M136 112 L162 154 L136 144 Z"/>'],
+      ['r', '<path d="M84 136 L100 180 L116 136 Z"/>'],
+      ['r', '<circle cx="34" cy="42" r="7"/>'],
+      ['r', '<circle cx="168" cy="66" r="5"/>']
+    ]),
+    build('bus', 'بس', 'Bus', '🚌', [
+      ['r', '<rect x="0" y="0" width="200" height="200"/>'],
+      ['r', '<rect x="18" y="56" width="164" height="104" rx="18"/>'],
+      ['r', '<rect x="32" y="74" width="50" height="38" rx="6"/>'],
+      ['r', '<rect x="92" y="74" width="50" height="38" rx="6"/>'],
+      ['r', '<rect x="148" y="74" width="26" height="38" rx="6"/>'],
+      ['r', '<circle cx="60" cy="164" r="18"/>'],
+      ['r', '<circle cx="140" cy="164" r="18"/>'],
+      ['r', '<rect x="0" y="168" width="200" height="32"/>']
+    ]),
+    build('kitaab', 'کتاب', 'Kitaab', '📖', [
+      ['r', '<rect x="0" y="0" width="200" height="200"/>'],
+      ['r', '<path d="M100 58 C74 40 40 38 22 48 L22 162 C40 152 74 154 100 172 Z"/>'],
+      ['r', '<path d="M100 58 C126 40 160 38 178 48 L178 162 C160 152 126 154 100 172 Z"/>'],
+      ['l', '<path class="ol" d="M100 58 L100 172"/>']
+    ]),
+    build('seb', 'سیب', 'Seb', '🍎', [
+      ['r', '<rect x="0" y="0" width="200" height="200"/>'],
+      ['r', '<path d="M100 60 C64 40 26 60 26 104 C26 146 64 174 100 182 C136 174 174 146 174 104 C174 60 136 40 100 60 Z"/>'],
+      ['r', '<path d="M96 62 L102 26 L112 32 Z"/>'],
+      ['r', '<path d="M104 52 C92 34 106 20 122 26 C134 32 120 54 104 52 Z"/>'],
+      ['r', '<rect x="0" y="182" width="200" height="18"/>']
+    ]),
+    build('dil', 'دل', 'Dil', '❤️', [
+      ['r', '<rect x="0" y="0" width="200" height="200"/>'],
+      ['r', '<path d="M100 178 C44 136 24 100 24 74 C24 46 46 30 68 30 C84 30 95 40 100 52 C105 40 116 30 132 30 C154 30 176 46 176 74 C176 100 156 136 100 178 Z"/>']
     ])
   ];
   AA.artPages = PAGES;
@@ -93,7 +151,7 @@
     render() {
       const pics = '<div class="art-grid">' + PAGES.map((pg) => {
         const rec = Store.p.art[pg.id] || {}, done = Object.keys(rec).length >= pg.n;
-        return '<button class="art-tile" data-act="open" data-id="' + pg.id + '">' + (done ? '<span class="done-tag">✅</span>' : '') + previewSvg(pg, rec) + '<b class="ur">' + pg.ur + '</b></button>';
+        return '<button class="art-tile" data-act="open" data-id="' + pg.id + '">' + (done ? '<span class="done-tag">✅</span>' : '') + previewSvg(pg, rec) + '<b class="ur">' + pg.ur + '</b><small class="sub">' + pg.e + ' ' + pg.ro + '</small></button>';
       }).join('') + '</div>';
       const huroof = '<h3 class="harf-head"><span>🔤</span> <span class="ur">حروف — رنگ بھرو اور مشق کرو</span></h3>' +
         '<p class="center sub" style="padding:0 18px">الف سے ی تک — har harf ko rang bharo, ungli se likho, phir mitti mein ya kaghaz par dohrao</p>' +

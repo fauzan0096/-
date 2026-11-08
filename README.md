@@ -37,13 +37,16 @@ Huroof, rang, jaanwar, ginti (1–20), shakal, lafz, **do harfi lafz (JOIN)**, d
 - **Aaj ka dohrai:** jo harf bhoolne wale hain wo home se seedha dohrane ko milte hain.
 - **Kamyabi / report ki tasveer:** `UI.cardImage` + `UI.shareImage` se PNG banti hai — WhatsApp par bhej dein ya gallery mein save ho jati hai.
 - **Naam bol kar batana:** home ke tile dabane par agla screen apna naam bolta hai (`UI.speakNext`), kyunki chhote bachche padh nahi sakte.
+- **Rang bharne ki 16 tasveerein:** masjid, machhli, phool, gubbaray, ghar, titli, chaand, darakht, sooraj, sitara, patang, rocket, bus, kitaab, seb aur dil — har tasveer alag alag hisson mein, ungli se rang bharne ke liye; saath hi 28 huroof ki mashq.
+- **Halki music aur naye sound effects:** `audio.js` mein WebAudio se bani music (koi file nahi) aur `tap, pop, good, great, oops, star, whoosh, win, drop, coin, magic, boing, clap, tada` — sab Phone mein hi bante hain, offline.
+- **Zubaan ka button har page par:** screen ke kinare par chhota 🌐/RO button — dabate hi paanch zubanon ki list.
 
 
 ## Zubaan (languages)
 
 App panch zubanon mein chalti hai: **Roman Urdu** (default), **اردو**, **हिन्दी**, **English**, **मराठी**.
 
-- Badalne ki jagah: Welcome screen par sab se upar, ya Parent area → Settings → Zubaan.
+- Badalne ki jagah: har page par kinare wala 🌐 button, Welcome screen par sab se upar, ya Parent area → Settings → Zubaan.
 - `i18n.js` mein `AA.LANGS` (zubanein) aur `D` (tarjuma: Roman Urdu lafz → [ur, hi, en, mr]) hai. Naya lafz add karna ho to usi tarteeb se ek line daal dein.
 - `AA.t('lafz')` ek lafz ka tarjuma deta hai; `AA.i18n(html)` poori screen ka; `AA.mn(item)` content ka matlab (`data.js` ke `mr`/`hi`/`ro`/`en` fields).
 - Urdu mode mein app RTL chalti hai, baqi zubanon mein LTR; harf khud hamesha RTL rehte hain.

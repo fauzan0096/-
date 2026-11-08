@@ -53,6 +53,7 @@
         '<div class="pa"><h3>⚙️ Settings</h3>' +
         '<div class="set-row"><div class="lbl"><b>Awaaz</b><small>Awaaz aur effects</small></div>' + tg('sound', st.sound) + '</div>' +
         '<div class="set-row"><div class="lbl"><b>Awaaz test</b><small>TTS check karein</small></div><button class="mini" data-act="vtest">🔊 Sunao</button></div>' +
+        '<div class="set-row"><div class="lbl"><b>Music</b><small>Halki music</small></div>' + tg('music', st.music !== false) + '</div>' +
         '<div class="set-row"><div class="lbl"><b>Bolne ki raftaar</b></div>' + pills('speed', [[0.8, 'Dheemi'], [1, 'Normal'], [1.15, 'Tez']], st.speed) + '</div>' +
         '<div class="set-row"><div class="lbl"><b>English bhi bolo</b><small>Urdu ke baad English lafz</small></div>' + tg('bilingual', st.bilingual) + '</div>' +
         '<div class="set-row"><div class="lbl"><b>Rozana waqt ki had</b><small>Poora hone par "aaram" screen</small></div>' + pills('limit', [[0, 'Band'], [10, '10'], [20, '20'], [30, '30'], [45, '45']], st.limit) + '</div>' +
@@ -110,7 +111,14 @@
       }
       const setK = (k, v) => { Store.settings[k] = v; Store.saveSettings(); };
       UI.bind(root, {
-        tg(t) { const k = t.dataset.k; setK(k, !Store.settings[k]); t.classList.toggle('on', Store.settings[k]); t.setAttribute('aria-checked', Store.settings[k]); if (k === 'sound' && Store.settings.sound) AA.sfx.play('good'); },
+        tg(t) {
+          const k = t.dataset.k;
+          setK(k, !Store.settings[k]);
+          t.classList.toggle('on', Store.settings[k]);
+          t.setAttribute('aria-checked', Store.settings[k]);
+          if (k === 'sound' && Store.settings.sound) AA.sfx.play('good');
+          if (k === 'music') { try { if (Store.settings.music) AA.music.start(); else AA.music.stop(); } catch (e) {} }
+        },
         pl(t) {
           const k = t.dataset.k; let v = t.dataset.v;
           if (k === 'age') { Store.updateProfile(Store.profile.id, { age: v }); UI.refresh(); return; }

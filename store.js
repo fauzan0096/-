@@ -11,7 +11,7 @@
   // Dohrane ka waqfa (din): box 0..6
   const INTERVALS = [0, 1, 2, 4, 8, 16, 32];
 
-  Store.settings = { sound: true, speed: 1, bilingual: false, limit: 0, theme: 'auto', lang: 'ro' };
+  Store.settings = { sound: true, speed: 1, bilingual: false, limit: 0, theme: 'auto', lang: 'ro', music: true };
   Store.profiles = [];
   Store.profile = null;
   Store.p = null;
@@ -39,6 +39,7 @@
   Store.applySettings = function () {
     const s = Store.settings;
     AA.voice.on = !!s.sound; AA.sfx.on = !!s.sound;
+    if (AA.music) AA.music.set(s.music !== false);
     AA.voice.speed = s.speed || 1;
     AA.voice.bilingual = !!s.bilingual;
     AA.voice.base = Store.profile && Store.profile.age === 'bada' ? 0.92 : 0.8;

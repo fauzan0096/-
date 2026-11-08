@@ -134,6 +134,7 @@
     try { if (S.mount) S.mount(root, params || {}); } catch (e) { console.error(e); }
     root.scrollTop = 0; window.scrollTo(0, 0);
     document.body.dataset.screen = name;
+    UI.langFab();   // har page par zubaan ka button
     // naye screen ka naam bolo (chhote bachche button ka label padh nahi sakte)
     if (UI.speakNextSpec) { const sp = UI.speakNextSpec; UI.speakNextSpec = null; setTimeout(() => AA.voice.seq([sp]), 320); }
   }
@@ -225,7 +226,7 @@
   UI.reward = async function (n, why) {
     if (!n) return;
     const earned = Store.addStars(n, why);
-    AA.sfx.play('star');
+    AA.sfx.play('coin');
     UI.flyStars(n);
     for (const s of earned) { await AA.wait(500); await UI.stickerModal(s); }
   };
@@ -319,6 +320,36 @@
     });
   };
 
+  /* ------------------------- zubaan (har page par) ------------------------- */
+  const LANG_SHORT = { ro: 'RO', ur: 'اردو', hi: 'हि', en: 'EN', mr: 'मर' };
+  UI.langFab = function () {
+    let el = document.getElementById('lang-fab');
+    if (!el) {
+      el = document.createElement('button');
+      el.id = 'lang-fab';
+      el.className = 'lang-fab';
+      el.setAttribute('aria-label', 'Zubaan badlein');
+      el.addEventListener('click', () => UI.langSheet());
+      document.body.appendChild(el);
+    }
+    el.textContent = LANG_SHORT[AA.lang] || '🌐';
+  };
+  UI.langSheet = function () {
+    const m = UI.modal('<div class="langs"><h3>' + AA.t('Zubaan') + '</h3><div class="col">' +
+      AA.LANGS.map((l) => '<button class="btn ' + (l.id === AA.lang ? 'green' : 'ghost') + '" data-l="' + l.id + '">' + l.native + '</button>').join('') +
+      '</div></div>', { cls: 'lang-modal' });
+    m.el.addEventListener('click', (e) => {
+      const b = e.target.closest('[data-l]');
+      if (!b) return;
+      Store.settings.lang = b.dataset.l;
+      Store.saveSettings();
+      UI.closeModal(m);
+      UI.langFab();
+      AA.sfx.play('tap');
+      UI.refresh();
+    });
+  };
+
   /* ------------------------- parent gate ------------------------- */
   // har screen ke 🎙️ button (capture phase, taake card ka apna action na chale)
   document.addEventListener('click', (e) => {
@@ -370,6 +401,7 @@
   UI.restOverlay = function () {
     restShown = true;
     AA.voice.stop();
+    try { AA.music.stop(); } catch (e) {}
     const m = UI.modal(
       '<div class="rest">' + UI.mascot('happy', 'rest-noori') + '<h2>Aaram ka waqt 🌙</h2>' +
       '<p>Aaj ke liye bohat khel liya. Ab aankhon ko aaram do, kal phir milenge, in shaa Allah!</p>' +

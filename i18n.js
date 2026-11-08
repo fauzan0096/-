@@ -476,6 +476,8 @@
     'Awaaz nahi aayi — phir koshish karein': ['آواز نہیں آئی — پھر کوشش کریں', 'आवाज़ नहीं आई — फिर कोशिश करें', 'No sound recorded — please try again', 'आवाज आला नाही — पुन्हा प्रयत्न करा'],
     'Awaaz save ho gayi ✅': ['آواز محفوظ ہو گئی ✅', 'आवाज़ सेव हो गई ✅', 'Voice saved ✅', 'आवाज जतन झाला ✅'],
     'Awaaz test': ['آواز ٹیسٹ', 'आवाज़ टेस्ट', 'Sound test', 'आवाज चाचणी'],
+    'Music': ['موسیقی', 'संगीत', 'Music', 'संगीत'],
+    'Halki music': ['ہلکی موسیقی', 'हल्का संगीत', 'Soft music', 'हलका संगीत'],
     'App ke har screen par 🎙️ nishan hai — harf, tasveer, dua ya surah ke saath. Us par dabayein, chhota sa hisaab hal karein, aur apni awaaz record kar lein. Bachcha phir hamesha wahi awaaz sunega.': ['ایپ کے ہر اسکرین پر 🎙️ نشان ہے — حرف، تصویر، دعا یا سورت کے ساتھ۔ اس پر دبائیں، چھوٹا سا حساب حل کریں، اور اپنی آواز ریکارڈ کر لیں۔ بچہ پھر ہمیشہ وہی آواز سنے گا۔', 'ऐप के हर स्क्रीन पर 🎙️ निशान है — हरफ़, तस्वीर, दुआ या सूरत के साथ। उस पर दबाएँ, छोटा सा हिसाब हल करें, और अपनी आवाज़ रिकॉर्ड कर लें। बच्चा फिर हमेशा वही आवाज़ सुनेगा।', 'Every screen has a 🎙️ mark — with letters, pictures, duas and surahs. Tap it, solve a small sum, and record your own voice. The child will then always hear that voice.', 'प्रत्येक स्क्रीनवर 🎙️ खूण आहे — अक्षर, चित्र, दुआ किंवा सुरासोबत. ती दाबा, छोटी बेरीज सोडवा आणि तुमचा आवाज रेकॉर्ड करा. मूल नंतर नेहमी तोच आवाज ऐकेल.']
   };
 

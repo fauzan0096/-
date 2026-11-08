@@ -267,8 +267,40 @@
       case 'whoosh': tone(300, 0, 0.18, 'sawtooth', 0.04, 900); break;
       case 'win': [523, 659, 784, 659, 784, 1047].forEach((f, i) => tone(f, i * 0.11, 0.26, 'triangle', 0.17)); break;
       case 'drop': tone(420, 0, 0.1, 'sine', 0.14, 260); break;
+      case 'coin': tone(988, 0, 0.08, 'square', 0.07); tone(1319, 0.07, 0.16, 'square', 0.06); break;
+      case 'magic': [523, 659, 784, 1047, 1319].forEach((f, i) => tone(f, i * 0.06, 0.18, 'sine', 0.09)); break;
+      case 'boing': tone(320, 0, 0.18, 'sine', 0.14, 180); tone(180, 0.16, 0.22, 'sine', 0.12, 420); break;
+      case 'clap': [0, 0.06, 0.12].forEach((d) => tone(1400, d, 0.05, 'square', 0.05)); break;
+      case 'tada': [523, 659, 784, 1047].forEach((f, i) => tone(f, i * 0.11, 0.3, 'triangle', 0.12)); tone(1568, 0.46, 0.5, 'sine', 0.08); break;
     }
   };
+
+  /* ============================ MUSIC (halki, khushnuma loop) ============================ */
+  const MUS = (AA.music = { on: true, playing: false, timer: 0, step: 0 });
+  const MEL = [0, 2, 4, 2, 0, -3, 0, 2, 4, 7, 4, 2, 0, -1, -3, 0];
+  const BASS = [0, 0, -5, -5, 0, 0, 3, -3];
+  const midi = (n) => 261.63 * Math.pow(2, n / 12);
+
+  function musicStep() {
+    if (!MUS.on || !MUS.playing) return;
+    if (!ctx()) return;
+    const t = MUS.step % 16;
+    tone(midi(7 + MEL[t]), 0, 0.26, 'triangle', 0.03);
+    if (t % 4 === 0) tone(midi(19 + MEL[t]), 0.05, 0.2, 'sine', 0.018);
+    if (t % 2 === 0) tone(midi(BASS[(MUS.step >> 1) % BASS.length]), 0, 0.5, 'sine', 0.045);
+    MUS.step++;
+  }
+  MUS.start = function () {
+    if (MUS.playing || !MUS.on) return;
+    MUS.playing = true;
+    MUS.timer = setInterval(musicStep, 300);
+  };
+  MUS.stop = function () { MUS.playing = false; clearInterval(MUS.timer); MUS.timer = 0; };
+  MUS.set = function (on) { MUS.on = !!on; if (!MUS.on) MUS.stop(); };
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) MUS.stop();
+    else if (MUS.on && AA.booted) MUS.start();
+  });
 
   // Pehli touch par audio ko jagao (browser ki shart)
   window.addEventListener('pointerdown', () => { SFX.unlock(); }, { once: true, passive: true });
