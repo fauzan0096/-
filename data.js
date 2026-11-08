@@ -119,6 +119,26 @@
   ];
 
   /* ---------------------------------------------------------
+     DO HARFI LAFZ — do harf jur kar ek lafz banate hain.
+     (Chhote bachche dekhte hain ke harf alag bhi hota hai aur jur kar
+      lafz bhi banta hai — isi se mashq ka maza aata hai.)
+     --------------------------------------------------------- */
+  D.JOIN = [
+    { w: 'اب', parts: ['ا', 'ب'], ro: 'Ab', ur: 'ابھی', e: '⏱️', en: 'Now' },
+    { w: 'لا', parts: ['ل', 'ا'], ro: 'La', ur: 'نہیں', e: '🙅', en: 'No' },
+    { w: 'تو', parts: ['ت', 'و'], ro: 'Tu', ur: 'تم', e: '👦', en: 'You' },
+    { w: 'کب', parts: ['ك', 'ب'], ro: 'Kab', ur: 'کب؟', e: '❓', en: 'When' },
+    { w: 'لب', parts: ['ل', 'ب'], ro: 'Lab', ur: 'ہونٹ', e: '👄', en: 'Lip' },
+    { w: 'دل', parts: ['د', 'ل'], ro: 'Dil', ur: 'دل', e: '❤️', en: 'Heart' },
+    { w: 'کم', parts: ['ك', 'م'], ro: 'Kam', ur: 'تھوڑا', e: '🤏', en: 'Less' },
+    { w: 'ہم', parts: ['ه', 'م'], ro: 'Hum', ur: 'ہم', e: '👨‍👩‍👧', en: 'We' }
+  ];
+
+  // Mashq ke liye: harf ki pehli lakeer kis taraf jati hai
+  // (ا اور ل upar se seedha neeche; baqi harf daayein se baayein neeche)
+  D.letterDir = (i) => (i === 0 || i === 22) ? 'down' : 'dl';
+
+  /* ---------------------------------------------------------
      RANG
      --------------------------------------------------------- */
   D.COLORS = [
@@ -165,7 +185,17 @@
     { n: 7, ur: 'سات', hi: 'सात', ro: 'Saat', en: 'Seven' },
     { n: 8, ur: 'آٹھ', hi: 'आठ', ro: 'Aath', en: 'Eight' },
     { n: 9, ur: 'نو', hi: 'नौ', ro: 'Nau', en: 'Nine' },
-    { n: 10, ur: 'دس', hi: 'दस', ro: 'Das', en: 'Ten' }
+    { n: 10, ur: 'دس', hi: 'दस', ro: 'Das', en: 'Ten' },
+    { n: 11, ur: 'گیارہ', hi: 'ग्यारह', ro: 'Gyarah', en: 'Eleven' },
+    { n: 12, ur: 'بارہ', hi: 'बारह', ro: 'Barah', en: 'Twelve' },
+    { n: 13, ur: 'تیرہ', hi: 'तेरह', ro: 'Terah', en: 'Thirteen' },
+    { n: 14, ur: 'چودہ', hi: 'चौदह', ro: 'Chaudah', en: 'Fourteen' },
+    { n: 15, ur: 'پندرہ', hi: 'पंद्रह', ro: 'Pandrah', en: 'Fifteen' },
+    { n: 16, ur: 'سولہ', hi: 'सोलह', ro: 'Solah', en: 'Sixteen' },
+    { n: 17, ur: 'سترہ', hi: 'सत्रह', ro: 'Satrah', en: 'Seventeen' },
+    { n: 18, ur: 'اٹھارہ', hi: 'अठारह', ro: 'Atharah', en: 'Eighteen' },
+    { n: 19, ur: 'انیس', hi: 'उन्नीस', ro: 'Unnees', en: 'Nineteen' },
+    { n: 20, ur: 'بیس', hi: 'बीस', ro: 'Bees', en: 'Twenty' }
   ];
   D.COUNT_THINGS = ['🍎', '⭐', '🎈', '🐟', '🌸', '🚗', '🍪', '🐥', '🦋', '🍓'];
 
@@ -248,7 +278,7 @@
 
   /* ---------------------------------------------------------
      CHHOTI SURAHEIN — Hafs, Uthmani. Fatiha mein 1st ayat Bismillah hai
-     (everyayah.com ki file tarteeb ke mutabiq).
+     (Husary Muallim ki awaaz app ke andar: audio/quran/sSSaAA.mp3).
      --------------------------------------------------------- */
   D.SURAHS = [
     { n: 1, ar: 'الفاتحة', ur: 'الفاتحہ', ro: 'Al-Fatiha', e: '🌟', color: '#FF7A59', m: 'Namaz ki pehli surah. Allah ki tareef aur seedhe raaste ki dua.',
@@ -265,7 +295,8 @@
       ayat: ['وَٱلۡعَصۡرِ', 'إِنَّ ٱلۡإِنسَٰنَ لَفِي خُسۡرٍ', 'إِلَّا ٱلَّذِينَ ءَامَنُواْ وَعَمِلُواْ ٱلصَّٰلِحَٰتِ وَتَوَاصَوۡاْ بِٱلۡحَقِّ وَتَوَاصَوۡاْ بِٱلصَّبۡرِ'] }
   ];
   D.QARI = { id: 'Husary_Muallim_128kbps', alt: 'Minshawy_Teacher_128kbps' };
-  D.ayahUrl = (s, a, qari) => 'https://everyayah.com/data/' + (qari || D.QARI.id) + '/' + String(s).padStart(3, '0') + String(a).padStart(3, '0') + '.mp3';
+  // Qari ki awaaz app ke andar hi hai (audio/quran) — internet ki zaroorat nahi
+  D.ayahUrl = (s, a) => 'audio/quran/' + String(s).padStart(3, '0') + String(a).padStart(3, '0') + '.mp3';
 
   /* ---------------------------------------------------------
      NAMAZ — kids ke liye aasaan
@@ -320,4 +351,30 @@
   D.stickerAt = (k) => k * k + 2 * k;
 
   D.AVATARS = ['🦁', '🐘', '🐰', '🐼', '🦊', '🐯', '🐨', '🦋', '🐥', '🐬', '🦄', '🐢'];
+
+  /* ---------------------------------------------------------
+     MARATHI (मराठी) — chhote naqshe. Jo lafz yahan nahi, wo Hindi
+     (ya Roman) par chala jata hai: AA.mn() dekhta hai.
+     --------------------------------------------------------- */
+  const MR_LETTERS = ['अलिफ़', 'बा', 'ता', 'सा', 'जीम', 'हा', 'ख़ा', 'दाल', 'ज़ाल', 'रा', 'ज़ा', 'सीन', 'शीन', 'साद', 'ज़ाद', 'तोए', 'ज़ोए', 'ऐन', 'ग़ैन', 'फ़ा', 'क़ाफ़', 'काफ़', 'लाम', 'मीम', 'नून', 'वाओ', 'हा', 'या'];
+  const MR_WORDS = ['शेर', 'बदक', 'सेब', 'कोल्हा', 'उंट', 'घोडा', 'मेंढी', 'कोंबडी', 'मका', 'पीस', 'जिराफ', 'मासा', 'सूर्य', 'ससाणा', 'बेडूक', 'चिमणी', 'हरीण', 'द्राक्ष', 'ढग', 'हत्ती', 'पेन', 'पुस्तक', 'लिंबू', 'केळ', 'माशी', 'गुलाब', 'चंद्र', 'हात'];
+  D.LETTERS.forEach((L, i) => { L.mr = MR_LETTERS[i]; if (L.w) L.w.mr = MR_WORDS[i]; });
+
+  const MR_COLORS = ['लाल', 'निळा', 'पिवळा', 'हिरवा', 'नारिंगी', 'गुलाबी', 'जांभळा', 'तपकिरी', 'काळा', 'पांढरा'];
+  D.COLORS.forEach((c, i) => { c.mr = MR_COLORS[i]; });
+
+  const MR_ANIMALS = ['गाय', 'कुत्रा', 'मांजर', 'बकरी', 'मेंढी', 'कोंबडी', 'बदक', 'घोडा', 'सिंह', 'हत्ती', 'बेडूक', 'मधमाशी'];
+  D.ANIMALS.forEach((a, i) => { a.mr = MR_ANIMALS[i]; });
+
+  const MR_NUMBERS = ['एक', 'दोन', 'तीन', 'चार', 'पाच', 'सहा', 'सात', 'आठ', 'नऊ', 'दहा', 'अकरा', 'बारा', 'तेरा', 'चौदा', 'पंधरा', 'सोळा', 'सतरा', 'अठरा', 'एकोणीस', 'वीस'];
+  D.NUMBERS.forEach((n, i) => { n.mr = MR_NUMBERS[i]; });
+
+  const MR_SHAPES = ['गोल', 'चौरस', 'त्रिकोण', 'तारा', 'हृदय', 'चंद्रकोर'];
+  D.SHAPES.forEach((s, i) => { s.mr = MR_SHAPES[i]; });
+
+  const MR_JOIN = ['आता', 'नाही', 'तू', 'कधी', 'ओठ', 'हृदय', 'कमी', 'आम्ही'];
+  D.JOIN.forEach((j, i) => { j.mr = MR_JOIN[i]; });
+
+  const MR_HABITS = ['सलाम करा', 'बिस्मिल्लाह म्हणून खा', 'खरे बोला', 'आई-बाबांचे ऐका', 'आभार माना', 'वाटून खा', 'स्वच्छता ठेवा', 'माफ करा', 'प्राण्यांवर प्रेम करा', 'मोठ्यांचा आदर करा'];
+  D.HABITS.forEach((x, i) => { x.mr = MR_HABITS[i]; });
 })();

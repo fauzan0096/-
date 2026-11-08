@@ -12,13 +12,26 @@
       const grid = D.STICKERS.map((s) => have.includes(s) ? '<div class="stk" data-act="stk" data-s="' + s + '">' + s + '</div>' : '<div class="stk locked">❔</div>').join('');
       return UI.topbar({ ur: 'میرا باغ', ro: 'Mere stickers' }) +
         '<div class="pad" style="padding-bottom:0"><button class="btn big green block" data-act="tree">🌳 Yaad ka Darakht ' + UI.icon('next') + '</button></div>' +
+        '<div class="pad" style="padding:8px 16px 0"><button class="btn ghost small block" data-act="shareCard">📤 Meri kamyabi ki tasveer</button></div>' +
         '<div class="pa progress-sticker" style="margin:6px 16px 0"><div class="row" style="justify-content:space-between"><b>' + have.length + ' / ' + D.STICKERS.length + ' stickers</b><span>⭐ ' + Store.p.stars + (info.done ? '' : ' / ' + info.need) + '</span></div>' +
         '<div class="bar" style="margin-top:8px"><i style="width:' + pct + '%"></i></div>' +
         '<p class="center" style="margin-top:6px">' + (info.done ? 'MashaAllah! Saari album poori 🎉' : 'Agle sticker ke liye ' + Math.max(0, info.need - info.have) + ' ⭐ aur') + '</p></div>' +
         '<div class="stk-grid">' + grid + '</div>';
     },
     mount(root) {
-      UI.bind(root, { tree() { AA.sfx.play('whoosh'); UI.go('tree'); }, stk(t) { AA.sfx.play('pop'); UI.pulse(t, 'wob'); t.style.animation = 'wobble .5s'; setTimeout(() => { t.style.animation = ''; }, 520); } });
+      UI.bind(root, {
+        tree() { AA.sfx.play('whoosh'); UI.go('tree'); },
+        stk(t) { AA.sfx.play('pop'); UI.pulse(t, 'wob'); t.style.animation = 'wobble .5s'; setTimeout(() => { t.style.animation = ''; }, 520); },
+        async shareCard() {
+          const learned = Store.learnedList().length, mastered = Store.masteredList().length;
+          const blob = await UI.cardImage({
+            title: Store.profile.name, sub: 'Meri kamyabi', big: '⭐',
+            lines: ['Harf seekhe: ' + learned + ' / 28', 'Pakke yaad: ' + mastered, 'Sitare: ' + Store.p.stars, 'Stickers: ' + Store.p.stickers.length + ' / ' + D.STICKERS.length]
+          });
+          const shared = await UI.shareImage(blob, 'kamyabi.png');
+          if (!shared) UI.toast('Tasveer save ho gayi — gallery mein dekhein 📷');
+        }
+      });
     }
   };
 

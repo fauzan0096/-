@@ -12,7 +12,8 @@
       return '<div class="welcome">' + UI.mascot('happy') +
         '<div class="ur">السلام علیکم</div><h1>' + (first ? 'Assalamu Alaikum!' : 'Naya Dost') + '</h1>' +
         '<p class="sub">Bachche ka naam likhein (zaroori nahi), phir tasveer aur umar chunein.</p>' +
-        '<div class="col" style="margin-top:14px"><input class="text-in" id="w-name" maxlength="14" placeholder="Naam" autocomplete="off" aria-label="Bachche ka naam">' +
+        '<div class="pills" style="justify-content:center;margin:10px 0 4px">' + AA.LANGS.map((l) => '<button class="pill ' + (Store.settings.lang === l.id ? 'on' : '') + '" data-act="lang" data-v="' + l.id + '">' + l.native + '</button>').join('') + '</div>' +
+        '<div class="col" style="margin-top:10px"><input class="text-in" id="w-name" maxlength="14" placeholder="Naam" autocomplete="off" aria-label="Bachche ka naam">' +
         '<div class="avatars" id="w-av">' + D.AVATARS.map((a, i) => '<button data-act="av" data-v="' + a + '" class="' + (i === 0 ? 'on' : '') + '">' + a + '</button>').join('') + '</div>' +
         '<div class="age-pick" id="w-age"><button data-act="age" data-v="nanha" class="on"><span class="e">🧸</span>Nanha<small>3 – 4 saal</small></button>' +
         '<button data-act="age" data-v="bada" class=""><span class="e">🎒</span>Bada<small>5 – 7 saal</small></button></div>' +
@@ -22,6 +23,7 @@
     mount(root) {
       let av = D.AVATARS[0], age = 'nanha';
       UI.bind(root, {
+        lang(t) { Store.settings.lang = t.dataset.v; Store.saveSettings(); UI.refresh(); },
         av(t) { av = t.dataset.v; AA.$$('#w-av button', root).forEach((b) => b.classList.toggle('on', b === t)); AA.sfx.play('tap'); },
         age(t) { age = t.dataset.v; AA.$$('#w-age button', root).forEach((b) => b.classList.toggle('on', b === t)); AA.sfx.play('tap'); },
         go() {
@@ -67,6 +69,7 @@
       duniya: { id: 'duniya', ur: 'میری دنیا', ro: 'Rang • Jaanwar • Ginti', e: '🌈', a: '#FFB020', b: '#FF8A3D', d: '#C77700', go: 'early' },
       harf: { id: 'harf', ur: 'حرف سیکھو', ro: 'Qaida — Alif Ba Ta', e: '🔤', a: '#FF7A59', b: '#FF5E7E', d: '#C94430', go: 'learn' },
       khel: { id: 'khel', ur: 'کھیل', ro: 'Games', e: '🎮', a: '#3DA9FC', b: '#5B7CFA', d: '#2358B8', go: 'games' },
+      dost: { id: 'dost', ur: 'دو دوست', ro: 'Bari badal kar khelo', e: '👫', a: '#FF6FA8', b: '#8B6CFF', d: '#9A3AB8', go: 'duo' },
       rang: { id: 'rang', ur: 'رنگ بھرو', ro: 'Rang bharo', e: '🎨', a: '#FF6FA8', b: '#C75BFF', d: '#9A3AB8', go: 'art' },
       dua: { id: 'dua', ur: 'دعائیں', ro: 'Roz ki duaein', e: '🤲', a: '#2ED1A0', b: '#12B5A6', d: '#0B7F73', go: 'duas' },
       surah: { id: 'surah', ur: 'چھوٹی سورتیں', ro: 'Chhoti surahein', e: '📖', a: '#8B6CFF', b: '#6A4FDB', d: '#4631A8', go: 'surahs' },
@@ -75,8 +78,8 @@
       bagh: { id: 'bagh', ur: 'میرا باغ', ro: 'Darakht aur stickers', e: '🌳', a: '#FFC83D', b: '#7BD65A', d: '#B98A00', go: 'album' }
     };
     const order = age === 'bada'
-      ? ['harf', 'khel', 'duniya', 'rang', 'dua', 'surah', 'namaz', 'aadat', 'bagh']
-      : ['duniya', 'harf', 'khel', 'rang', 'dua', 'bagh', 'aadat', 'namaz', 'surah'];
+      ? ['harf', 'khel', 'dost', 'duniya', 'rang', 'dua', 'surah', 'namaz', 'aadat', 'bagh']
+      : ['duniya', 'harf', 'khel', 'dost', 'rang', 'dua', 'bagh', 'aadat', 'namaz', 'surah'];
     return order.map((k) => T[k]);
   }
 
@@ -98,6 +101,8 @@
       const ns = nextStep();
       const m = Store.missionToday();
       const due = Store.dueCount();
+      const todayDua = D.DUAS[new Date().getDate() % D.DUAS.length];
+      const rev = Array.from(new Set(Store.dueList(6).concat(Store.weakList(6))));
       const say = due >= 3 ? 'Tumhare <b>darakht</b> ko paani chahiye 💧' : 'Aaj kya seekhein? <b>' + AA.esc(pr.name) + '</b>!';
       const week = AA.weekDays().map((d) => '<i class="' + (Store.active(d) ? 'on' : '') + '" title="' + d + '"></i>').join('');
       return '<div class="home-hero">' +
@@ -114,6 +119,8 @@
       '<div class="card missions">' +
         [['learn', '🔤', 'Seekho'], ['play', '🎮', 'Khelo'], ['deen', '🤲', 'Deen']].map((x) => '<div class="mis ' + (m[x[0]] ? 'on' : '') + '"><div class="st">' + (m[x[0]] ? '⭐' : x[1]) + '</div>' + x[2] + '</div>').join('') +
       '</div><div class="week" aria-label="Is hafte ke din">' + week + '</div>' +
+      '<button class="card" data-act="duaToday" style="margin:12px 16px 0;display:flex;align-items:center;gap:12px;text-align:start;width:calc(100% - 32px)"><span style="font-size:2rem">' + todayDua.e + '</span><span class="grow"><b class="ur" style="font-size:1.25rem">' + todayDua.ur + '</b><br><small class="sub">Aaj ki dua — ' + todayDua.ro + '</small></span>' + UI.icon('play') + '</button>' +
+      (rev.length >= 3 ? '<button class="card" data-act="revise" style="margin:12px 16px 0;display:flex;align-items:center;gap:12px;text-align:start;width:calc(100% - 32px)"><span style="font-size:2rem">💧</span><span class="grow"><b class="ur" style="font-size:1.25rem">آج کا دہراؤ</b><br><small class="sub">' + rev.length + ' harf wapas aaye hain</small></span>' + UI.icon('play') + '</button>' : '') +
       '<div class="tiles">' + tilesFor(pr.age).map((t) => {
         const b = badge(t.id);
         return '<button class="tile" data-act="tile" data-go="' + t.go + '" style="--a:' + t.a + ';--b:' + t.b + ';--d:' + t.d + '">' +
@@ -128,7 +135,19 @@
         sound() { const on = UI.toggleSound(); root.querySelector('[data-act=sound]').innerHTML = UI.icon(on ? 'sound' : 'mute'); },
         async parent() { if (await UI.parentGate('Walidain ka hissa kholne ke liye')) UI.go('parent'); },
         noori(t) { V.seq([D.T.salam]); const n = t.querySelector('.noori'); n.dataset.mood = 'cheer'; setTimeout(() => (n.dataset.mood = 'happy'), 1400); },
-        tile(t) { AA.sfx.play('whoosh'); UI.go(t.dataset.go); },
+        tile(t) {
+          const tl = tilesFor(Store.profile.age).find((x) => x.go === t.dataset.go);
+          if (tl) UI.speakNext({ ur: tl.ur, ro: tl.ro });   // bachcha padh nahi sakta — naam sun kar jaye
+          AA.sfx.play('whoosh'); UI.go(t.dataset.go);
+        },
+        duaToday() {
+          const d = D.DUAS[new Date().getDate() % D.DUAS.length];
+          AA.sfx.play('whoosh'); UI.go('dua', { id: d.id });
+        },
+        revise() {
+          const letters = Array.from(new Set(Store.dueList(6).concat(Store.weakList(6))));
+          AA.sfx.play('whoosh'); UI.go('play', { id: 'review', letters });
+        },
         cta() {
           const ns = nextStep();
           AA.sfx.play('whoosh');

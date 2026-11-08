@@ -62,7 +62,26 @@
     setTimeout(offerInstall, 6000);
 
     if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol)) {
-      navigator.serviceWorker.register('sw.js').catch((e) => console.warn('sw', e));
+      let reloading = false;
+      navigator.serviceWorker.addEventListener('controllerchange', () => { if (reloading) location.reload(); });
+      navigator.serviceWorker.register('sw.js').then((reg) => {
+        // naya version tayyar ho to ek patti dikhao — bachche ke khel ke beech reload nahi
+        const ask = (w) => {
+          if (!w || !navigator.serviceWorker.controller || AA.updateAsked) return;
+          AA.updateAsked = true;
+          const bar = document.createElement('button');
+          bar.className = 'update-bar';
+          bar.textContent = 'Naya version tayyar hai — yahan dabayein';
+          bar.addEventListener('click', () => { reloading = true; bar.remove(); w.postMessage({ type: 'SKIP_WAITING' }); });
+          document.body.appendChild(bar);
+        };
+        if (reg.waiting) ask(reg.waiting);
+        reg.addEventListener('updatefound', () => {
+          const nw = reg.installing;
+          if (!nw) return;
+          nw.addEventListener('statechange', () => { if (nw.state === 'installed') ask(nw); });
+        });
+      }).catch((e) => console.warn('sw', e));
     }
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start); else start();

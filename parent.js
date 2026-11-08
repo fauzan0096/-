@@ -48,7 +48,7 @@
         '<div class="kpi"><b>' + r.mastered + '</b><small>pakke yaad</small></div><div class="kpi"><b>' + r.duasKnown + '/' + D.DUAS.length + '</b><small>duaein</small></div><div class="kpi"><b>' + r.surKnown + '/' + D.SURAHS.length + '</b><small>surahein</small></div></div>' +
         '<div class="bars">' + bars + '</div><p class="center">Minute har din (7 din)</p>' +
         (r.weak.length ? '<p><b>Dohrane wale harf:</b></p><div class="weak">' + r.weak.map((i) => '<span class="ar">' + D.LETTERS[i].ch + '</span>').join('') + '</div><button class="mini" style="margin-top:8px" data-act="rev">💧 Inhein dohrao</button>' : '<p>Abhi koi harf kamzor nahi 👍</p>') +
-        '<div class="row wrap" style="margin-top:10px"><button class="mini gray" data-act="share">📤 Report bhejein</button></div></div>' +
+        '<div class="row wrap" style="margin-top:10px"><button class="mini gray" data-act="share">📤 Report bhejein</button><button class="mini gray" data-act="img">🖼️ Tasveer bana kar bhejein</button></div></div>' +
 
         '<div class="pa"><h3>⚙️ Settings</h3>' +
         '<div class="set-row"><div class="lbl"><b>Awaaz</b><small>Awaaz aur effects</small></div>' + tg('sound', st.sound) + '</div>' +
@@ -56,6 +56,7 @@
         '<div class="set-row"><div class="lbl"><b>English bhi bolo</b><small>Urdu ke baad English lafz</small></div>' + tg('bilingual', st.bilingual) + '</div>' +
         '<div class="set-row"><div class="lbl"><b>Rozana waqt ki had</b><small>Poora hone par "aaram" screen</small></div>' + pills('limit', [[0, 'Band'], [10, '10'], [20, '20'], [30, '30'], [45, '45']], st.limit) + '</div>' +
         '<div class="set-row"><div class="lbl"><b>Theme</b></div>' + pills('theme', [['auto', 'Auto'], ['light', 'Din'], ['night', 'Raat']], st.theme) + '</div>' +
+        '<div class="set-row"><div class="lbl"><b>Zubaan</b><small>App ki zubaan</small></div>' + pills('lang', AA.LANGS.map((l) => [l.id, l.native]), st.lang) + '</div>' +
         '</div>' +
 
         '<div class="pa"><h3>🎙️ Ammi/Abbu ki awaaz</h3><p>Bachche apni ammi ya abbu ki awaaz mein seekhein to yaad zyada rehta hai. Neeche kisi bhi cheez par record dabayein — jahan recording ho, wahan phone ki awaaz ki jagah aap ki awaaz bajegi.</p>' +
@@ -63,12 +64,12 @@
         '<div id="rec-list"></div>' +
         '<div class="row wrap" style="margin-top:10px"><button class="mini gray" data-act="rexp">⬇️ Backup</button><button class="mini gray" data-act="rimp">⬆️ Wapas laayein</button><input type="file" id="rfile" accept="application/json" hidden></div></div>' +
 
-        '<div class="pa"><h3>📶 Offline aur install</h3><p>Phone ke browser menu se <b>"Add to Home Screen"</b> chunein — phir app internet ke baghair bhi chalegi.</p>' +
-        '<button class="mini" data-act="cache">⬇️ Surahon ki qari awaaz offline karein</button><p id="cache-st" class="note" style="display:none"></p></div>' +
+        '<div class="pa"><h3>📶 Offline aur install</h3><p>Poora app phone mein hi hai — <b>internet ki zaroorat nahi</b>: harf, duaein, surahein (qari ki awaaz ke saath), khel aur rang bhi. Pehli baar khulne ke baad sab kuch baghair net chalega.</p>' +
+        '<p>Phone ke browser menu se <b>"Add to Home Screen"</b> chunein — icon ban jayega aur app seedha khulegi.</p></div>' +
 
         '<div class="pa"><h3>👧 Bachon ka intezam</h3>' +
         '<div class="set-row"><div class="lbl"><b>' + prof.avatar + ' ' + AA.esc(prof.name) + '</b><small>' + (prof.age === 'bada' ? 'Bada (5–7 saal)' : 'Nanha (3–4 saal)') + '</small></div>' + pills('age', [['nanha', 'Nanha'], ['bada', 'Bada']], prof.age) + '</div>' +
-        '<div class="row wrap" style="margin-top:8px"><button class="mini gray" data-act="switch">👥 Dost badlein</button><button class="mini gray" data-act="exp">📦 Progress save</button><button class="mini red" data-act="reset">🔄 Progress saaf</button><button class="mini red" data-act="del">🗑️ Hata dein</button></div></div>' +
+        '<div class="row wrap" style="margin-top:8px"><button class="mini gray" data-act="switch">👥 Dost badlein</button><button class="mini gray" data-act="exp">📦 Progress save</button><button class="mini gray" data-act="pimp">⬆️ Progress wapas</button><input type="file" id="pfile" accept="application/json" hidden><button class="mini red" data-act="reset">🔄 Progress saaf</button><button class="mini red" data-act="del">🗑️ Hata dein</button></div></div>' +
 
         '<div class="pa"><h3>📚 Seekhne ka tareeqa</h3>' +
         '<p><b>1. Dekho</b> — harf ka bada rang-birangi nishan aur ek tasveer wala lafz.<br><b>2. Suno</b> — awaaz aur harf ek saath.<br><b>3. Chhoo kar likho</b> — ungli se (5+ saal).<br><b>4. Rang bharo</b> — harf ko apna rang do; rang aur harakat se yaad pakki hoti hai.<br><b>5. Pehchano</b> — galti par sazaa nahi, bas dobara mauqa.</p>' +
@@ -111,6 +112,7 @@
         pl(t) {
           const k = t.dataset.k; let v = t.dataset.v;
           if (k === 'age') { Store.updateProfile(Store.profile.id, { age: v }); UI.refresh(); return; }
+          if (k === 'lang') { Store.settings.lang = v; Store.saveSettings(); UI.refresh(); return; }
           if (k === 'speed' || k === 'limit') v = +v;
           setK(k, v);
           AA.$$('[data-act=pl][data-k=' + k + ']', root).forEach((b) => b.classList.toggle('on', b === t));
@@ -122,6 +124,21 @@
           try { if (navigator.share) { await navigator.share({ text: txt }); return; } } catch (e) { return; }
           try { await navigator.clipboard.writeText(txt); UI.toast('Report copy ho gayi — WhatsApp mein paste karein'); } catch (e) { prompt('Copy karein:', txt); }
         },
+        async img() {
+          const blob = await UI.cardImage({
+            title: Store.profile.name, sub: 'Is hafte ki report', big: '📒',
+            lines: [
+              'Din practice: ' + r.activeDays + ' / 7',
+              'Kul waqt: ' + r.total + ' minute',
+              'Harf seekhe: ' + r.learned + ' / 28',
+              'Pakke yaad: ' + r.mastered,
+              'Duaein: ' + r.duasKnown + ' • Surahein: ' + r.surKnown,
+              'Sitare: ' + Store.p.stars + ' • Stickers: ' + Store.p.stickers.length
+            ]
+          });
+          const shared = await UI.shareImage(blob, 'report.png');
+          if (!shared) UI.toast('Report ki tasveer save ho gayi');
+        },
         rtab(t) { tab = t.dataset.k; AA.$$('[data-act=rtab]', root).forEach((b) => b.classList.toggle('on', b === t)); drawList(); },
         rplay(t) { V.sayAr(t.dataset.key); },
         rrec(t) { toggleRec(t.dataset.key); },
@@ -131,11 +148,7 @@
           const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify(o)], { type: 'application/json' })); a.download = 'ustad-awaaz.json'; a.click();
         },
         rimp() { AA.$('#rfile', root).click(); },
-        async cache() {
-          const st = AA.$('#cache-st', root); st.style.display = 'block'; st.textContent = 'Download ho raha hai…';
-          try { const o = await AA.cacheSurahAudio((i, n) => { st.textContent = 'Download: ' + i + ' / ' + n; }); st.textContent = o.ok === o.total ? '✅ Sab surahein offline ho gayin' : '⚠️ ' + o.ok + '/' + o.total + ' mil sakeen. Internet check karke dobara koshish karein.'; }
-          catch (e) { st.textContent = 'Is browser mein offline cache nahi chalta.'; }
-        },
+        pimp() { AA.$('#pfile', root).click(); },
         switch() { UI.go('profiles'); },
         exp() {
           const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([Store.exportProfile()], { type: 'application/json' })); a.download = 'progress-' + Store.profile.name + '.json'; a.click();
@@ -157,6 +170,15 @@
         const f = e.target.files[0]; if (!f) return;
         try { const j = JSON.parse(await f.text()); let n = 0; for (const k of Object.keys(j)) { if (String(j[k]).startsWith('data:')) { await V.saveClip(k, j[k]); n++; } } UI.toast(n + ' recording wapas aa gayin'); drawList(); }
         catch (err) { UI.toast('File sahi nahi hai'); }
+      });
+      AA.$('#pfile', root).addEventListener('change', async (e) => {
+        const f = e.target.files[0]; if (!f) return;
+        try {
+          const j = JSON.parse(await f.text());
+          if (Store.importProfile(j)) { UI.toast('Progress wapas aa gayi ✅'); UI.refresh(); }
+          else UI.toast('Yeh file is app ki nahi lagti');
+        } catch (err) { UI.toast('File sahi nahi hai'); }
+        e.target.value = '';
       });
     },
     leave() { V.stop(); }

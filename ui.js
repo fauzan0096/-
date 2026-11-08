@@ -74,7 +74,7 @@
 
   UI.toast = function (msg) {
     const t = $('#toast');
-    t.textContent = msg; t.classList.add('show');
+    t.textContent = AA.i18n ? AA.i18n(msg) : msg; t.classList.add('show');
     clearTimeout(UI.toast._t); UI.toast._t = setTimeout(() => t.classList.remove('show'), 1800);
   };
 
@@ -125,7 +125,7 @@
     const stage = UI.stage();
     const root = document.createElement('section');
     root.className = 'screen s-' + name;
-    root.innerHTML = S.render(params || {});
+    root.innerHTML = AA.i18n ? AA.i18n(S.render(params || {})) : S.render(params || {});
     stage.innerHTML = '';
     stage.appendChild(root);
     UI.cur = { name, params, root };
@@ -133,6 +133,8 @@
     try { if (S.mount) S.mount(root, params || {}); } catch (e) { console.error(e); }
     root.scrollTop = 0; window.scrollTo(0, 0);
     document.body.dataset.screen = name;
+    // naye screen ka naam bolo (chhote bachche button ka label padh nahi sakte)
+    if (UI.speakNextSpec) { const sp = UI.speakNextSpec; UI.speakNextSpec = null; setTimeout(() => AA.voice.seq([sp]), 320); }
   }
   UI.refresh = () => { if (UI.cur) { const { name, params } = UI.cur; leaveCurrent(); mount(name, params); } };
 
@@ -142,7 +144,7 @@
     o = o || {};
     const el = document.createElement('div');
     el.className = 'modal ' + (o.cls || '');
-    el.innerHTML = '<div class="modal-card ' + (o.cardCls || '') + '">' + html + '</div>';
+    el.innerHTML = '<div class="modal-card ' + (o.cardCls || '') + '">' + (AA.i18n ? AA.i18n(html) : html) + '</div>';
     document.body.appendChild(el);
     requestAnimationFrame(() => el.classList.add('open'));
     const m = { el, onClose: o.onClose, dismiss: o.dismiss !== false };
@@ -316,4 +318,49 @@
   UI.ar = (t, cls) => '<span class="ar ' + (cls || '') + '" lang="ar" dir="rtl">' + AA.esc(t) + '</span>';
   // Phir se phir se dabane par animation dobara chalane ke liye
   UI.pulse = function (el, cls) { if (!el) return; el.classList.remove(cls); void el.offsetWidth; el.classList.add(cls); setTimeout(() => el.classList.remove(cls), 800); };
+
+  /* ------------------------- agla screen bol kar batana ------------------------- */
+  UI.speakNext = function (spec) { UI.speakNextSpec = spec; };
+
+  /* ------------------------- tasveer bana kar bhejna (report / kamyabi) ------------------------- */
+  const CARD_FONT = 'system-ui, -apple-system, "Segoe UI", Roboto, "Noto Naskh Arabic", sans-serif';
+  UI.cardImage = function (o) {
+    o = o || {};
+    return new Promise((resolve) => {
+      const W = 900, H = 1200;
+      const cv = document.createElement('canvas');
+      cv.width = W; cv.height = H;
+      const g = cv.getContext('2d');
+      g.fillStyle = '#FFF4DC'; g.fillRect(0, 0, W, H);
+      g.fillStyle = '#FFE7B0'; g.fillRect(0, 0, W, 210);
+      g.textAlign = 'center';
+      g.fillStyle = '#2B2250';
+      g.font = '700 58px ' + CARD_FONT;
+      g.fillText(String(o.title || 'Aghaaz-e-Asaas').slice(0, 30), W / 2, 105);
+      g.font = '500 36px ' + CARD_FONT;
+      g.fillText(String(o.sub || '').slice(0, 46), W / 2, 170);
+      g.font = '700 150px ' + CARD_FONT;
+      g.fillText(String(o.big || '⭐').slice(0, 4), W / 2, 380);
+      g.textAlign = 'start';
+      g.font = '500 36px ' + CARD_FONT;
+      (o.lines || []).forEach((t, k) => { g.fillText(String(t).slice(0, 42), 70, 470 + k * 62); });
+      g.textAlign = 'center';
+      g.fillStyle = '#6B6490';
+      g.font = '500 30px ' + CARD_FONT;
+      g.fillText('Aghaaz-e-Asaas — bachon ka Qaida', W / 2, H - 46);
+      cv.toBlob((b) => resolve(b), 'image/png');
+    });
+  };
+  // Phone par share sheet, warna download
+  UI.shareImage = async function (blob, name) {
+    if (!blob) return false;
+    try {
+      const file = new File([blob], name, { type: 'image/png' });
+      if (navigator.canShare && navigator.canShare({ files: [file] })) { await navigator.share({ files: [file] }); return true; }
+    } catch (e) {}
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob); a.download = name; a.click();
+    setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+    return false;
+  };
 })();

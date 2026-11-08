@@ -1,3 +1,14 @@
+/* ---------- Fonts (offline: fonts/ folder — koi Google Fonts nahi) ---------- */
+@font-face { font-family: 'Fredoka'; font-style: normal; font-weight: 400; font-display: swap; src: url('fonts/fredoka-400.ttf') format('truetype'); }
+@font-face { font-family: 'Fredoka'; font-style: normal; font-weight: 600; font-display: swap; src: url('fonts/fredoka-600.ttf') format('truetype'); }
+@font-face { font-family: 'Fredoka'; font-style: normal; font-weight: 700; font-display: swap; src: url('fonts/fredoka-700.ttf') format('truetype'); }
+@font-face { font-family: 'Noto Naskh Arabic'; font-style: normal; font-weight: 500; font-display: swap; src: url('fonts/noto-naskh-500.ttf') format('truetype'); }
+@font-face { font-family: 'Noto Naskh Arabic'; font-style: normal; font-weight: 700; font-display: swap; src: url('fonts/noto-naskh-700.ttf') format('truetype'); }
+@font-face { font-family: 'Amiri Quran'; font-style: normal; font-weight: 400; font-display: swap; src: url('fonts/amiri-quran-400.ttf') format('truetype'); }
+@font-face { font-family: 'Amiri'; font-style: normal; font-weight: 400; font-display: swap; src: url('fonts/amiri-400.ttf') format('truetype'); }
+@font-face { font-family: 'Amiri'; font-style: normal; font-weight: 700; font-display: swap; src: url('fonts/amiri-700.ttf') format('truetype'); }
+
+
 /* ==========================================================
    Aghaaz-e-Asaas Kids — app.css
    Design: garam cream background, chunky "dabne wale" buttons,
@@ -563,3 +574,27 @@ html[dir] .tb-title { text-align: start; }
 [dir='rtl'] .ar, [dir='rtl'] .ar-big { direction: rtl; }
 [dir='rtl'] .center, [dir='rtl'] .sub { text-align: center; }
 [dir='rtl'] :is(.screen, .modal, .toast) :is(b, small, span, p, h1, h2, h3, button, div, label):not(.ar):not(.ar-big) { unicode-bidi: plaintext; }
+
+
+/* ---------- Huroof: rang bharo + mashq ---------- */
+.harf-head { margin: 20px 16px 4px; font-size: 1.25rem; display: flex; align-items: center; gap: 8px; }
+.harf-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; padding: 6px 16px 10px; }
+.harf-tile { position: relative; aspect-ratio: 1; border-radius: 22px; background: var(--card); box-shadow: var(--shadow-s); border: 3px solid var(--line); display: grid; place-items: center; color: var(--ink); }
+.harf-tile:active { transform: translateY(3px); }
+.harf-tile .ch { font-family: 'Noto Naskh Arabic', 'Amiri', serif; font-weight: 700; font-size: 2.1rem; line-height: 1.7; direction: rtl; }
+.harf-tile .nn { position: absolute; bottom: 3px; left: 0; right: 0; text-align: center; font-size: .6rem; color: var(--ink2); }
+.harf-tile .dt { position: absolute; top: 3px; right: 6px; font-size: .9rem; }
+.harf-tile.done { border-color: var(--ok); background: var(--ok-bg); }
+.harf-tile.c-only { border-color: var(--c2); }
+.harf-tile.t-only { border-color: var(--c4); }
+
+/* ---------- Update bar (naya version) ---------- */
+.update-bar { position: fixed; top: calc(8px + var(--sat)); left: 50%; transform: translateX(-50%); z-index: 350; max-width: 92vw; padding: 10px 20px; border-radius: 99px; background: var(--c4); color: #fff; font-family: 'Fredoka', system-ui, sans-serif; font-weight: 700; font-size: .95rem; box-shadow: 0 6px 18px rgba(43, 34, 80, .3); }
+
+
+/* ---------- Zubaan ke hisaab se font ---------- */
+html[lang='hi'] .ur, html[lang='mr'] .ur { font-family: 'Noto Sans Devanagari', 'Nirmala UI', 'Kohinoor Devanagari', 'Noto Naskh Arabic', system-ui, sans-serif; }
+html[lang='en'] .ur { font-family: 'Fredoka', system-ui, -apple-system, 'Segoe UI', sans-serif; }
+html[dir='ltr'] .tb-title b, html[dir='ltr'] .tb-title small { text-align: left; }
+html[dir='ltr'] .cta { padding: 12px 22px 12px 18px; }
+html[dir='ltr'] .bubble-say { border-radius: 26px 26px 8px 26px; }

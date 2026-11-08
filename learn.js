@@ -24,6 +24,7 @@
       const harkatOpen = bada && learned.length >= 10;
       return UI.topbar({ ur: 'حرف سیکھو', ro: 'Alif Ba Ta — ' + learned.length + '/28' }) +
         '<button class="song-card" data-act="song"><span class="se">🎵</span><span class="grow"><b style="font-size:1.25rem">Alif Ba Ta ka Gaana</b><br><small style="opacity:.9">Sab huroof suno aur saath bolo</small></span>' + UI.icon('play') + '</button>' +
+        '<button class="card chapter" data-act="join" style="margin-top:10px"><span class="ce">🔗</span><span class="grow"><b class="ur">دو حرفی الفاظ</b><b style="font-size:1rem">Jodo — 2 harf ke lafz</b><span class="lockmsg">Harf jur kar lafz banta hai</span></span>' + UI.icon('next') + '</button>' +
         manz +
         (bada ? '<button class="card chapter" data-act="harkat" ' + (harkatOpen ? '' : 'style="opacity:.75"') + '><span class="ce">' + (harkatOpen ? '⬆️' : '🔒') + '</span><span class="grow"><b class="ur">زبر زیر پیش</b><b style="font-size:1rem">Zabar • Zer • Pesh</b><span class="lockmsg">' + (harkatOpen ? 'Harf ko awaaz dena seekho' : 'Pehle 10 harf seekh lo, phir yeh khulega') + '</span></span>' + UI.icon('next') + '</button>' : '');
     },
@@ -33,6 +34,7 @@
       UI.bind(root, {
         letter(t) { AA.sfx.play('tap'); UI.go('lesson', { i: +t.dataset.i }); },
         song() { UI.go('song'); },
+        join() { UI.go('join'); },
         review(t) {
           const m = D.MANZIL.find((x) => x.id === +t.dataset.m);
           const ids = []; for (let i = m.from; i <= m.to; i++) if (Store.isLearned(i)) ids.push(i);
@@ -127,6 +129,37 @@
       });
       show(false);
       setTimeout(() => V.seq([h, 300, { ar: D.harakatLetter(0, h.mark) }]), 400);
+    }
+  };
+
+  /* ------------------------- Do harfi lafz (jodo) ------------------------- */
+  S.join = {
+    render() {
+      return UI.topbar({ ur: 'دو حرفی الفاظ', ro: 'Jodo — 2 harf ke lafz' }) +
+        '<p class="center sub" style="padding:0 20px">Do harf mil kar ek lafz banate hain. Card dabao — pehle har harf, phir poora lafz sunaya jayega.</p>' +
+        '<div class="list">' + D.JOIN.map((j, i) => '<button class="lrow" data-act="say" data-i="' + i + '"><span class="le"><b class="ar-big" style="font-size:1.7rem">' + j.parts[0] + '</b></span><span class="lt"><b class="ar-big" style="font-size:2.1rem">' + j.w + '</b><small>' + j.ro + ' — ' + AA.esc(j.ur) + '</small></span><span class="lr">' + j.e + '</span></button>').join('') + '</div>' +
+        '<p class="note" style="margin:12px 16px">Jab harf jurte hain to shakal badal jati hai — yahi asli mashq hai. Baad mein bachche se kaghaz par likhwa kar batayein.</p>';
+    },
+    mount(root) {
+      if (!Store.p.join) Store.p.join = { seen: [] };
+      if (!Store.p.join.seen) Store.p.join.seen = [];
+      const seen = Store.p.join.seen;
+      UI.bind(root, {
+        say(t) {
+          const i = +t.dataset.i, j = D.JOIN[i];
+          AA.sfx.play('tap');
+          const list = [{ ar: j.parts[0] }];
+          if (j.parts[1]) list.push({ ar: j.parts[1] });
+          list.push(400, { ar: j.w }, j);
+          V.seq(list);
+          if (seen.includes(i)) return;
+          seen.push(i); Store.save();
+          if (seen.length < D.JOIN.length || Store.p.join.done) return;
+          Store.p.join.done = true; Store.save();
+          UI.reward(3, 'join').then(() => UI.mission('learn'));
+          UI.celebrate({ title: 'Shabash!', big: '🔗', sub: 'Saare do harfi lafz dekh liye', voice: [AA.pick(D.PRAISE)] });
+        }
+      });
     }
   };
 })();

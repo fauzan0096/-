@@ -51,10 +51,10 @@
           const cells = L.join ? [['start', 'shuru'], ['mid', 'beech'], ['end', 'aakhir']] : [['end', 'aakhir mein']];
           forms = '<div class="forms">' + cells.map((c) => '<div><span class="ar-big">' + f[c[0]] + '</span><small>' + c[1] + '</small></div>').join('') + '</div>';
         }
-        el.innerHTML = '<div class="step-say"><span class="ur">یہ ہے</span></div>' +
+        el.innerHTML = AA.i18n('<div class="step-say"><span class="ur">یہ ہے</span></div>' +
           '<button class="letter-card" data-act="say"><span class="ar-big big-letter">' + L.ch + '</span><span class="letter-name">' + L.n + '</span><span class="speak-fab">' + UI.icon('sound') + '</span></button>' +
-          '<button class="pic-card" data-act="word"><span class="pe">' + w.e + '</span><span class="pw"><span class="ar-big">' + w.ar + '</span><span class="ur">' + w.ur + '</span><small>' + w.ro + '</small></span></button>' +
-          '<div class="cue">💡 ' + AA.esc(L.cue) + '</div>' + forms;
+          '<button class="pic-card" data-act="word"><span class="pe">' + w.e + '</span><span class="pw"><span class="ar-big">' + w.ar + '</span><span class="ur">' + w.ur + '</span><small>' + AA.mn(w) + '</small></span></button>' +
+          '<div class="cue">💡 ' + AA.esc(L.cue) + '</div>' + forms);
         V.seq([D.T.yehHai, { ar: L.say }, 450, { ar: w.ar }, w]);
         later(enable, 1800);
         UI.bind(el, {
@@ -65,10 +65,10 @@
 
       /* ---------- 🔊 Suno aur bolo ---------- */
       function stepHear(el) {
-        el.innerHTML = '<div class="step-say"><span class="ur">سنو اور بولو</span></div>' +
+        el.innerHTML = AA.i18n('<div class="step-say"><span class="ur">سنو اور بولو</span></div>' +
           '<div class="letter-card" style="max-width:300px"><span class="ar-big big-letter" style="font-size:130px">' + L.ch + '</span><span class="letter-name">' + L.n + '</span></div>' +
           '<div class="echo"><div class="mic-ring" id="mic">🗣️</div><div class="counter-dots" id="cd"><i></i><i></i><i></i></div><div class="q-text" id="hear-t">Suno…</div></div>' +
-          '<button class="btn ghost" data-act="again">' + UI.icon('redo') + ' Dobara</button>';
+          '<button class="btn ghost" data-act="again">' + UI.icon('redo') + ' Dobara</button>');
         const mic = AA.$('#mic', el), dots = AA.$$('#cd i', el), t = AA.$('#hear-t', el);
         let run = 0;
         async function loop() {
@@ -93,15 +93,16 @@
       /* ---------- ✍️ Likho  /  🎨 Rang bharo ---------- */
       function stepPaint(el, mode) {
         const trace = mode === 'trace';
-        el.innerHTML = '<div class="step-say"><span class="ur">' + (trace ? 'ungli phero — harf bharo' : 'rang bharo') + '</span></div>' +
+        el.innerHTML = AA.i18n('<div class="step-say"><span class="ur">' + (trace ? 'ungli phero — harf bharo' : 'rang bharo') + '</span></div>' +
           '<div class="meter"><i id="pm"></i><b id="pt">0%</b></div>' +
           '<div class="board" id="pb"></div>' +
           (trace ? '' : '<div class="palette" id="pal">' + AA.trace.PALETTE.map((c, k) => '<button class="swatch ' + (k === 4 ? 'on' : '') + '" style="--sw:' + c + '" data-act="sw" data-c="' + c + '" aria-label="Rang"></button>').join('') + '<button class="swatch rainbow" data-act="sw" data-c="rainbow" aria-label="Rainbow"></button></div>') +
-          '<div class="tools"><button class="btn ghost small" data-act="clear">' + UI.icon('erase') + ' Saaf</button></div>';
+          '<div class="tools"><button class="btn ghost small" data-act="clear">' + UI.icon('erase') + ' Saaf</button></div>');
         const meter = AA.$('#pm', el), pt = AA.$('#pt', el);
         let celebrated = false;
         tr = AA.trace.create(AA.$('#pb', el), {
           ch: L.ch, mode, nanha: !bada, color: AA.trace.PALETTE[4],
+          hint: trace, dir: D.letterDir(i),
           onProgress(p) { const v = Math.round(p * 100); meter.style.width = v + '%'; pt.textContent = v + '%'; if (p >= 0.3) enable(); },
           onDone() {
             if (celebrated) return; celebrated = true;
@@ -130,10 +131,10 @@
           const prompt = type === 'hear'
             ? '<button class="listen-btn" data-act="hear" aria-label="Suno">' + UI.icon('sound') + '</button>'
             : '<span class="big">' + L.w.e + '</span>';
-          el.innerHTML = '<div class="q-card">' + dots() +
+          el.innerHTML = AA.i18n('<div class="q-card">' + dots() +
             '<div class="q-text"><span class="ur">' + (type === 'hear' ? 'سنو اور ڈھونڈو' : 'اس کا حرف کون سا؟') + '</span></div>' +
             '<div class="q-prompt ' + (type === 'hear' ? 'listen' : '') + '">' + prompt + '</div>' +
-            '<div class="opt-grid" style="--cols:' + nOpt + '">' + opts.map((k) => '<button class="opt" data-act="pick" data-k="' + k + '"><span class="ar-big">' + D.LETTERS[k].ch + '</span></button>').join('') + '</div></div>';
+            '<div class="opt-grid" style="--cols:' + nOpt + '">' + opts.map((k) => '<button class="opt" data-act="pick" data-k="' + k + '"><span class="ar-big">' + D.LETTERS[k].ch + '</span></button>').join('') + '</div></div>');
           if (type === 'hear') V.seq([{ ar: L.say }]); else V.seq([{ ar: L.w.ar }, L.w, D.T.kaunSaHarf]);
         }
         async function pick(t) {

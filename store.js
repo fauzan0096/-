@@ -11,7 +11,7 @@
   // Dohrane ka waqfa (din): box 0..6
   const INTERVALS = [0, 1, 2, 4, 8, 16, 32];
 
-  Store.settings = { sound: true, speed: 1, bilingual: false, limit: 0, theme: 'auto' };
+  Store.settings = { sound: true, speed: 1, bilingual: false, limit: 0, theme: 'auto', lang: 'ro' };
   Store.profiles = [];
   Store.profile = null;
   Store.p = null;
@@ -25,7 +25,7 @@
       v: 2, stars: 0, stickers: [], letters: {},
       harkat: { seen: [], found: 0 },
       games: {}, days: {}, habits: {}, surahs: {}, duas: {}, namaz: { wudu: 0, postures: 0, namazein: 0 },
-      art: {}, early: {}, song: 0,
+      art: {}, early: {}, join: {}, song: 0,
       missions: { date: '', learn: false, play: false, deen: false, bonus: false }
     };
   }
@@ -44,6 +44,12 @@
     AA.voice.base = Store.profile && Store.profile.age === 'bada' ? 0.92 : 0.8;
     const night = s.theme === 'night' || (s.theme === 'auto' && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
     document.documentElement.setAttribute('data-theme', night ? 'night' : 'light');
+    // zubaan: Urdu RTL, baqi LTR (harf-khari khud rtl hai)
+    const lang = s.lang || 'ro';
+    s.lang = lang;   // purane users ke liye bhi set kar do
+    AA.lang = lang;
+    document.documentElement.setAttribute('lang', { ro: 'ur-Latn', ur: 'ur', hi: 'hi', en: 'en', mr: 'mr' }[lang] || 'ur');
+    document.documentElement.setAttribute('dir', lang === 'ur' ? 'rtl' : 'ltr');
     const m = document.querySelector('meta[name=theme-color]'); if (m) m.setAttribute('content', night ? '#1B1740' : '#FFF4DC');
   };
 
@@ -70,7 +76,7 @@
     const saved = AA.lsGet(K_P + id, null);
     Store.p = Object.assign(blank(), saved || {});
     // purane data mein naye khane na hon to bhar do
-    ['harkat', 'games', 'days', 'habits', 'surahs', 'duas', 'art', 'early', 'letters', 'missions', 'namaz'].forEach((k) => { if (!Store.p[k]) Store.p[k] = blank()[k]; });
+    ['harkat', 'games', 'days', 'habits', 'surahs', 'duas', 'art', 'early', 'join', 'letters', 'missions', 'namaz'].forEach((k) => { if (!Store.p[k]) Store.p[k] = blank()[k]; });
     AA.lsSet(K_ACTIVE, id);
     Store.applySettings();
     if (!silent) emit('profile', prof);
@@ -90,11 +96,27 @@
   };
   Store.resetProgress = function () { if (Store.profile) { Store.p = blank(); Store.save(); } };
   Store.exportProfile = () => JSON.stringify({ profile: Store.profile, progress: Store.p });
+  // Backup file (progress-*.json) wapas laane ke liye
+  Store.importProfile = function (j) {
+    if (!Store.profile) return false;
+    const p = j && j.progress;
+    if (!p || typeof p !== 'object') return false;
+    if (typeof p.stars !== 'number' && !p.letters && !p.days) return false;   // is app ki file nahi
+    const b = blank();
+    Object.keys(b).forEach((k) => { if (p[k] !== undefined && typeof p[k] === typeof b[k]) b[k] = p[k]; });
+    Store.p = b;
+    Store.save();
+    return true;
+  };
 
-  let saveT = 0;
+  let saveT = 0, saveWarned = false;
   Store.save = function () {
     if (!Store.profile || !Store.p) return;
-    AA.lsSet(K_P + Store.profile.id, Store.p);
+    const ok = AA.lsSet(K_P + Store.profile.id, Store.p);
+    if (!ok && !saveWarned) {
+      saveWarned = true;
+      try { AA.ui.toast('Phone mein jagah kam hai — purani recordings hata dein'); } catch (e) {}
+    }
     emit('save');
   };
   Store.saveSoon = function () { clearTimeout(saveT); saveT = setTimeout(Store.save, 400); };

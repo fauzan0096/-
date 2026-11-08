@@ -71,23 +71,15 @@
   };
 
   /* ========================= SURAHEIN ========================= */
-  // Awaaz: pehle offline cache, phir internet, warna phone ki awaaz
-  AA.audioCache = 'aa-audio-v1';
-  async function ayahSrc(url) {
-    try {
-      if ('caches' in window) { const c = await caches.open(AA.audioCache); const hit = await c.match(url); if (hit) return URL.createObjectURL(await hit.blob()); }
-    } catch (e) {}
-    return url;
-  }
+  // Awaaz: qari ki mp3 app ke andar hi hai (audio/quran) — internet ki zaroorat nahi
   let ayahAudio = null;
   function stopAyah() { try { if (ayahAudio) { ayahAudio.pause(); ayahAudio = null; } } catch (e) {} }
   async function playAyah(n, idx, text) {
     stopAyah(); V.stop();
     if (!Store.settings.sound) return;
-    const url = D.ayahUrl(n, idx + 1);
     const key = text;
     if (V.clips[key]) return V.arab(key);
-    const src = await ayahSrc(url);
+    const url = D.ayahUrl(n, idx + 1);
     return new Promise((resolve) => {
       const a = new Audio(); ayahAudio = a; let done = false;
       const fin = (fallback) => { if (done) return; done = true; clearTimeout(tm); if (fallback) V.arab(text, 0.75).then(resolve); else resolve(); };
@@ -95,22 +87,10 @@
       a.onplaying = () => clearTimeout(tm);
       a.onended = () => fin(false);
       a.onerror = () => fin(true);
-      a.src = src;
+      a.src = url;
       const pr = a.play(); if (pr && pr.catch) pr.catch(() => fin(true));
     });
   }
-  AA.cacheSurahAudio = async function (onProgress) {
-    if (!('caches' in window)) throw new Error('no cache');
-    const c = await caches.open(AA.audioCache);
-    const urls = [];
-    D.SURAHS.forEach((s) => s.ayat.forEach((_, i) => urls.push(D.ayahUrl(s.n, i + 1))));
-    let ok = 0;
-    for (let i = 0; i < urls.length; i++) {
-      try { if (!(await c.match(urls[i]))) { const r = await fetch(urls[i], { mode: 'cors' }); if (r.ok) await c.put(urls[i], r); else throw new Error('x'); } ok++; } catch (e) { /* is ayat ko chhod do */ }
-      if (onProgress) onProgress(i + 1, urls.length, ok);
-    }
-    return { ok, total: urls.length };
-  };
 
   S.surahs = {
     render() {
@@ -118,7 +98,7 @@
         '<div class="list">' + D.SURAHS.map((s) => {
           const k = Store.p.surahs[s.n] && Store.p.surahs[s.n].known;
           return '<button class="lrow ' + (k ? 'done' : '') + '" data-act="open" data-n="' + s.n + '" style="--lc:' + s.color + '33"><span class="le">' + s.e + '</span><span class="lt"><b class="ur">' + s.ur + '</b><small>' + s.ro + ' • ' + s.ayat.length + ' ayat</small></span><span class="lr">' + (k ? '✅' : '▶') + '</span></button>';
-        }).join('') + '</div><p class="center sub" style="padding:0 20px">Qari ki awaaz ke liye internet chahiye. Walidain "Parent" hissay se offline bhi kar sakte hain.</p>';
+        }).join('') + '</div><p class="center sub" style="padding:0 20px">Qari ki awaaz app ke andar hi hai — pehli baar khulne ke baad internet ki zaroorat nahi.</p>';
     },
     mount(root) { UI.bind(root, { open(t) { AA.sfx.play('whoosh'); UI.go('surah', { n: +t.dataset.n }); } }); }
   };

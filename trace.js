@@ -67,6 +67,41 @@
         // dotted kinara
         vx.save(); vx.lineWidth = 3; vx.strokeStyle = '#7A68E8'; vx.setLineDash([9, 8]); vx.lineJoin = 'round';
         glyph(vx, 'stroke'); vx.restore();
+        // mashq: yahan se shuru karo (ek dafa likhne se pehle hi dikhta hai)
+        if (o.hint && !state.strokes) drawHint();
+      }
+      // harf ke andar sab se upar-daayein nuqta — likhna wahin se shuru hota hai
+      function startPoint() {
+        if (!maskCells) return null;
+        let x0 = G, x1 = -1, y0 = G, y1 = -1;
+        for (let y = 0; y < G; y++) for (let x = 0; x < G; x++) if (maskCells[y * G + x]) { if (x < x0) x0 = x; if (x > x1) x1 = x; if (y < y0) y0 = y; if (y > y1) y1 = y; }
+        if (x1 < 0) return null;
+        const yMax = y0 + Math.max(3, Math.round((y1 - y0) * 0.35));
+        let px = -1, py = y0;
+        for (let y = y0; y <= yMax; y++) {
+          for (let x = G - 1; x >= 0; x--) if (maskCells[y * G + x]) { if (x > px) { px = x; py = y; } break; }
+        }
+        if (px < 0) return null;
+        return { x: ((px + 0.5) * S) / G, y: ((py + 0.5) * S) / G };
+      }
+      function drawHint() {
+        const p = startPoint(); if (!p) return;
+        const d = { down: [0, 1], left: [-1, 0], dl: [-0.78, 0.62], dr: [0.78, 0.62] }[o.dir || 'dl'] || [-0.78, 0.62];
+        const r = S * 0.035, len = S * 0.12;
+        vx.save();
+        vx.beginPath(); vx.arc(p.x, p.y, r, 0, Math.PI * 2);
+        vx.fillStyle = '#2ED1A0'; vx.fill();
+        vx.lineWidth = Math.max(2, S * 0.008); vx.strokeStyle = '#fff'; vx.stroke();
+        const ex = p.x + d[0] * len, ey = p.y + d[1] * len;
+        vx.strokeStyle = '#2ED1A0'; vx.lineWidth = Math.max(2.5, S * 0.012); vx.lineCap = 'round';
+        vx.beginPath(); vx.moveTo(p.x + d[0] * r * 1.5, p.y + d[1] * r * 1.5); vx.lineTo(ex, ey); vx.stroke();
+        const a = Math.atan2(d[1], d[0]);
+        vx.beginPath();
+        vx.moveTo(ex, ey);
+        vx.lineTo(ex - Math.cos(a - 0.5) * r * 1.15, ey - Math.sin(a - 0.5) * r * 1.15);
+        vx.lineTo(ex - Math.cos(a + 0.5) * r * 1.15, ey - Math.sin(a + 0.5) * r * 1.15);
+        vx.closePath(); vx.fillStyle = '#2ED1A0'; vx.fill();
+        vx.restore();
       }
       function measure() {
         const small = document.createElement('canvas'); small.width = small.height = G;

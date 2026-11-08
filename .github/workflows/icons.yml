@@ -1,0 +1,36 @@
+name: icons
+
+on:
+  push:
+    paths:
+      - 'icons/icon.svg'
+      - 'icons/icon-maskable.svg'
+      - 'tools/build-icons.mjs'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: SVG renderer install karein
+        run: npm install --no-save --no-package-lock @resvg/resvg-js@2
+      - name: PNGs banayein
+        run: node tools/build-icons.mjs
+      - name: PNGs commit karein
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@users.noreply.github.com"
+          git add icons/icon-192.png icons/icon-512.png icons/icon-maskable-512.png icons/apple-touch-icon.png
+          if git diff --staged --quiet; then
+            echo "icons already up to date"
+          else
+            git commit -m "icons: regenerate PNGs from SVG"
+            git push
+          fi

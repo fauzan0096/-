@@ -164,8 +164,8 @@
       cards = shuffle(cards);
       st_render();
       function st_render() {
-        ctx.stage.innerHTML = '<div class="q-text"><span class="ur">جوڑی ملاؤ</span></div><div class="mem-grid" style="--cols:' + cols + '">' +
-          cards.map((c, k) => '<button class="mcard flip" data-act="card" data-k="' + k + '" aria-label="Card"><span class="mc-in"><span class="back">❓</span><span class="face">' + c.html + '</span></span></button>').join('') + '</div><div class="sub" id="mv">Chaalein: 0</div>';
+        ctx.stage.innerHTML = AA.i18n('<div class="q-text"><span class="ur">جوڑی ملاؤ</span></div><div class="mem-grid" style="--cols:' + cols + '">' +
+          cards.map((c, k) => '<button class="mcard flip" data-act="card" data-k="' + k + '" aria-label="Card"><span class="mc-in"><span class="back">❓</span><span class="face">' + c.html + '</span></span></button>').join('') + '</div><div class="sub" id="mv">Chaalein: 0</div>');
       }
       let open = [], moves = 0, matched = 0, locked = true;
       ctx.say([D.T.dekho]);
@@ -213,7 +213,7 @@
         const extra = shuffle(D.LETTERS.map((x) => x.ch).filter((c) => !letters.includes(c))).slice(0, lvl >= 4 ? 2 : lvl >= 3 ? 1 : 0);
         const bank = shuffle(letters.map((c, k) => ({ c, id: k })).concat(extra.map((c, k) => ({ c, id: 100 + k }))));
         cur = { w, letters, next: 0, wrong: 0, locked: false };
-        ctx.stage.innerHTML = '<div class="q-card">' + dotsHtml(ctx) + '<div class="q-text"><span class="ur">لفظ بناؤ</span></div>' +
+        ctx.stage.innerHTML = AA.i18n('<div class="q-card">' + dotsHtml(ctx) + '<div class="q-text"><span class="ur">لفظ بناؤ</span></div>' +
           '<div class="q-prompt"><button class="big" data-act="hearw" style="font-size:4.6rem">' + w.e + '</button></div>' +
           '<div class="slots" id="lz-s">' + letters.map(() => '<div class="slot"></div>').join('') + '</div>' +
           '<div class="tiles-bank" id="lz-b">' + bank.map((b) => '<button class="ltile" data-act="tile" data-id="' + b.id + '" data-c="' + b.c + '"><span class="ar-big">' + b.c + '</span></button>').join('') + '</div></div>';
@@ -255,7 +255,7 @@
     start(ctx) {
       const n = [3, 4, 5, 6][ctx.lvl - 1], shapes = shuffle(D.SHAPES).slice(0, n);
       const cols = shuffle(D.COLORS.filter((c) => !['safed', 'kala', 'bhura'].includes(c.id)));
-      ctx.stage.innerHTML = '<div class="q-text"><span class="ur">شکل کو اس کے گھر میں رکھو</span></div><div class="shape-board" id="sb"></div>';
+      ctx.stage.innerHTML = AA.i18n('<div class="q-text"><span class="ur">شکل کو اس کے گھر میں رکھو</span></div><div class="shape-board" id="sb"></div>');
       const board = AA.$('#sb', ctx.stage), W = board.clientWidth || 360, H = 300, pc = Math.min(n, 3);
       const holes = [], pieces = [];
       shapes.forEach((s, k) => {

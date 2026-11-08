@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="Aghaaz-e-Asaas">
+  <title>Aghaaz-e-Asaas</title>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0.2" y2="1">
+      <stop offset="0" stop-color="#FFF9EC"/>
+      <stop offset="1" stop-color="#FFDF9B"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.45" r="0.62">
+      <stop offset="0" stop-color="#FFFFFF" stop-opacity="0.9"/>
+      <stop offset="1" stop-color="#FFFFFF" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="512" height="512" fill="url(#bg)"/>
+  <circle cx="256" cy="238" r="204" fill="url(#glow)"/>
+  <g transform="translate(66 52) scale(1.9)">
+    <circle cx="34" cy="138" r="13" fill="#FFB400"/>
+    <circle cx="166" cy="138" r="13" fill="#FFB400"/>
+    <circle cx="100" cy="116" r="70" fill="#FFC83D"/>
+    <path d="M52 92a56 56 0 0 1 30-32" stroke="#FFE38A" stroke-width="9" stroke-linecap="round" fill="none"/>
+    <path d="M42 82Q100 4 158 82Z" fill="#2ED1A0"/>
+    <rect x="40" y="74" width="120" height="16" rx="8" fill="#12B5A6"/>
+    <path d="M100 40l3.8 8.3 9 .9-6.7 6 1.9 8.8-8-4.6-8 4.6 1.9-8.8-6.7-6 9-.9z" fill="#FFF4C2"/>
+    <circle cx="62" cy="138" r="11" fill="#FF8FA3" opacity=".65"/>
+    <circle cx="138" cy="138" r="11" fill="#FF8FA3" opacity=".65"/>
+    <ellipse cx="76" cy="116" rx="9" ry="12" fill="#2B2250"/>
+    <ellipse cx="124" cy="116" rx="9" ry="12" fill="#2B2250"/>
+    <circle cx="79" cy="111" r="3.6" fill="#FFFFFF"/>
+    <circle cx="127" cy="111" r="3.6" fill="#FFFFFF"/>
+    <path d="M84 140Q100 158 116 140" stroke="#2B2250" stroke-width="5.5" stroke-linecap="round" fill="none"/>
+  </g>
+</svg>

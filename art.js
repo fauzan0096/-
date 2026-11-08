@@ -91,13 +91,25 @@
 
   S.art = {
     render() {
-      return UI.topbar({ ur: 'رنگ بھرو', ro: 'Rang Bharo' }) +
-        '<div class="art-grid">' + PAGES.map((pg) => {
-          const rec = Store.p.art[pg.id] || {}, done = Object.keys(rec).length >= pg.n;
-          return '<button class="art-tile" data-act="open" data-id="' + pg.id + '">' + (done ? '<span class="done-tag">✅</span>' : '') + previewSvg(pg, rec) + '<b class="ur">' + pg.ur + '</b></button>';
+      const pics = '<div class="art-grid">' + PAGES.map((pg) => {
+        const rec = Store.p.art[pg.id] || {}, done = Object.keys(rec).length >= pg.n;
+        return '<button class="art-tile" data-act="open" data-id="' + pg.id + '">' + (done ? '<span class="done-tag">✅</span>' : '') + previewSvg(pg, rec) + '<b class="ur">' + pg.ur + '</b></button>';
+      }).join('') + '</div>';
+      const huroof = '<h3 class="harf-head"><span>🔤</span> <span class="ur">حروف — رنگ بھرو اور مشق کرو</span></h3>' +
+        '<p class="center sub" style="padding:0 18px">الف سے ی تک — har harf ko rang bharo, ungli se likho, phir mitti mein ya kaghaz par dohrao</p>' +
+        '<div class="harf-grid">' + D.LETTERS.map((L, i) => {
+          const c = !!Store.p.art['c' + i], t = !!Store.p.art['t' + i], done = !!Store.p.art['r' + i];
+          const cls = done ? 'done' : c ? 'c-only' : t ? 't-only' : '';
+          return '<button class="harf-tile ' + cls + '" data-act="harf" data-i="' + i + '" aria-label="' + L.n + '"><span class="ch">' + L.ch + '</span><span class="nn">' + L.n + '</span>' + (done ? '<span class="dt">⭐</span>' : '') + '</button>';
         }).join('') + '</div>';
+      return UI.topbar({ ur: 'رنگ بھرو', ro: 'Rang Bharo' }) + pics + huroof;
     },
-    mount(root) { UI.bind(root, { open(t) { AA.sfx.play('whoosh'); UI.go('paint', { id: t.dataset.id }); } }); }
+    mount(root) {
+      UI.bind(root, {
+        open(t) { AA.sfx.play('whoosh'); UI.go('paint', { id: t.dataset.id }); },
+        harf(t) { AA.sfx.play('whoosh'); UI.go('harf', { i: +t.dataset.i }); }
+      });
+    }
   };
 
   S.paint = {
@@ -140,5 +152,69 @@
         clear() { AA.$$('[data-r]', svg).forEach((r) => { r.style.fill = ''; }); Object.keys(rec).forEach((k) => delete rec[k]); hist.length = 0; Store.save(); }
       });
     }
+  };
+
+  /* ---------- Huroof: rang bharo / mashq (Alif se Ya tak) ---------- */
+  S.harf = {
+    render(p) {
+      return '<div class="lesson">' + UI.topbar({ ur: D.LETTERS[p.i].ch, ro: D.LETTERS[p.i].n }) +
+        '<div class="cards-wrap">' +
+        '<div class="seg" id="h-mode"><button class="on" data-act="mode" data-m="colour">🎨 Rang bharo</button><button data-act="mode" data-m="trace">✍️ Mashq karo</button></div>' +
+        '<div class="meter"><i id="h-m"></i><b id="h-t">0%</b></div>' +
+        '<div class="board" id="h-b"></div>' +
+        '<div class="palette" id="h-pal">' + AA.trace.PALETTE.map((c, k) => '<button class="swatch ' + (k === 4 ? 'on' : '') + '" style="--sw:' + c + '" data-act="sw" data-c="' + c + '" aria-label="Rang"></button>').join('') + '<button class="swatch rainbow" data-act="sw" data-c="rainbow" aria-label="Rainbow"></button></div>' +
+        '<div class="tools"><button class="btn ghost small" data-act="clear">' + UI.icon('erase') + ' Saaf</button><button class="btn blue small" data-act="say">' + UI.icon('sound') + ' ' + AA.esc(D.LETTERS[p.i].n) + '</button></div>' +
+        '<p class="note" style="max-width:390px">💡 ' + AA.esc(D.LETTERS[p.i].cue) + '</p>' +
+        '</div></div>';
+    },
+    mount(root, p) {
+      const i = p.i, L = D.LETTERS[i], nanha = Store.profile.age !== 'bada';
+      const board = AA.$('#h-b', root), meter = AA.$('#h-m', root), pctEl = AA.$('#h-t', root), pal = AA.$('#h-pal', root);
+      const key = (m) => (m === 'trace' ? 't' : 'c') + i;
+      let mode = 'colour', tr = null, color = AA.trace.PALETTE[4];
+
+      function build(m) {
+        if (tr) { tr.destroy(); tr = null; }
+        board.innerHTML = '';
+        meter.style.width = '0%'; pctEl.textContent = '0%';
+        tr = AA.trace.create(board, {
+          ch: L.ch, mode: m, nanha, color,
+          hint: m === 'trace', dir: D.letterDir(i),
+          onProgress(v) { const pc = Math.round(v * 100); meter.style.width = pc + '%'; pctEl.textContent = pc + '%'; },
+          onDone() {
+            if (Store.p.art[key(m)]) return;
+            Store.p.art[key(m)] = 1; Store.save();
+            AA.sfx.play('great'); UI.confetti(board, 24);
+            if (Store.p.art['r' + i]) return;      // is harf ka inaam sirf ek baar
+            Store.p.art['r' + i] = 1; Store.save();
+            UI.reward(2, 'harf').then(() => UI.mission('play'));
+          }
+        });
+      }
+      root._kill = () => { if (tr) { tr.destroy(); tr = null; } };
+      build(mode);
+      setTimeout(() => V.sayAr(L.say, 0.8), 350);
+
+      UI.bind(root, {
+        mode(t) {
+          const m = t.dataset.m;
+          if (m === mode) return;
+          mode = m;
+          AA.$$('#h-mode button', root).forEach((b) => b.classList.toggle('on', b === t));
+          pal.style.display = m === 'colour' ? 'flex' : 'none';
+          AA.sfx.play('tap');
+          build(m);
+        },
+        sw(t) {
+          color = t.dataset.c;
+          if (tr) tr.setColor(color);
+          AA.$$('.swatch', root).forEach((b) => b.classList.toggle('on', b === t));
+          AA.sfx.play('tap');
+        },
+        clear() { if (tr) tr.clear(); },
+        say() { V.sayAr(L.say, 0.8); }
+      });
+    },
+    leave(root) { if (root && root._kill) root._kill(); }
   };
 })();

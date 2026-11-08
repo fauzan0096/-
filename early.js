@@ -8,7 +8,7 @@
   const CATS = {
     rang: { ur: 'رنگ', ro: 'Rang', e: '🎨', items: () => D.COLORS, a: '#FF6FA8', b: '#C75BFF', d: '#9A3AB8', game: 'rang' },
     jaanwar: { ur: 'جانور', ro: 'Jaanwar', e: '🐮', items: () => D.ANIMALS, a: '#7BD65A', b: '#2ED1A0', d: '#3B9B28', game: 'jaanwar' },
-    ginti: { ur: 'گنتی', ro: 'Ginti 1–10', e: '🔢', items: () => D.NUMBERS, a: '#FFB020', b: '#FF7A59', d: '#C77700', game: 'ginti' },
+    ginti: { ur: 'گنتی', ro: 'Ginti 1–20', e: '🔢', items: () => D.NUMBERS, a: '#FFB020', b: '#FF7A59', d: '#C77700', game: 'ginti' },
     shakal: { ur: 'شکلیں', ro: 'Shakalein', e: '🔷', items: () => D.SHAPES, a: '#3DA9FC', b: '#12B5A6', d: '#2184D6', game: 'shakal' }
   };
 
@@ -26,11 +26,11 @@
   };
 
   function cardHtml(k, it) {
-    if (k === 'rang') return '<div class="disc-xl" style="--hex:' + it.hex + '"></div><div class="fu ur">' + it.ur + '</div><div class="fr">' + it.ro + '</div><div class="fen">' + it.en + '</div><div class="things">' + it.things.join(' ') + '</div>';
-    if (k === 'jaanwar') return '<div class="fe">' + it.e + '</div><div class="fu ur">' + it.ur + '</div><div class="fr">' + it.ro + '</div><div class="fen">' + it.en + '</div><div class="snd">🔊 ' + it.snd + '</div>';
-    if (k === 'ginti') return '<div class="num">' + it.n + '</div><div class="things">' + Array.from({ length: it.n }, () => D.COUNT_THINGS[it.n % D.COUNT_THINGS.length]).join('') + '</div><div class="fu ur">' + it.ur + '</div><div class="fr">' + it.ro + '</div><div class="fen">' + it.en + '</div>';
+    if (k === 'rang') return '<div class="disc-xl" style="--hex:' + it.hex + '"></div><div class="fu ur">' + it.ur + '</div><div class="fr">' + AA.mn(it) + '</div><div class="fen">' + it.en + '</div><div class="things">' + it.things.join(' ') + '</div>';
+    if (k === 'jaanwar') return '<div class="fe">' + it.e + '</div><div class="fu ur">' + it.ur + '</div><div class="fr">' + AA.mn(it) + '</div><div class="fen">' + it.en + '</div><div class="snd">🔊 ' + it.snd + '</div>';
+    if (k === 'ginti') return '<div class="num">' + it.n + '</div><div class="things">' + Array.from({ length: it.n }, () => D.COUNT_THINGS[it.n % D.COUNT_THINGS.length]).join('') + '</div><div class="fu ur">' + it.ur + '</div><div class="fr">' + AA.mn(it) + '</div><div class="fen">' + it.en + '</div>';
     const cols = D.COLORS.slice(0, 6);
-    return AA.shapeSvg(it, cols[D.SHAPES.indexOf(it) % 6].hex) + '<div class="fu ur">' + it.ur + '</div><div class="fr">' + it.ro + '</div><div class="fen">' + it.en + '</div>';
+    return AA.shapeSvg(it, cols[D.SHAPES.indexOf(it) % 6].hex) + '<div class="fu ur">' + it.ur + '</div><div class="fr">' + AA.mn(it) + '</div><div class="fen">' + it.en + '</div>';
   }
   function speakCard(k, it) {
     if (k === 'ginti') { const list = []; for (let i = 0; i < it.n; i++) list.push(D.NUMBERS[i], 250); list.push(400, it); return V.seq(list.length > 12 ? [it] : list); }

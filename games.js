@@ -129,11 +129,11 @@
 
   function showResult(ctx, stars, good, total, opt) {
     const msg = stars === 3 ? 'ماشاءاللہ! کمال کر دیا' : stars === 2 ? 'بہت خوب!' : 'شاباش! کوشش کرتے رہو';
-    ctx.stage.innerHTML = '<div class="result">' + UI.mascot('cheer') + '<h2 class="ur">' + msg + '</h2>' +
+    ctx.stage.innerHTML = AA.i18n('<div class="result">' + UI.mascot('cheer') + '<h2 class="ur">' + msg + '</h2>' +
       '<div class="rstars">' + '⭐'.repeat(stars) + '<span class="off">' + '⭐'.repeat(3 - stars) + '</span></div>' +
       '<p class="sub">' + (opt && opt.note ? AA.esc(opt.note) : 'Pehli koshish mein sahi: ' + good + ' / ' + total) + '</p>' +
       '<button class="btn big green block" data-act="again">' + UI.icon('redo') + ' Phir khelo</button>' +
-      '<button class="btn ghost block" data-act="back">Wapas</button></div>';
+      '<button class="btn ghost block" data-act="back">Wapas</button></div>');
     AA.sfx.play(stars === 3 ? 'win' : 'great');
     UI.confetti(ctx.stage, stars === 3 ? 44 : 22);
     V.seq([AA.pick(D.PRAISE)]);
@@ -147,10 +147,10 @@
     ctx.setTotal(rounds.length);
     function show() {
       const r = rounds[idx]; locked = false; wrong = 0;
-      ctx.stage.innerHTML = '<div class="q-card">' + dotsHtml(ctx) +
+      ctx.stage.innerHTML = AA.i18n('<div class="q-card">' + dotsHtml(ctx) +
         '<div class="q-text"><span class="ur">' + r.label + '</span></div>' +
         '<div class="q-prompt ' + (r.pcls || '') + '" id="q-prompt">' + r.prompt + '</div>' +
-        '<div class="opt-grid" style="--cols:' + (r.cols || r.opts.length) + '">' + r.opts.map((o, k) => '<button class="opt ' + (o.cls || '') + '" data-act="pick" data-k="' + k + '" ' + (o.aria ? 'aria-label="' + AA.esc(o.aria) + '"' : '') + '>' + o.html + '</button>').join('') + '</div></div>';
+        '<div class="opt-grid" style="--cols:' + (r.cols || r.opts.length) + '">' + r.opts.map((o, k) => '<button class="opt ' + (o.cls || '') + '" data-act="pick" data-k="' + k + '" ' + (o.aria ? 'aria-label="' + AA.esc(o.aria) + '"' : '') + '>' + o.html + '</button>').join('') + '</div></div>');
       ctx.stage.scrollTop = 0;
       if (r.intro) ctx.say(r.intro);
     }
@@ -353,7 +353,7 @@
   AA.games.add({
     id: 'ginti', ur: 'گنتی', ro: 'Ginti Karo', e: '🔢', a: '#FFB020', b: '#FF7A59', d: '#C77700', ages: ['nanha', 'bada'], on: 3, ob: 9,
     start(ctx) {
-      const max = [3, 5, 7, 10][ctx.lvl - 1], rounds = [];
+      const max = [5, 10, 15, 20][ctx.lvl - 1], rounds = [];
       const used = [];
       for (let k = 0; k < 5; k++) {
         let n; do { n = rand(1, max); } while (used.includes(n) && used.length < max); used.push(n);
