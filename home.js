@@ -70,6 +70,7 @@
       harf: { id: 'harf', ur: 'حرف سیکھو', ro: 'Qaida — Alif Ba Ta', e: '🔤', a: '#FF7A59', b: '#FF5E7E', d: '#C94430', go: 'learn' },
       khel: { id: 'khel', ur: 'کھیل', ro: 'Games', e: '🎮', a: '#3DA9FC', b: '#5B7CFA', d: '#2358B8', go: 'games' },
       dost: { id: 'dost', ur: 'دو دوست', ro: 'Bari badal kar khelo', e: '👫', a: '#FF6FA8', b: '#8B6CFF', d: '#9A3AB8', go: 'duo' },
+      kahani: { id: 'kahani', ur: 'کہانیاں', ro: 'Chhoti kahaniyan', e: '📖', a: '#3DA9FC', b: '#8B6CFF', d: '#2358B8', go: 'stories' },
       rang: { id: 'rang', ur: 'رنگ بھرو', ro: 'Rang bharo', e: '🎨', a: '#FF6FA8', b: '#C75BFF', d: '#9A3AB8', go: 'art' },
       dua: { id: 'dua', ur: 'دعائیں', ro: 'Roz ki duaein', e: '🤲', a: '#2ED1A0', b: '#12B5A6', d: '#0B7F73', go: 'duas' },
       surah: { id: 'surah', ur: 'چھوٹی سورتیں', ro: 'Chhoti surahein', e: '📖', a: '#8B6CFF', b: '#6A4FDB', d: '#4631A8', go: 'surahs' },
@@ -78,8 +79,8 @@
       bagh: { id: 'bagh', ur: 'میرا باغ', ro: 'Darakht aur stickers', e: '🌳', a: '#FFC83D', b: '#7BD65A', d: '#B98A00', go: 'album' }
     };
     const order = age === 'bada'
-      ? ['harf', 'khel', 'dost', 'duniya', 'rang', 'dua', 'surah', 'namaz', 'aadat', 'bagh']
-      : ['duniya', 'harf', 'khel', 'dost', 'rang', 'dua', 'bagh', 'aadat', 'namaz', 'surah'];
+      ? ['harf', 'khel', 'dost', 'kahani', 'duniya', 'rang', 'dua', 'surah', 'namaz', 'aadat', 'bagh']
+      : ['duniya', 'harf', 'khel', 'dost', 'kahani', 'rang', 'dua', 'bagh', 'aadat', 'namaz', 'surah'];
     return order.map((k) => T[k]);
   }
 
@@ -90,6 +91,7 @@
     if (id === 'dua') return Object.values(p.duas).filter((x) => x.known).length + '/' + D.DUAS.length;
     if (id === 'bagh') return p.stickers.length + '/' + D.STICKERS.length;
     if (id === 'aadat') return Store.habitsToday().length + ' aaj';
+    if (id === 'kahani') return Object.keys(p.story || {}).length + '/' + D.STORIES.length;
     return '';
   }
 

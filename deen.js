@@ -30,7 +30,7 @@
         '<div class="mic-ring" id="dmic" style="width:90px;height:90px;font-size:2.4rem;display:none">🗣️</div>' +
         '<div class="row wrap" style="justify-content:center"><button class="btn big blue" data-act="listen">' + UI.icon('sound') + ' Suno</button>' +
         '<button class="btn big green" data-act="echo">' + UI.icon('mic') + ' Saath bolo</button></div>' +
-        '<div class="row" style="justify-content:center">' + UI.recBtn(d.ar, d.ro) + '</div>' +
+        '<div class="row wrap" style="justify-content:center"><button class="btn ghost small" data-act="mean">' + UI.icon('sound') + ' Matlab suno</button>' + UI.recBtn(d.ar, d.ro) + '</div>' +
         '<button class="btn ' + (known ? 'sun' : 'ghost') + ' block" id="dknow" data-act="know">' + (known ? '⭐ Mujhe yaad hai!' : '☆ Mujhe yaad ho gayi') + '</button>' +
         '<div class="note" style="max-width:420px"><b>Matlab (walidain ke liye):</b> ' + AA.esc(d.tr) + '</div></div>';
     },
@@ -48,8 +48,13 @@
         async listen() {
           const my = ++duaRun; clear(); V.stop();
           await V.arab(d.ar, 0.8);
+          if (my === duaRun) {
+            await AA.wait(250);
+            if (my === duaRun) { const tr = AA.t ? AA.t(d.tr) : d.tr; if (tr) await V.speakText(tr); }
+          }
           if (my === duaRun) credit();
         },
+        mean() { const tr = AA.t ? AA.t(d.tr) : d.tr; if (tr) V.speakText(tr); },
         async echo() {
           const my = ++duaRun; V.stop(); clear();
           for (let k = 0; k < d.parts.length && my === duaRun; k++) {

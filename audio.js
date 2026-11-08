@@ -79,6 +79,38 @@
 
   Voice.rate = function (mult) { return AA.clamp(Voice.base * Voice.speed * (mult || 1), 0.5, 1.4); };
 
+  // Kisi bhi text ko sahi zubaan mein padho: Arbi → Arbi awaaz, Urdu → Urdu, English/Hindi/Marathi alag
+  function looksArabic(t) {
+    if (/[\u0610-\u061A\u064B-\u065F\u0670\u06D6-\u06ED]/.test(t)) return true;   // harakat = Arbi
+    if (/[\u0679\u067E\u0686\u0688\u0691\u06BA\u06BE\u06C1\u06D2\u06CC\u06AF\u06D3]/.test(t)) return false;  // Urdu ke apne harf
+    return /[\u0621-\u064A]/.test(t);
+  }
+  Voice.speakText = async function (text) {
+    if (!Voice.on) return;
+    const t = String(text == null ? '' : text).trim();
+    if (!t) return;
+    if (Voice.clips[t]) { try { await playClip(Voice.clips[t]); return; } catch (e) {} }
+    if (/[\u0900-\u097F]/.test(t)) return tts(t, 'hi-IN', findVoice(AA.lang === 'mr' ? 'mr' : 'hi'), Voice.rate(1));
+    if (/[A-Za-z]/.test(t) && !/[\u0600-\u06FF]/.test(t)) return tts(t, 'en-IN', findVoice('en'), Voice.rate(1));
+    if (looksArabic(t)) return tts(Voice.cleanAr(t), 'ar-SA', findVoice('ar'), Voice.rate(0.85));
+    return tts(t, 'ur-PK', findVoice('ur'), Voice.rate(1));
+  };
+  // lines: [] — ek ke baad ek, beech mein thoda sa waqfa
+  Voice.readLines = async function (lines, onEach) {
+    if (!Voice.on) return false;
+    Voice.stop();
+    const tok = Voice.token;
+    for (let i = 0; i < lines.length; i++) {
+      if (tok !== Voice.token) return false;
+      if (onEach) onEach(i);
+      await Voice.speakText(lines[i]);
+      if (tok !== Voice.token) return false;
+      await AA.wait(340);
+    }
+    return true;
+  };
+  Voice.reloadVoices = loadVoices;
+
   // Quran ke chhote nishan jo TTS ko uljhate hain unhein saaf karo
   Voice.cleanAr = function (t) {
     return String(t)
@@ -95,6 +127,7 @@
       let done = false, tm;
       const fin = () => { if (done) return; done = true; clearTimeout(tm); resolve(); };
       try {
+        try { ss.resume(); } catch (e) {}
         const u = new SpeechSynthesisUtterance(text);
         if (voice) { u.voice = voice; u.lang = voice.lang; } else u.lang = lang;
         u.rate = rate; u.pitch = 1.08;
@@ -140,8 +173,11 @@
     if (!Voice.on || !spec) return;
     if (typeof spec === 'string') spec = { ro: spec, en: spec };
     if (spec.ar) return Voice.arab(spec.ar, mult);
+    const l = AA.lang, r = Voice.rate(mult || 1);
+    if (l === 'en') return tts(spec.en || spec.ro || '', 'en-IN', findVoice('en'), r);
+    if (l === 'mr') return tts(spec.mr || spec.hi || spec.ro || '', 'mr-IN', findVoice('mr') || findVoice('hi'), r);
+    if (l === 'hi') return tts(spec.hi || spec.ro || '', 'hi-IN', findVoice('hi'), r);
     const ur = findVoice('ur'), hi = findVoice('hi'), en = findVoice('en');
-    const r = Voice.rate(mult || 1);
     if (ur && spec.ur) return tts(spec.ur, 'ur-PK', ur, r);
     if (hi && spec.hi) return tts(spec.hi, 'hi-IN', hi, r);
     if (spec.hi) return tts(spec.hi, 'hi-IN', null, r);   // voice list khali ho to bhi hi-IN try
@@ -154,6 +190,7 @@
   };
 
   // Ek item bolo: pehle ammi/abbu ki recording, warna phone ki TTS
+  // Arbi lafz ho to: pehle Arbi, phir us ka matlab chuni hui zubaan mein
   Voice.word = async function (item, mult) {
     if (!Voice.on) return;
     const tok = Voice.token;
@@ -165,6 +202,14 @@
           if (Voice.bilingual && item.en && tok === Voice.token) { await AA.wait(150); if (tok === Voice.token) await Voice.english(item.en, mult); }
           return;
         } catch (e) { /* TTS par jao */ }
+      }
+      if (item.ar) {
+        await Voice.arab(item.ar, mult);
+        if (tok !== Voice.token) return;
+        const second = AA.mn ? AA.mn(item) : (item.ur || item.ro || '');
+        if (second && second !== item.ar) { await AA.wait(180); if (tok === Voice.token) await Voice.speakText(second); }
+        if (Voice.bilingual && item.en && tok === Voice.token) { await AA.wait(140); if (tok === Voice.token) await Voice.english(item.en, mult); }
+        return;
       }
     }
     await Voice.urdu(item, mult);

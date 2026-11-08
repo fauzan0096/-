@@ -377,4 +377,55 @@
 
   const MR_HABITS = ['सलाम करा', 'बिस्मिल्लाह म्हणून खा', 'खरे बोला', 'आई-बाबांचे ऐका', 'आभार माना', 'वाटून खा', 'स्वच्छता ठेवा', 'माफ करा', 'प्राण्यांवर प्रेम करा', 'मोठ्यांचा आदर करा'];
   D.HABITS.forEach((x, i) => { x.mr = MR_HABITS[i]; });
+
+  /* ---------------------------------------------------------
+     CHHOTI KAHANIYAN — 4 kahaniyan, har ek 5 chhoti lines.
+     Har line ka apna matlab paanch zubanon mein; TTS usi zubaan mein padhta hai.
+     --------------------------------------------------------- */
+  D.STORIES = [
+    {
+      id: 'chirya', e: '🐦', color: '#3DA9FC',
+      title: { ro: 'Noori aur chirya', ur: 'نوری اور چڑیا', hi: 'नूरी और चिड़िया', en: 'Noori and the bird', mr: 'नूरी आणि चिमणी' },
+      lines: [
+        { e: '🧒', ro: 'Noori baagh mein khel raha tha.', ur: 'نوری باغ میں کھیل رہا تھا۔', hi: 'नूरी बाग़ में खेल रहा था।', en: 'Noori was playing in the garden.', mr: 'नूरी बागेत खेळत होता.' },
+        { e: '🐦', ro: 'Achanak ek chhoti chirya us ke paas aayi.', ur: 'اچانک ایک چھوٹی چڑیا اس کے پاس آئی۔', hi: 'अचानक एक छोटी चिड़िया उसके पास आई।', en: 'Suddenly a little bird came to him.', mr: 'अचानक एक छोटी चिमणी त्याच्याजवळ आली.' },
+        { e: '💧', ro: 'Chirya ko bohat pyaas lagi thi.', ur: 'چڑیا کو بہت پیاس لگی تھی۔', hi: 'चिड़िया को बहुत प्यास लगी थी।', en: 'The bird was very thirsty.', mr: 'चिमणीला खूप तहान लागली होती.' },
+        { e: '🥛', ro: 'Noori ne apna paani us ko de diya.', ur: 'نوری نے اپنا پانی اس کو دے دیا۔', hi: 'नूरी ने अपना पानी उसे दे दिया।', en: 'Noori gave her his water.', mr: 'नूरीने आपले पाणी तिला दिले.' },
+        { e: '💚', ro: 'Chirya ne mithi awaaz mein kaha: Shukriya!', ur: 'چڑیا نے میٹھی آواز میں کہا: شکریہ!', hi: 'चिड़िया ने मीठी आवाज़ में कहा: शुक्रिया!', en: 'The bird said sweetly: Thank you!', mr: 'चिमणीने गोड आवाजात म्हणले: धन्यवाद!' }
+      ]
+    },
+    {
+      id: 'bismillah', e: '🍞', color: '#FFB020',
+      title: { ro: 'Ammi ki baat', ur: 'امی کی بات', hi: 'अम्मी की बात', en: 'Ammi said so', mr: 'आईचे बोलणे' },
+      lines: [
+        { e: '🍞', ro: 'Ali ne roti dekhi aur haath barhaya.', ur: 'علی نے روٹی دیکھی اور ہاتھ بڑھایا۔', hi: 'अली ने रोटी देखी और हाथ बढ़ाया।', en: 'Ali saw the bread and reached out.', mr: 'अलीने पोळी पाहिली आणि हात पुढे केला.' },
+        { e: '👩', ro: 'Ammi ne kaha: Pehle Bismillah kaho.', ur: 'امی نے کہا: پہلے بسم اللہ کہو۔', hi: 'अम्मी ने कहा: पहले बिस्मिल्लाह कहो।', en: 'Ammi said: First say Bismillah.', mr: 'आई म्हणाली: आधी बिस्मिल्लाह म्हण.' },
+        { e: '👦', ro: 'Ali ne kaha: Bismillah.', ur: 'علی نے کہا: بسم اللہ۔', hi: 'अली ने कहा: बिस्मिल्लाह।', en: 'Ali said: Bismillah.', mr: 'अली म्हणाला: बिस्मिल्लाह.' },
+        { e: '🤲', ro: 'Phir donon ne mil kar khana khaya.', ur: 'پھر دونوں نے مل کر کھانا کھایا۔', hi: 'फिर दोनों ने मिल कर खाना खाया।', en: 'Then they ate together.', mr: 'मगर दोघांनी मिळून जेवले.' },
+        { e: '💚', ro: 'Khane ke baad Ali ne kaha: Alhamdulillah.', ur: 'کھانے کے بعد علی نے کہا: الحمدللہ۔', hi: 'खाने के बाद अली ने कहा: अलहम्दुलिल्लाह।', en: 'After eating Ali said: Alhamdulillah.', mr: 'जेवणानंतर अली म्हणाला: अलहम्दुलिल्लाह.' }
+      ]
+    },
+    {
+      id: 'seb', e: '🍎', color: '#FF7A59',
+      title: { ro: 'Do dost aur ek seb', ur: 'دو دوست اور ایک سیب', hi: 'दो दोस्त और एक सेब', en: 'Two friends and one apple', mr: 'दोन मित्र आणि एक सेब' },
+      lines: [
+        { e: '👧', ro: 'Sara aur Bilal baagh mein gaye.', ur: 'سارہ اور بلال باغ میں گئے۔', hi: 'सारा और बिलाल बाग़ में गए।', en: 'Sara and Bilal went to the garden.', mr: 'सारा आणि बिलाल बागेत गेले.' },
+        { e: '🍎', ro: 'Unhon ne ek hi seb dekha.', ur: 'انہوں نے ایک ہی سیب دیکھا۔', hi: 'उन्होंने एक ही सेब देखा।', en: 'They saw just one apple.', mr: 'त्यांनी एकच सेब पाहिले.' },
+        { e: '😶', ro: 'Donon chup reh gaye.', ur: 'دونوں چپ رہ گئے۔', hi: 'दोनों चुप रह गए।', en: 'Both went quiet.', mr: 'दोघे गप्प राहिले.' },
+        { e: '🤝', ro: 'Phir Sara ne kaha: Aadha tum, aadha main.', ur: 'پھر سارہ نے کہا: آدھا تم، آدھا میں۔', hi: 'फिर सारा ने कहा: आधा तुम, आधा मैं।', en: 'Then Sara said: Half for you, half for me.', mr: 'मगर सारा म्हणाली: अर्धे तू, अर्धे मी.' },
+        { e: '😊', ro: 'Donon hanse — baant kar khane mein maza aaya.', ur: 'دونوں ہنسے — بانٹ کر کھانے میں مزہ آیا۔', hi: 'दोनों हँसे — बाँट कर खाने में मज़ा आया।', en: 'Both laughed — sharing made it sweet.', mr: 'दोघे हसले — वाटून खाल्ल्यावर गोड वाटले.' }
+      ]
+    },
+    {
+      id: 'billi', e: '🐈', color: '#2ED1A0',
+      title: { ro: 'Billi ka doodh', ur: 'بلی کا دودھ', hi: 'बिल्ली का दूध', en: 'The cat and the milk', mr: 'मांजर आणि दूध' },
+      lines: [
+        { e: '🐈', ro: 'Ek billi darwaze par baithi thi.', ur: 'ایک بلی دروازے پر بیٹھی تھی۔', hi: 'एक बिल्ली दरवाज़े पर बैठी थी।', en: 'A cat was sitting at the door.', mr: 'एक मांजर दारात बसली होती.' },
+        { e: '🐾', ro: 'Us ne pyar se Meow kaha.', ur: 'اس نے پیار سے میاؤں کہا۔', hi: 'उसने प्यार से म्याऊँ कहा।', en: 'She said Meow, very sweetly.', mr: 'तीने प्रेमाने म्याऊ म्हणले.' },
+        { e: '🥛', ro: 'Hamza ne us ke liye doodh rakha.', ur: 'حمزہ نے اس کے لیے دودھ رکھا۔', hi: 'हमज़ा ने उसके लिए दूध रखा।', en: 'Hamza put out milk for her.', mr: 'हमझाने तिच्यासाठी दूध ठेवले.' },
+        { e: '😺', ro: 'Billi ne doodh piya aur khush ho kar chali gayi.', ur: 'بلی نے دودھ پیا اور خوش ہو کر چلی گئی۔', hi: 'बिल्ली ने दूध पिया और खुश हो कर चली गई।', en: 'The cat drank it and went away happy.', mr: 'मांजरने दूध प्यायले आणि आनंदाने गेली.' },
+        { e: '💚', ro: 'Hamza khush hua — jaanwaron se pyar karo.', ur: 'حمزہ خوش ہوا — جانوروں سے پیار کرو۔', hi: 'हमज़ा खुश हुआ — जानवरों से प्यार करो।', en: 'Hamza was happy — be kind to animals.', mr: 'हमझा आनंदी झाला — प्राण्यांवर प्रेम करा.' }
+      ]
+    }
+  ];
 })();

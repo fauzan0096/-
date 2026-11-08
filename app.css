@@ -618,3 +618,10 @@ html[dir='ltr'] .bubble-say { border-radius: 26px 26px 8px 26px; }
 [dir='rtl'] .lang-fab { right: auto; left: 0; border-radius: 0 23px 23px 0; border-right: 3px solid var(--line); border-left: 0; }
 .langs h3 { margin-bottom: 12px; text-align: center; font-size: 1.35rem; }
 .art-tile small { display: block; font-size: .78rem; color: var(--ink2); margin-top: 2px; }
+
+
+/* ---------- Kahaniyan ---------- */
+.story-card { width: 100%; max-width: 400px; background: var(--card); border-radius: 40px; box-shadow: var(--shadow); padding: 18px 16px 14px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 10px; animation: pop .3s; }
+.story-card:active { transform: scale(.99); }
+.story-em { font-size: 5rem; line-height: 1.1; }
+.story-tx { font-size: 1.3rem; line-height: 1.65; font-weight: 600; }

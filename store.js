@@ -25,7 +25,7 @@
       v: 2, stars: 0, stickers: [], letters: {},
       harkat: { seen: [], found: 0 },
       games: {}, days: {}, habits: {}, surahs: {}, duas: {}, namaz: { wudu: 0, postures: 0, namazein: 0 },
-      art: {}, early: {}, join: {}, song: 0,
+      art: {}, early: {}, join: {}, story: {}, song: 0,
       missions: { date: '', learn: false, play: false, deen: false, bonus: false }
     };
   }
@@ -77,7 +77,7 @@
     const saved = AA.lsGet(K_P + id, null);
     Store.p = Object.assign(blank(), saved || {});
     // purane data mein naye khane na hon to bhar do
-    ['harkat', 'games', 'days', 'habits', 'surahs', 'duas', 'art', 'early', 'join', 'letters', 'missions', 'namaz'].forEach((k) => { if (!Store.p[k]) Store.p[k] = blank()[k]; });
+    ['harkat', 'games', 'days', 'habits', 'surahs', 'duas', 'art', 'early', 'join', 'story', 'letters', 'missions', 'namaz'].forEach((k) => { if (!Store.p[k]) Store.p[k] = blank()[k]; });
     AA.lsSet(K_ACTIVE, id);
     Store.applySettings();
     if (!silent) emit('profile', prof);

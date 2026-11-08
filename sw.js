@@ -4,7 +4,7 @@ const VER = 'aa-kids-v5';
 
 const ICONS = ['icons/icon-192.png', 'icons/icon-512.png', 'icons/icon-maskable-512.png', 'icons/apple-touch-icon.png'];
 const FONTS = ['fonts/fredoka-400.ttf', 'fonts/fredoka-600.ttf', 'fonts/fredoka-700.ttf', 'fonts/noto-naskh-500.ttf', 'fonts/noto-naskh-700.ttf', 'fonts/amiri-quran-400.ttf', 'fonts/amiri-400.ttf', 'fonts/amiri-700.ttf'];
-const SCRIPTS = ['util.js', 'i18n.js', 'data.js', 'audio.js', 'store.js', 'ui.js', 'home.js', 'learn.js', 'trace.js', 'lesson.js', 'games.js', 'games2.js', 'early.js', 'art.js', 'deen.js', 'album.js', 'duo.js', 'parent.js', 'boot.js'];
+const SCRIPTS = ['util.js', 'i18n.js', 'data.js', 'audio.js', 'store.js', 'ui.js', 'home.js', 'learn.js', 'trace.js', 'lesson.js', 'games.js', 'games2.js', 'early.js', 'art.js', 'deen.js', 'album.js', 'duo.js', 'stories.js', 'parent.js', 'boot.js'];
 
 // Surahein jo app mein hain: [surah number, ayat ki tadaad] — data.js se milna chahiye
 const SURAH_AYAT = [[1, 7], [103, 3], [108, 3], [112, 4], [113, 5], [114, 6]];

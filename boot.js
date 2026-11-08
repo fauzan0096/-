@@ -56,6 +56,9 @@
     const unlock = () => {
       try { AA.sfx.play('tap'); } catch (e) {}
       try { if (Store.settings.music !== false && AA.music) AA.music.start(); } catch (e) {}
+      try { if (AA.voice && AA.voice.reloadVoices) AA.voice.reloadVoices(); } catch (e) {}
+      // iOS: pehli chhoti awaaz se TTS khulta hai
+      try { if ('speechSynthesis' in window) { const u = new SpeechSynthesisUtterance(' '); u.volume = 0; window.speechSynthesis.speak(u); } } catch (e) {}
       window.removeEventListener('pointerdown', unlock);
     };
     window.addEventListener('pointerdown', unlock, { once: true });

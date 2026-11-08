@@ -56,11 +56,11 @@
           '<button class="pic-card" data-act="word"><span class="pe">' + w.e + '</span><span class="pw"><span class="ar-big">' + w.ar + '</span><span class="ur">' + w.ur + '</span><small>' + AA.mn(w) + '</small></span></button>' +
           '<div class="row wrap" style="justify-content:center">' + UI.recBtn(L.say, L.n) + UI.recBtn(w.ar, w.ro || w.ur) + '</div>' +
           '<div class="cue">💡 ' + AA.esc(L.cue) + '</div>' + forms);
-        V.seq([D.T.yehHai, { ar: L.say }, 450, { ar: w.ar }, w]);
+        V.seq([D.T.yehHai, { ar: L.say }, 450, w]);
         later(enable, 1800);
         UI.bind(el, {
           say() { V.sayAr(L.say); UI.pulse(AA.$('.letter-card', el), 'pulse-once'); },
-          word() { V.seq([{ ar: w.ar }, w]); UI.pulse(AA.$('.pic-card', el), 'pulse-once'); }
+          word() { V.seq([w]); UI.pulse(AA.$('.pic-card', el), 'pulse-once'); }
         });
       }
 
