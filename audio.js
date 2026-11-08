@@ -66,10 +66,11 @@
   /* ---------- awaaz chunna ---------- */
   function findVoice(kind) {
     const list = Voice.voices.length ? Voice.voices : (loadVoices(), Voice.voices);
-    const by = (re) => list.find((v) => re.test(v.lang.replace('_', '-')));
-    if (kind === 'ar') return by(/^ar/i) || null;
-    if (kind === 'ur') return by(/^ur/i) || null;
-    if (kind === 'hi') return by(/^hi/i) || null;
+    const by = (re) => list.find((v) => re.test(String(v.lang || '').replace('_', '-')));
+    if (kind === 'ar') return by(/^ar/i) || by(/^(ur|fa|ps)/i) || null;
+    if (kind === 'ur') return by(/^ur/i) || by(/^hi/i) || by(/^ar/i) || null;
+    if (kind === 'hi') return by(/^hi/i) || by(/^mr/i) || null;
+    if (kind === 'mr') return by(/^mr/i) || by(/^hi/i) || null;
     if (kind === 'en') return by(/^en-(IN|GB|US)/i) || by(/^en/i) || null;
     return null;
   }
@@ -152,12 +153,56 @@
     return tts(text, 'en-US', findVoice('en'), Voice.rate(mult || 1));
   };
 
-  // Ek item bolo (Urdu), bilingual ho to English bhi
+  // Ek item bolo: pehle ammi/abbu ki recording, warna phone ki TTS
   Voice.word = async function (item, mult) {
     if (!Voice.on) return;
     const tok = Voice.token;
+    if (item && typeof item === 'object') {
+      const ck = (item.ar && Voice.clips[item.ar]) || Voice.clips[item.ur] || Voice.clips[item.ro];
+      if (ck) {
+        try {
+          await playClip(ck);
+          if (Voice.bilingual && item.en && tok === Voice.token) { await AA.wait(150); if (tok === Voice.token) await Voice.english(item.en, mult); }
+          return;
+        } catch (e) { /* TTS par jao */ }
+      }
+    }
     await Voice.urdu(item, mult);
     if (Voice.bilingual && item.en && tok === Voice.token) { await AA.wait(150); if (tok === Voice.token) await Voice.english(item.en, mult); }
+  };
+
+  /* ---------- recording (amma/abbu ki apni awaaz, har cheez ke liye) ---------- */
+  // { stop(), done: Promise<dataUrl|null> } — done kabhi reject nahi karta, null deta hai
+  Voice.startRecording = async function (maxMs) {
+    if (!navigator.mediaDevices || !window.MediaRecorder) { const e = new Error('no-recorder'); e.code = 'norec'; throw e; }
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    let rec;
+    try { rec = new MediaRecorder(stream); }
+    catch (err) { stream.getTracks().forEach((t) => { try { t.stop(); } catch (e) {} }); throw err; }
+    const chunks = [];
+    let timer = 0;
+    const done = new Promise((resolve, reject) => {
+      const stopTracks = () => stream.getTracks().forEach((t) => { try { t.stop(); } catch (e) {} });
+      rec.ondataavailable = (e) => { if (e.data && e.data.size) chunks.push(e.data); };
+      rec.onstop = () => {
+        clearTimeout(timer); stopTracks();
+        const blob = new Blob(chunks, { type: rec.mimeType || 'audio/webm' });
+        if (blob.size < 700) { resolve(null); return; }
+        const fr = new FileReader();
+        fr.onload = () => resolve(String(fr.result));
+        fr.onerror = () => resolve(null);
+        fr.readAsDataURL(blob);
+      };
+      rec.onerror = (err) => { clearTimeout(timer); stopTracks(); reject(err); };
+      timer = setTimeout(() => { try { if (rec.state === 'recording') rec.stop(); } catch (e) {} }, maxMs || 6000);
+    });
+    rec.start();
+    return { stop() { try { if (rec.state === 'recording') rec.stop(); } catch (e) {} }, done };
+  };
+
+  // TTS check: kya awaaz aa rahi hai
+  Voice.test = function () {
+    Voice.seq([{ ur: 'السلام علیکم', hi: 'सलाम', ro: 'Assalamu alaikum' }, 250, { ar: 'أَلِف' }]);
   };
 
   // Tareeb-war bolo: list mein { ar }, { ur.. }, { en:'..', lang:'en' }, ya number (pause ms)

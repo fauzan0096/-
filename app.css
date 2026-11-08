@@ -598,3 +598,15 @@ html[lang='en'] .ur { font-family: 'Fredoka', system-ui, -apple-system, 'Segoe U
 html[dir='ltr'] .tb-title b, html[dir='ltr'] .tb-title small { text-align: left; }
 html[dir='ltr'] .cta { padding: 12px 22px 12px 18px; }
 html[dir='ltr'] .bubble-say { border-radius: 26px 26px 8px 26px; }
+
+
+/* ---------- Awaaz record (amma/abbu) ---------- */
+.rec-btn { display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; border-radius: 99px; background: var(--card); border: 2px solid var(--line); box-shadow: var(--shadow-s); font-size: 1rem; font-weight: 700; color: var(--ink2); cursor: pointer; }
+.rec-btn span { font-size: .8rem; max-width: 90px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.rec-btn:active { transform: translateY(2px); }
+.rec-btn.has { border-color: var(--ok); color: var(--c3d); background: var(--ok-bg); }
+.rec-wrap { display: flex; justify-content: center; margin-top: 10px; }
+.rec { text-align: center; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.rec-ic { width: 96px; height: 96px; border-radius: 50%; display: grid; place-items: center; font-size: 2.6rem; background: var(--soft); border: 4px solid var(--line); }
+.rec-ic.live { background: var(--oops-bg); border-color: var(--c1); animation: btnPulse 1.2s infinite; }
+.rec-lbl { font-size: 1.3rem; }

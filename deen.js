@@ -30,6 +30,7 @@
         '<div class="mic-ring" id="dmic" style="width:90px;height:90px;font-size:2.4rem;display:none">🗣️</div>' +
         '<div class="row wrap" style="justify-content:center"><button class="btn big blue" data-act="listen">' + UI.icon('sound') + ' Suno</button>' +
         '<button class="btn big green" data-act="echo">' + UI.icon('mic') + ' Saath bolo</button></div>' +
+        '<div class="row" style="justify-content:center">' + UI.recBtn(d.ar, d.ro) + '</div>' +
         '<button class="btn ' + (known ? 'sun' : 'ghost') + ' block" id="dknow" data-act="know">' + (known ? '⭐ Mujhe yaad hai!' : '☆ Mujhe yaad ho gayi') + '</button>' +
         '<div class="note" style="max-width:420px"><b>Matlab (walidain ke liye):</b> ' + AA.esc(d.tr) + '</div></div>';
     },
@@ -112,7 +113,7 @@
         '<div class="pad col" style="align-items:center">' +
         '<div class="row wrap" style="justify-content:center"><button class="btn blue" data-act="all">' + UI.icon('play') + ' Suno</button><button class="btn green" data-act="echo">' + UI.icon('mic') + ' Dohrao</button><button class="btn ghost" id="hidebtn" data-act="hide">🙈 Chhupao</button></div>' +
         (s.n !== 1 ? '<div class="ar center" style="font-size:1.6rem;color:var(--ink2)">بِسۡمِ ٱللَّهِ ٱلرَّحۡمَٰنِ ٱلرَّحِيمِ</div>' : '') +
-        '<div class="col" style="width:100%;max-width:460px" id="ayat">' + s.ayat.map((a, i) => '<div class="surah-ayah" data-act="ayah" data-i="' + i + '"><span class="no">' + (s.n === 1 ? i + 1 : i + 1) + '</span><span class="ar">' + AA.esc(a) + '</span></div>').join('') + '</div>' +
+        '<div class="col" style="width:100%;max-width:460px" id="ayat">' + s.ayat.map((a, i) => '<div class="surah-ayah" data-act="ayah" data-i="' + i + '"><span class="no">' + (s.n === 1 ? i + 1 : i + 1) + '</span><span class="ar">' + AA.esc(a) + '</span>' + UI.recBtn(a, String(i + 1)) + '</div>').join('') + '</div>' +
         '<button class="btn ' + (known ? 'sun' : 'ghost') + ' block" id="sknow" data-act="know" style="max-width:460px">' + (known ? '⭐ Mujhe yaad hai!' : '☆ Mujhe yaad ho gayi') + '</button>' +
         '<div class="note" style="max-width:460px">' + AA.esc(s.m) + '<br>Qari: Husary (Muallim) — har ayat ruk ruk kar, sikhane ke andaz mein.</div></div>';
     },

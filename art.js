@@ -163,7 +163,7 @@
         '<div class="meter"><i id="h-m"></i><b id="h-t">0%</b></div>' +
         '<div class="board" id="h-b"></div>' +
         '<div class="palette" id="h-pal">' + AA.trace.PALETTE.map((c, k) => '<button class="swatch ' + (k === 4 ? 'on' : '') + '" style="--sw:' + c + '" data-act="sw" data-c="' + c + '" aria-label="Rang"></button>').join('') + '<button class="swatch rainbow" data-act="sw" data-c="rainbow" aria-label="Rainbow"></button></div>' +
-        '<div class="tools"><button class="btn ghost small" data-act="clear">' + UI.icon('erase') + ' Saaf</button><button class="btn blue small" data-act="say">' + UI.icon('sound') + ' ' + AA.esc(D.LETTERS[p.i].n) + '</button></div>' +
+        '<div class="tools"><button class="btn ghost small" data-act="clear">' + UI.icon('erase') + ' Saaf</button><button class="btn blue small" data-act="say">' + UI.icon('sound') + ' ' + AA.esc(D.LETTERS[p.i].n) + '</button>' + UI.recBtn(D.LETTERS[p.i].say, D.LETTERS[p.i].n) + '</div>' +
         '<p class="note" style="max-width:390px">💡 ' + AA.esc(D.LETTERS[p.i].cue) + '</p>' +
         '</div></div>';
     },

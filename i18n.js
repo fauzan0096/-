@@ -463,7 +463,20 @@
     'Allah ek hai. Na us ki aulad, na koi us jaisa.': ['اللہ ایک ہے۔ نہ اس کی اولاد، نہ کوئی اس جیسا۔', 'अल्लाह एक है। न उसकी औलाद, न कोई उस जैसा।', 'Allah is one — no child, nothing like Him.', 'अल्लाह एक आहे — ना त्याची संतती, ना त्याच्यासारखा कोणी.'],
     'Logon ke Rab ki panah — waswason se hifazat.': ['لوگوں کے رب کی پناہ — وسوسوں سے حفاظت۔', 'लोगों के रब की पनाह — वसवसों से हिफ़ाज़त।', 'Refuge with the Lord of people — safety from whispers.', 'लोकांच्या रबाचा आसरा — वाईट सुचवण्यांपासून संरक्षण.'],
     'Subah ke Rab ki panah — buraiyon se hifazat.': ['صبح کے رب کی پناہ — برائیوں سے حفاظت۔', 'सुबह के रब की पनाह — बुराइयों से हिफ़ाज़त।', 'Refuge with the Lord of the dawn — safety from evil.', 'पहाटेच्या रबाचा आसरा — वाईटांपासून संरक्षण.'],
-    'Waqt ki qasam — imaan, neik amal, sach aur sabr wale kamyab hain.': ['وقت کی قسم — ایمان، نیک عمل، سچ اور صبر والے کامیاب ہیں۔', 'वक़्त की क़सम — ईमान, नेक अमल, सच और सब्र वाले कामयाब हैं।', 'By time — those with faith, good deeds, truth and patience succeed.', 'वेळेची शपथ — श्रद्धा, चांगली कृती, सत्य व संयम असणारे यशस्वी.']
+    'Waqt ki qasam — imaan, neik amal, sach aur sabr wale kamyab hain.': ['وقت کی قسم — ایمان، نیک عمل، سچ اور صبر والے کامیاب ہیں۔', 'वक़्त की क़सम — ईमान, नेक अमल, सच और सब्र वाले कामयाब हैं।', 'By time — those with faith, good deeds, truth and patience succeed.', 'वेळेची शपथ — श्रद्धा, चांगली कृती, सत्य व संयम असणारे यशस्वी.'],
+
+    /* ---- awaaz record ---- */
+    'Awaaz record karne ke liye': ['آواز ریکارڈ کرنے کے لیے', 'आवाज़ रिकॉर्ड करने के लिए', 'To record the voice', 'आवाज रेकॉर्ड करण्यासाठी'],
+    'Recording maujood hai. Naya record karne par purani badal jayegi.': ['ریکارڈنگ موجود ہے۔ نیا ریکارڈ کرنے پر پرانی بدل جائے گی۔', 'रिकॉर्डिंग मौजूद है। नया रिकॉर्ड करने पर पुरानी बदल जाएगी।', 'A recording exists. Recording again will replace it.', 'रेकॉर्डिंग आहे. पुन्हा रेकॉर्ड केल्यास जुनी बदलेल.'],
+    'Neeche Record dabayein aur 6 second tak apni awaaz mein parhein.': ['نیچے ریکارڈ دبائیں اور 6 سیکنڈ تک اپنی آواز میں پڑھیں۔', 'नीचे रिकॉर्ड दबाएँ और 6 सेकंड तक अपनी आवाज़ में पढ़ें।', 'Tap Record below and say it in your voice for up to 6 seconds.', 'खाली रेकॉर्ड दाबा आणि 6 सेकंद आपल्या आवाजात म्हणा.'],
+    '🔴 Record': ['🔴 ریکارڈ', '🔴 रिकॉर्ड', '🔴 Record', '🔴 रेकॉर्ड'],
+    '⏹ Ruko': ['⏹ رکو', '⏹ रुको', '⏹ Stop', '⏹ थांबा'],
+    'Bol rahe hain… phir Ruko dabayein': ['بول رہے ہیں… پھر رکو دبائیں', 'बोल रहे हैं… फिर रुको दबाएँ', 'Speaking… then tap Stop', 'बोलत आहात… मगर थांबा दाबा'],
+    'Save ho gaya ✅ — bachcha ab yahi awaaz sunega': ['محفوظ ہو گیا ✅ — بچہ اب یہی آواز سنے گا', 'सेव हो गया ✅ — बच्चा अब यही आवाज़ सुनेगा', 'Saved ✅ — the child will now hear this voice', 'जतन झाले ✅ — मूल आता हाच आवाज ऐकेल'],
+    'Awaaz nahi aayi — phir koshish karein': ['آواز نہیں آئی — پھر کوشش کریں', 'आवाज़ नहीं आई — फिर कोशिश करें', 'No sound recorded — please try again', 'आवाज आला नाही — पुन्हा प्रयत्न करा'],
+    'Awaaz save ho gayi ✅': ['آواز محفوظ ہو گئی ✅', 'आवाज़ सेव हो गई ✅', 'Voice saved ✅', 'आवाज जतन झाला ✅'],
+    'Awaaz test': ['آواز ٹیسٹ', 'आवाज़ टेस्ट', 'Sound test', 'आवाज चाचणी'],
+    'App ke har screen par 🎙️ nishan hai — harf, tasveer, dua ya surah ke saath. Us par dabayein, chhota sa hisaab hal karein, aur apni awaaz record kar lein. Bachcha phir hamesha wahi awaaz sunega.': ['ایپ کے ہر اسکرین پر 🎙️ نشان ہے — حرف، تصویر، دعا یا سورت کے ساتھ۔ اس پر دبائیں، چھوٹا سا حساب حل کریں، اور اپنی آواز ریکارڈ کر لیں۔ بچہ پھر ہمیشہ وہی آواز سنے گا۔', 'ऐप के हर स्क्रीन पर 🎙️ निशान है — हरफ़, तस्वीर, दुआ या सूरत के साथ। उस पर दबाएँ, छोटा सा हिसाब हल करें, और अपनी आवाज़ रिकॉर्ड कर लें। बच्चा फिर हमेशा वही आवाज़ सुनेगा।', 'Every screen has a 🎙️ mark — with letters, pictures, duas and surahs. Tap it, solve a small sum, and record your own voice. The child will then always hear that voice.', 'प्रत्येक स्क्रीनवर 🎙️ खूण आहे — अक्षर, चित्र, दुआ किंवा सुरासोबत. ती दाबा, छोटी बेरीज सोडवा आणि तुमचा आवाज रेकॉर्ड करा. मूल नंतर नेहमी तोच आवाज ऐकेल.']
   };
 
   const keys = Object.keys(D).sort((a, b) => b.length - a.length);

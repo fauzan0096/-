@@ -52,6 +52,7 @@
 
         '<div class="pa"><h3>⚙️ Settings</h3>' +
         '<div class="set-row"><div class="lbl"><b>Awaaz</b><small>Awaaz aur effects</small></div>' + tg('sound', st.sound) + '</div>' +
+        '<div class="set-row"><div class="lbl"><b>Awaaz test</b><small>TTS check karein</small></div><button class="mini" data-act="vtest">🔊 Sunao</button></div>' +
         '<div class="set-row"><div class="lbl"><b>Bolne ki raftaar</b></div>' + pills('speed', [[0.8, 'Dheemi'], [1, 'Normal'], [1.15, 'Tez']], st.speed) + '</div>' +
         '<div class="set-row"><div class="lbl"><b>English bhi bolo</b><small>Urdu ke baad English lafz</small></div>' + tg('bilingual', st.bilingual) + '</div>' +
         '<div class="set-row"><div class="lbl"><b>Rozana waqt ki had</b><small>Poora hone par "aaram" screen</small></div>' + pills('limit', [[0, 'Band'], [10, '10'], [20, '20'], [30, '30'], [45, '45']], st.limit) + '</div>' +
@@ -60,6 +61,7 @@
         '</div>' +
 
         '<div class="pa"><h3>🎙️ Ammi/Abbu ki awaaz</h3><p>Bachche apni ammi ya abbu ki awaaz mein seekhein to yaad zyada rehta hai. Neeche kisi bhi cheez par record dabayein — jahan recording ho, wahan phone ki awaaz ki jagah aap ki awaaz bajegi.</p>' +
+        '<p class="note">App ke har screen par 🎙️ nishan hai — harf, tasveer, dua ya surah ke saath. Us par dabayein, chhota sa hisaab hal karein, aur apni awaaz record kar lein. Bachcha phir hamesha wahi awaaz sunega.</p>' +
         '<div class="pills" style="justify-content:flex-start;margin:8px 0">' + [['letters', 'Harf'], ['words', 'Alfaaz'], ['duas', 'Duaein']].map(([k, l]) => '<button class="pill ' + (k === 'letters' ? 'on' : '') + '" data-act="rtab" data-k="' + k + '">' + l + '</button>').join('') + '</div>' +
         '<div id="rec-list"></div>' +
         '<div class="row wrap" style="margin-top:10px"><button class="mini gray" data-act="rexp">⬇️ Backup</button><button class="mini gray" data-act="rimp">⬆️ Wapas laayein</button><input type="file" id="rfile" accept="application/json" hidden></div></div>' +
@@ -119,6 +121,7 @@
           if (k === 'speed') V.seq([D.T.shabash || AA.pick(D.PRAISE)]);
         },
         rev() { UI.go('play', { id: 'review' }); },
+        vtest() { V.test(); },
         async share() {
           const txt = shareText(r);
           try { if (navigator.share) { await navigator.share({ text: txt }); return; } } catch (e) { return; }

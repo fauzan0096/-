@@ -53,6 +53,7 @@
   UI.stage = () => $('#stage');
   UI.bind = function (root, handlers) {
     root.addEventListener('click', (e) => {
+      if (e.target.closest('[data-rec]')) return;   // mic apna kaam karega
       const t = e.target.closest('[data-act]');
       if (!t || !root.contains(t) || t.disabled) return;
       const fn = handlers[t.dataset.act];
@@ -249,7 +250,84 @@
     }
   };
 
+  /* ------------------------- awaaz record (amma/abbu ki awaaz) ------------------------- */
+  // har jagah: UI.recBtn(key, label) — click par parent gate, phir 6 second ki recording
+  UI.recBtn = function (key, label) {
+    if (!key) return '';
+    const has = AA.voice && AA.voice.hasClip ? AA.voice.hasClip(key) : false;
+    return '<span class="rec-btn' + (has ? ' has' : '') + '" data-rec="' + AA.esc(key) + '" data-lbl="' + AA.esc(label || '') + '" role="button" aria-label="' + AA.esc((label || '') + ' — record') + '">🎙️<span>' + AA.esc(label || 'Awaaz') + '</span></span>';
+  };
+
+  UI.recordFor = async function (key, label) {
+    const V = AA.voice;
+    if (!V || !V.startRecording || !key) return;
+    const ok = await UI.parentGate('Awaaz record karne ke liye');
+    if (!ok) return;
+    UI.openRecorder(key, label);
+  };
+
+  UI.openRecorder = function (key, label) {
+    const V = AA.voice;
+    let ctrl = null, alive = true, busy = false;
+    const has = V.hasClip(key);
+    const m = UI.modal(
+      '<div class="rec"><div class="rec-ic" id="rec-ic">🎙️</div>' +
+      '<h3 class="rec-lbl">' + AA.esc(label || 'Awaaz') + '</h3>' +
+      '<p class="sub" id="rec-t">' + (has ? 'Recording maujood hai. Naya record karne par purani badal jayegi.' : 'Neeche Record dabayein aur 6 second tak apni awaaz mein parhein.') + '</p>' +
+      '<div class="row" style="justify-content:center;flex-wrap:wrap">' +
+      '<button class="btn green" data-r="start">🔴 Record</button>' +
+      '<button class="btn ghost" data-r="stop" disabled>⏹ Ruko</button>' +
+      (has ? '<button class="btn ghost" data-r="del">🗑️</button>' : '') +
+      '</div></div>', { cls: 'rec-modal', onClose: () => { alive = false; if (ctrl) ctrl.stop(); } });
+    const btnStart = m.el.querySelector('[data-r=start]');
+    const btnStop = m.el.querySelector('[data-r=stop]');
+    const txt = m.el.querySelector('#rec-t');
+    const ic = m.el.querySelector('#rec-ic');
+    m.el.addEventListener('click', async (e) => {
+      const b = e.target.closest('[data-r]');
+      if (!b) return;
+      const act = b.dataset.r;
+      if (act === 'del') {
+        await V.deleteClip(key);
+        UI.closeModal(m);
+        try { UI.refresh(); } catch (x) {}
+        return;
+      }
+      if (act === 'stop') { if (ctrl) ctrl.stop(); return; }
+      if (act !== 'start' || busy) return;
+      busy = true;
+      try {
+        ctrl = await V.startRecording(6000);
+      } catch (err) {
+        busy = false;
+        txt.textContent = (err && err.code === 'norec') ? 'Is browser mein record nahi ho sakta' : 'Mic ki ijazat dein';
+        return;
+      }
+      btnStart.disabled = true; btnStop.disabled = false;
+      ic.classList.add('live'); txt.textContent = 'Bol rahe hain… phir Ruko dabayein';
+      const url = await ctrl.done;
+      ctrl = null; busy = false;
+      ic.classList.remove('live'); btnStart.disabled = false; btnStop.disabled = true;
+      if (!url) { txt.textContent = 'Awaaz nahi aayi — phir koshish karein'; return; }
+      await V.saveClip(key, url);
+      AA.sfx.play('good');
+      txt.textContent = 'Save ho gaya ✅ — bachcha ab yahi awaaz sunega';
+      if (!alive) return;
+      UI.closeModal(m);
+      UI.toast('Awaaz save ho gayi ✅');
+      try { UI.refresh(); } catch (x) {}
+    });
+  };
+
   /* ------------------------- parent gate ------------------------- */
+  // har screen ke 🎙️ button (capture phase, taake card ka apna action na chale)
+  document.addEventListener('click', (e) => {
+    const b = e.target.closest ? e.target.closest('[data-rec]') : null;
+    if (!b) return;
+    e.preventDefault();
+    e.stopPropagation();
+    UI.recordFor(b.dataset.rec, b.dataset.lbl || '');
+  }, true);
   UI.parentGate = function (why) {
     return new Promise((resolve) => {
       const a = AA.rand(23, 48), b = AA.rand(17, 39), ans = String(a + b);

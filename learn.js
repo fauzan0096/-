@@ -137,7 +137,7 @@
     render() {
       return UI.topbar({ ur: 'دو حرفی الفاظ', ro: 'Jodo — 2 harf ke lafz' }) +
         '<p class="center sub" style="padding:0 20px">Do harf mil kar ek lafz banate hain. Card dabao — pehle har harf, phir poora lafz sunaya jayega.</p>' +
-        '<div class="list">' + D.JOIN.map((j, i) => '<button class="lrow" data-act="say" data-i="' + i + '"><span class="le"><b class="ar-big" style="font-size:1.7rem">' + j.parts[0] + '</b></span><span class="lt"><b class="ar-big" style="font-size:2.1rem">' + j.w + '</b><small>' + j.ro + ' — ' + AA.esc(j.ur) + '</small></span><span class="lr">' + j.e + '</span></button>').join('') + '</div>' +
+        '<div class="list">' + D.JOIN.map((j, i) => '<button class="lrow" data-act="say" data-i="' + i + '"><span class="le"><b class="ar-big" style="font-size:1.7rem">' + j.parts[0] + '</b></span><span class="lt"><b class="ar-big" style="font-size:2.1rem">' + j.w + '</b><small>' + j.ro + ' — ' + AA.esc(j.ur) + '</small></span>' + UI.recBtn(j.w, '') + '<span class="lr">' + j.e + '</span></button>').join('') + '</div>' +
         '<p class="note" style="margin:12px 16px">Jab harf jurte hain to shakal badal jati hai — yahi asli mashq hai. Baad mein bachche se kaghaz par likhwa kar batayein.</p>';
     },
     mount(root) {

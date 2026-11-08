@@ -26,11 +26,15 @@
   };
 
   function cardHtml(k, it) {
-    if (k === 'rang') return '<div class="disc-xl" style="--hex:' + it.hex + '"></div><div class="fu ur">' + it.ur + '</div><div class="fr">' + AA.mn(it) + '</div><div class="fen">' + it.en + '</div><div class="things">' + it.things.join(' ') + '</div>';
-    if (k === 'jaanwar') return '<div class="fe">' + it.e + '</div><div class="fu ur">' + it.ur + '</div><div class="fr">' + AA.mn(it) + '</div><div class="fen">' + it.en + '</div><div class="snd">🔊 ' + it.snd + '</div>';
-    if (k === 'ginti') return '<div class="num">' + it.n + '</div><div class="things">' + Array.from({ length: it.n }, () => D.COUNT_THINGS[it.n % D.COUNT_THINGS.length]).join('') + '</div><div class="fu ur">' + it.ur + '</div><div class="fr">' + AA.mn(it) + '</div><div class="fen">' + it.en + '</div>';
-    const cols = D.COLORS.slice(0, 6);
-    return AA.shapeSvg(it, cols[D.SHAPES.indexOf(it) % 6].hex) + '<div class="fu ur">' + it.ur + '</div><div class="fr">' + AA.mn(it) + '</div><div class="fen">' + it.en + '</div>';
+    let html;
+    if (k === 'rang') html = '<div class="disc-xl" style="--hex:' + it.hex + '"></div><div class="fu ur">' + it.ur + '</div><div class="fr">' + AA.mn(it) + '</div><div class="fen">' + it.en + '</div><div class="things">' + it.things.join(' ') + '</div>';
+    else if (k === 'jaanwar') html = '<div class="fe">' + it.e + '</div><div class="fu ur">' + it.ur + '</div><div class="fr">' + AA.mn(it) + '</div><div class="fen">' + it.en + '</div><div class="snd">🔊 ' + it.snd + '</div>';
+    else if (k === 'ginti') html = '<div class="num">' + it.n + '</div><div class="things">' + Array.from({ length: it.n }, () => D.COUNT_THINGS[it.n % D.COUNT_THINGS.length]).join('') + '</div><div class="fu ur">' + it.ur + '</div><div class="fr">' + AA.mn(it) + '</div><div class="fen">' + it.en + '</div>';
+    else {
+      const cols = D.COLORS.slice(0, 6);
+      html = AA.shapeSvg(it, cols[D.SHAPES.indexOf(it) % 6].hex) + '<div class="fu ur">' + it.ur + '</div><div class="fr">' + AA.mn(it) + '</div><div class="fen">' + it.en + '</div>';
+    }
+    return html + '<div class="rec-wrap">' + UI.recBtn(it.ur, AA.mn(it)) + '</div>';
   }
   function speakCard(k, it) {
     if (k === 'ginti') { const list = []; for (let i = 0; i < it.n; i++) list.push(D.NUMBERS[i], 250); list.push(400, it); return V.seq(list.length > 12 ? [it] : list); }

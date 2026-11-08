@@ -54,6 +54,7 @@
         el.innerHTML = AA.i18n('<div class="step-say"><span class="ur">یہ ہے</span></div>' +
           '<button class="letter-card" data-act="say"><span class="ar-big big-letter">' + L.ch + '</span><span class="letter-name">' + L.n + '</span><span class="speak-fab">' + UI.icon('sound') + '</span></button>' +
           '<button class="pic-card" data-act="word"><span class="pe">' + w.e + '</span><span class="pw"><span class="ar-big">' + w.ar + '</span><span class="ur">' + w.ur + '</span><small>' + AA.mn(w) + '</small></span></button>' +
+          '<div class="row wrap" style="justify-content:center">' + UI.recBtn(L.say, L.n) + UI.recBtn(w.ar, w.ro || w.ur) + '</div>' +
           '<div class="cue">💡 ' + AA.esc(L.cue) + '</div>' + forms);
         V.seq([D.T.yehHai, { ar: L.say }, 450, { ar: w.ar }, w]);
         later(enable, 1800);
@@ -68,7 +69,7 @@
         el.innerHTML = AA.i18n('<div class="step-say"><span class="ur">سنو اور بولو</span></div>' +
           '<div class="letter-card" style="max-width:300px"><span class="ar-big big-letter" style="font-size:130px">' + L.ch + '</span><span class="letter-name">' + L.n + '</span></div>' +
           '<div class="echo"><div class="mic-ring" id="mic">🗣️</div><div class="counter-dots" id="cd"><i></i><i></i><i></i></div><div class="q-text" id="hear-t">Suno…</div></div>' +
-          '<button class="btn ghost" data-act="again">' + UI.icon('redo') + ' Dobara</button>');
+          '<div class="row wrap" style="justify-content:center"><button class="btn ghost" data-act="again">' + UI.icon('redo') + ' Dobara</button>' + UI.recBtn(L.say, L.n) + '</div>');
         const mic = AA.$('#mic', el), dots = AA.$$('#cd i', el), t = AA.$('#hear-t', el);
         let run = 0;
         async function loop() {
